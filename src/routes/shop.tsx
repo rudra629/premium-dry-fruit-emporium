@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { products, type Product } from "@/lib/products";
+import { type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
+import { useSite } from "@/lib/site-store";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Search = { cat?: string; q?: string };
 
