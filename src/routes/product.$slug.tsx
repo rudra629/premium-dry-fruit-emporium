@@ -105,7 +105,7 @@ function ProductPage() {
             </div>
           </div>
 
-          <div className="mt-8 flex items-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
             <div className="flex items-center rounded-full border-2 border-border overflow-hidden">
               <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-11 grid place-items-center hover:bg-muted"><Minus className="w-4 h-4" /></button>
               <span className="w-10 text-center font-semibold">{qty}</span>
@@ -115,15 +115,18 @@ function ProductPage() {
               onClick={() => {
                 add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
                 setAdded(true);
+                toast.success(`${product.name} added to bag`, { duration: 1600 });
+                window.dispatchEvent(new Event("grams:cart-bump"));
                 setTimeout(() => setAdded(false), 1800);
               }}
-              className="flex-1 rounded-full bg-forest-deep text-cream py-4 text-sm font-semibold hover:bg-forest transition inline-flex items-center justify-center gap-2"
+              className="flex-1 min-w-[180px] rounded-full bg-forest-deep text-cream py-4 text-sm font-semibold hover:bg-forest transition inline-flex items-center justify-center gap-2"
             >
               {added ? (<><Check className="w-4 h-4" /> Added to bag</>) : (<>Add to bag · ₹{weight.price * qty}</>)}
             </button>
             <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-terracotta hover:text-terracotta transition"><Heart className="w-5 h-5" /></button>
             <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-forest-deep transition"><Share2 className="w-5 h-5" /></button>
           </div>
+
 
           <div className="mt-8 flex flex-wrap gap-2">
             {product.badges.map((b) => (
