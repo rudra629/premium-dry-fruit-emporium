@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
+import { useSite } from "@/lib/site-store";
 import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
