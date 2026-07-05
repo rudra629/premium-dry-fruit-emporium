@@ -137,7 +137,6 @@ function Shop() {
             Explore Signature
           </Link>
         </div>
-        </div>
       </section>
     </div>
   );
