@@ -27,6 +27,21 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const cartRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const bump = () => {
+      const el = cartRef.current;
+      if (!el) return;
+      el.classList.remove("cart-bump");
+      void el.offsetWidth;
+      el.classList.add("cart-bump");
+    };
+    window.addEventListener("grams:cart-bump", bump);
+    return () => window.removeEventListener("grams:cart-bump", bump);
+  }, []);
+
+
 
   return (
     <>
