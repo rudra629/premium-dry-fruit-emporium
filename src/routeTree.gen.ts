@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -33,6 +34,11 @@ const ShopRoute = ShopRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderSuccessRoute = OrderSuccessRouteImport.update({
+  id: '/order-success',
+  path: '/order-success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/order-success'
     | '/profile'
     | '/shop'
     | '/story'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/order-success'
     | '/profile'
     | '/shop'
     | '/story'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/order-success'
     | '/profile'
     | '/shop'
     | '/story'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  OrderSuccessRoute: typeof OrderSuccessRoute
   ProfileRoute: typeof ProfileRoute
   ShopRoute: typeof ShopRoute
   StoryRoute: typeof StoryRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-success': {
+      id: '/order-success'
+      path: '/order-success'
+      fullPath: '/order-success'
+      preLoaderRoute: typeof OrderSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  OrderSuccessRoute: OrderSuccessRoute,
   ProfileRoute: ProfileRoute,
   ShopRoute: ShopRoute,
   StoryRoute: StoryRoute,
