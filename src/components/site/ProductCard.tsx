@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Star, Plus } from "lucide-react";
+import { Star } from "lucide-react";
+import { toast } from "sonner";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 
@@ -42,31 +43,12 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            add({
-              slug: product.slug,
-              name: product.name,
-              image: product.image,
-              weight: product.weights[0].label,
-              price: product.weights[0].price,
-              qty: 1,
-            });
-          }}
-          className="absolute bottom-3 right-3 grid place-items-center w-11 h-11 rounded-full bg-forest-deep text-gold shadow-glow opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition"
-          aria-label="Add to cart"
-        >
-          <Plus className="w-5 h-5" />
-        </button>
       </Link>
 
       <div className="pt-4 px-1">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground">{product.category}</p>
-          <div className="flex items-center gap-1 text-xs">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground truncate">{product.category}</p>
+          <div className="flex items-center gap-1 text-xs shrink-0">
             <Star className="w-3 h-3 fill-gold text-gold" />
             <span className="font-semibold">{product.rating}</span>
           </div>
@@ -74,16 +56,38 @@ export function ProductCard({ product }: { product: Product }) {
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
-          className="mt-1 block font-display text-xl text-forest-deep leading-tight hover:text-terracotta transition"
+          className="mt-1 block font-display text-lg sm:text-xl text-forest-deep leading-tight hover:text-terracotta transition line-clamp-1"
         >
           {product.name}
         </Link>
-        <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{product.tagline}</p>
-        <div className="mt-3 flex items-baseline gap-2">
-          <span className="font-display text-2xl text-forest-deep">₹{product.price}</span>
-          {product.compareAt && (
-            <span className="text-sm text-muted-foreground line-through">₹{product.compareAt}</span>
-          )}
+        <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">{product.tagline}</p>
+        <div className="mt-3 flex items-end justify-between gap-2">
+          <div className="flex items-baseline gap-2 min-w-0">
+            <span className="font-display text-xl sm:text-2xl text-forest-deep">₹{product.price}</span>
+            {product.compareAt && (
+              <span className="text-xs sm:text-sm text-muted-foreground line-through">₹{product.compareAt}</span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              add({
+                slug: product.slug,
+                name: product.name,
+                image: product.image,
+                weight: product.weights[0].label,
+                price: product.weights[0].price,
+                qty: 1,
+              });
+              toast.success(`${product.name} added to bag`, { duration: 1600 });
+              window.dispatchEvent(new Event("grams:cart-bump"));
+            }}
+            className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-forest-deep text-forest-deep text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
+          >
+            <span className="add-btn-fill" />
+            <span className="add-btn-label relative z-10">Add</span>
+          </button>
         </div>
       </div>
     </div>
