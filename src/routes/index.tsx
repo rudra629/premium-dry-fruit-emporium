@@ -19,9 +19,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const bestsellers = products.filter((p) => p.bestseller).slice(0, 4);
-  const featured = products[0];
-  const newArrivals = products.filter((p) => p.newArrival);
+  const { allProducts, bannerWords } = useSite();
+  const shown = allProducts;
+  const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
+  const featured = shown.find((p) => p.slug === "walnut-whole-california") ?? shown[0];
+  const newArrivals = shown.filter((p) => p.newArrival);
 
   return (
     <div>
