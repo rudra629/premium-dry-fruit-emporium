@@ -8,8 +8,18 @@ import { useCart } from "@/lib/cart-store";
 export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
     const p = getProduct(params.slug);
-    if (!p) throw notFound();
-    return { product: p };
+    if (p) return { product: p };
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("grams:extra-products");
+        if (raw) {
+          const list = JSON.parse(raw) as Product[];
+          const found = list.find((x) => x.slug === params.slug);
+          if (found) return { product: found };
+        }
+      } catch {}
+    }
+    throw notFound();
   },
   head: ({ loaderData }) => ({
     meta: loaderData
