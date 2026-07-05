@@ -27,13 +27,16 @@ const sorts = ["Featured", "Price: Low → High", "Price: High → Low", "Rating
 
 function Shop() {
   const search = Route.useSearch();
+  const { allProducts } = useSite();
   const [q, setQ] = useState(search.q ?? "");
   const [cat, setCat] = useState<string>(search.cat ?? "All");
   const [sort, setSort] = useState<(typeof sorts)[number]>("Featured");
   const [maxPrice, setMaxPrice] = useState(1500);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 350); return () => clearTimeout(t); }, []);
 
   const filtered = useMemo(() => {
-    let list: Product[] = products.slice();
+    let list: Product[] = allProducts.slice();
     if (cat !== "All") list = list.filter((p) => p.category === cat);
     if (q) list = list.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()) || p.tagline.toLowerCase().includes(q.toLowerCase()));
     list = list.filter((p) => p.price <= maxPrice);
@@ -41,7 +44,8 @@ function Shop() {
     if (sort === "Price: High → Low") list.sort((a, b) => b.price - a.price);
     if (sort === "Rating") list.sort((a, b) => b.rating - a.rating);
     return list;
-  }, [q, cat, sort, maxPrice]);
+  }, [q, cat, sort, maxPrice, allProducts]);
+
 
   return (
     <div>
