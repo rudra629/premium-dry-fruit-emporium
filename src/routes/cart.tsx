@@ -92,9 +92,9 @@ function Cart() {
             <span className="font-display text-4xl text-gold">₹{grand}</span>
           </div>
 
-          <button className="mt-6 w-full rounded-full bg-gold text-forest-deep py-4 text-sm font-bold hover:bg-cream transition inline-flex items-center justify-center gap-2">
+          <Link to="/checkout" className="mt-6 w-full rounded-full bg-gold text-forest-deep py-4 text-sm font-bold hover:bg-cream transition inline-flex items-center justify-center gap-2">
             Checkout securely <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
           <p className="mt-3 text-center text-xs text-cream/50">Secure checkout · COD available · 100% freshness guarantee</p>
         </aside>
       </div>

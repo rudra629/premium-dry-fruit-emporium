@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { products, type Product } from "@/lib/products";
+import { type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
+import { useSite } from "@/lib/site-store";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Search = { cat?: string; q?: string };
 
@@ -25,13 +27,16 @@ const sorts = ["Featured", "Price: Low → High", "Price: High → Low", "Rating
 
 function Shop() {
   const search = Route.useSearch();
+  const { allProducts } = useSite();
   const [q, setQ] = useState(search.q ?? "");
   const [cat, setCat] = useState<string>(search.cat ?? "All");
   const [sort, setSort] = useState<(typeof sorts)[number]>("Featured");
   const [maxPrice, setMaxPrice] = useState(1500);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 350); return () => clearTimeout(t); }, []);
 
   const filtered = useMemo(() => {
-    let list: Product[] = products.slice();
+    let list: Product[] = allProducts.slice();
     if (cat !== "All") list = list.filter((p) => p.category === cat);
     if (q) list = list.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()) || p.tagline.toLowerCase().includes(q.toLowerCase()));
     list = list.filter((p) => p.price <= maxPrice);
@@ -39,7 +44,8 @@ function Shop() {
     if (sort === "Price: High → Low") list.sort((a, b) => b.price - a.price);
     if (sort === "Rating") list.sort((a, b) => b.rating - a.rating);
     return list;
-  }, [q, cat, sort, maxPrice]);
+  }, [q, cat, sort, maxPrice, allProducts]);
+
 
   return (
     <div>
@@ -97,8 +103,18 @@ function Shop() {
 
       {/* Grid */}
       <section className="container-x py-12">
-        <p className="text-sm text-muted-foreground mb-6">{filtered.length} products</p>
-        {filtered.length === 0 ? (
+        <p className="text-sm text-muted-foreground mb-6">{loading ? "Loading…" : `${filtered.length} products`}</p>
+        {loading ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex flex-col gap-3">
+                <Skeleton className="aspect-[4/5] rounded-2xl" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-6 w-1/2" />
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-display text-3xl text-forest-deep">Nothing matches that.</p>
             <p className="text-muted-foreground mt-2">Try clearing filters or searching a friendlier word.</p>
@@ -112,12 +128,12 @@ function Shop() {
       </section>
 
       <section className="container-x pb-20">
-        <div className="rounded-3xl bg-forest-deep text-cream p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="rounded-3xl bg-forest-deep text-cream p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="font-display text-3xl md:text-4xl">Can't decide?</h3>
             <p className="mt-2 text-cream/70">Grab our curated Signature Trio — one from each category, hand-picked by us.</p>
           </div>
-          <Link to="/product/$slug" params={{ slug: products[0].slug }} className="rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition">
+          <Link to="/product/$slug" params={{ slug: allProducts[0]?.slug ?? "walnut-whole-california" }} className="rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition">
             Explore Signature
           </Link>
         </div>

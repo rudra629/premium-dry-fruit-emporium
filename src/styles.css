@@ -150,3 +150,52 @@
     mix-blend-mode: overlay;
   }
 }
+
+/* Bouncy Add button */
+@keyframes bouncy {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-4px) scale(1.03); }
+  60% { transform: translateY(0) scale(0.98); }
+}
+@utility animate-bouncy { animation: bouncy 1.8s ease-in-out infinite; }
+
+.add-btn { transition: color .35s ease, border-color .35s ease, transform .2s ease; }
+.add-btn .add-btn-fill {
+  position: absolute; inset: 0;
+  background: var(--forest-deep);
+  transform: translateY(101%);
+  transition: transform .35s cubic-bezier(.65,.05,.36,1);
+  z-index: 0;
+}
+.add-btn:hover .add-btn-fill { transform: translateY(0); }
+.add-btn:hover { color: var(--gold); border-color: var(--forest-deep); animation: none; }
+.add-btn:active { transform: scale(.94); }
+
+/* Cart badge bump */
+@keyframes cart-bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.5) rotate(-8deg); }
+  60% { transform: scale(.9); }
+  100% { transform: scale(1); }
+}
+.cart-bump { animation: cart-bump .55s ease-out; }
+
+/* Fade / slide in */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@utility animate-fade-up { animation: fade-up .5s ease-out both; }
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--muted) 0%, oklch(0.96 0.02 85) 50%, var(--muted) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 12px;
+}
+

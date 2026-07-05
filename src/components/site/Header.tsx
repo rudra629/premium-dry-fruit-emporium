@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Search, ShoppingBag, User, Menu, X, Leaf } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,21 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const cartRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const bump = () => {
+      const el = cartRef.current;
+      if (!el) return;
+      el.classList.remove("cart-bump");
+      void el.offsetWidth;
+      el.classList.add("cart-bump");
+    };
+    window.addEventListener("grams:cart-bump", bump);
+    return () => window.removeEventListener("grams:cart-bump", bump);
+  }, []);
+
+
 
   return (
     <>
@@ -65,7 +80,7 @@ export function Header() {
             <Link to="/profile" className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label="Profile">
               <User className="w-5 h-5" />
             </Link>
-            <Link to="/cart" className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
+            <Link ref={cartRef} to="/cart" className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-cream text-[10px] font-semibold grid place-items-center">

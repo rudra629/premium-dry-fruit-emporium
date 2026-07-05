@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
+import { useSite } from "@/lib/site-store";
 import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
@@ -18,9 +19,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const bestsellers = products.filter((p) => p.bestseller).slice(0, 4);
-  const featured = products[0];
-  const newArrivals = products.filter((p) => p.newArrival);
+  const { allProducts, bannerWords } = useSite();
+  const shown = allProducts;
+  const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
+  const featured = shown.find((p) => p.slug === "walnut-whole-california") ?? shown[0];
+  const newArrivals = shown.filter((p) => p.newArrival);
 
   return (
     <div>
@@ -109,10 +112,10 @@ function Home() {
 
       {/* Marquee */}
       <section className="bg-gold text-forest-deep py-4 overflow-hidden border-y border-forest-deep/20">
-        <div className="flex whitespace-nowrap marquee-track font-display text-2xl italic">
+        <div className="flex whitespace-nowrap marquee-track font-display text-xl md:text-2xl italic">
           {Array.from({ length: 2 }).map((_, i) => (
             <div key={i} className="flex items-center gap-10 pr-10">
-              {["Freshly Packed", "Small Batch", "No Preservatives", "Direct from Farms", "Vacuum Sealed", "Traceable Origins", "Freshly Packed", "Small Batch"].map((w, j) => (
+              {bannerWords.map((w, j) => (
                 <span key={j} className="flex items-center gap-10">
                   {w} <span className="text-forest-deep/40">✦</span>
                 </span>
@@ -121,6 +124,7 @@ function Home() {
           ))}
         </div>
       </section>
+
 
       {/* Value props */}
       <section className="container-x py-16 md:py-20">
