@@ -1,10 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Star, Minus, Plus, ShieldCheck, Truck, Leaf, Heart, Share2, Check } from "lucide-react";
-import { toast } from "sonner";
 import { getProduct, products, type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart-store";
+import { flyToCart } from "@/lib/fly-to-cart";
 
 export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
