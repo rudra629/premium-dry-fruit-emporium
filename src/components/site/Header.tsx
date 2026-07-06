@@ -80,7 +80,7 @@ export function Header() {
             <Link to="/profile" className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label="Profile">
               <User className="w-5 h-5" />
             </Link>
-            <Link ref={cartRef} to="/cart" className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
+            <Link ref={cartRef} to="/cart" data-cart-icon className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-cream text-[10px] font-semibold grid place-items-center">
