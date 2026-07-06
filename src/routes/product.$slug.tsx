@@ -116,8 +116,7 @@ function ProductPage() {
               onClick={() => {
                 add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
                 setAdded(true);
-                toast.success(`${product.name} added to bag`, { duration: 1600 });
-                window.dispatchEvent(new Event("grams:cart-bump"));
+                flyToCart(heroImgRef.current, product.image);
                 setTimeout(() => setAdded(false), 1800);
               }}
               className="flex-1 min-w-[180px] rounded-full bg-forest-deep text-cream py-4 text-sm font-semibold hover:bg-forest transition inline-flex items-center justify-center gap-2"
