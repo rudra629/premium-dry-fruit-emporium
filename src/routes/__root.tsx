@@ -130,3 +130,15 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
+function PageTransition({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+  return (
+    <div key={pathname} className="page-transition">
+      {children}
+    </div>
+  );
+}
