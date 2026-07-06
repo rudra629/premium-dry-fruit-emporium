@@ -83,8 +83,7 @@ export function ProductCard({ product }: { product: Product }) {
                 price: product.weights[0].price,
                 qty: 1,
               });
-              toast.success(`${product.name} added to bag`, { duration: 1600 });
-              window.dispatchEvent(new Event("grams:cart-bump"));
+              flyToCart(imgRef.current, product.image);
             }}
             className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-forest-deep text-forest-deep text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
           >
