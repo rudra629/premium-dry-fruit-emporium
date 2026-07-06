@@ -64,7 +64,7 @@ function ProductPage() {
             {product.bestseller && <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-forest-deep text-gold px-2.5 py-1 rounded-full">Bestseller</span>}
             {product.newArrival && <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-terracotta text-cream px-2.5 py-1 rounded-full">New</span>}
           </div>
-          <img src={product.image} alt={product.name} className="max-h-[560px] drop-shadow-[0_30px_50px_rgba(10,40,24,0.3)]" />
+          <img ref={heroImgRef} src={product.image} alt={product.name} className="max-h-[560px] drop-shadow-[0_30px_50px_rgba(10,40,24,0.3)]" />
         </div>
 
         <div>
