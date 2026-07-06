@@ -121,8 +121,12 @@ function Shop() {
             <button onClick={() => { setQ(""); setCat("All"); setMaxPrice(1500); }} className="mt-6 rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold">Reset</button>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((p) => <ProductCard key={p.slug} product={p} />)}
+          <div key={`${cat}|${sort}|${q}|${maxPrice}`} className="grid-stagger grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filtered.map((p, i) => (
+              <div key={p.slug} style={{ animationDelay: `${Math.min(i, 12) * 45}ms` }}>
+                <ProductCard product={p} />
+              </div>
+            ))}
           </div>
         )}
       </section>
