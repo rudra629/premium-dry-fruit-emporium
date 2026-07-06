@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
-import { toast } from "sonner";
+import { useRef } from "react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
+import { flyToCart } from "@/lib/fly-to-cart";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const imgRef = useRef<HTMLImageElement>(null);
   const discount = product.compareAt
     ? Math.round(((product.compareAt - product.price) / product.compareAt) * 100)
     : 0;
