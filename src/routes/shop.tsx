@@ -81,7 +81,7 @@ function Shop() {
               <button
                 key={c}
                 onClick={() => setCat(c)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${cat === c ? "bg-forest-deep text-cream" : "bg-muted hover:bg-border"}`}
+                className={`pill rounded-full px-4 py-2 text-sm font-medium ${cat === c ? "bg-forest-deep text-cream" : "bg-muted hover:bg-border"}`}
               >
                 {c}
               </button>
