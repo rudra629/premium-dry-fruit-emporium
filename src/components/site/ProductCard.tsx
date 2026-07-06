@@ -21,6 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <div className="absolute inset-0 flex items-center justify-center p-6 transition-transform duration-500 group-hover:scale-105">
           <img
+            ref={imgRef}
             src={product.image}
             alt={product.name}
             loading="lazy"
