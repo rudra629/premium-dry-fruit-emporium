@@ -203,3 +203,27 @@
   border-radius: 12px;
 }
 
+
+/* Page transition */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+.page-transition { animation: page-enter .5s cubic-bezier(.22,.61,.36,1) both; }
+
+/* Nav / button micro-transition helper */
+@utility tx { transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .25s ease, opacity .25s ease, box-shadow .25s ease; }
+
+/* Grid item stagger — apply to children with inline animation-delay */
+@keyframes grid-item-in {
+  from { opacity: 0; transform: translateY(18px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+.grid-stagger > * {
+  animation: grid-item-in .55s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* Pill filter transition */
+.pill { position: relative; transition: color .3s ease, background-color .35s ease, transform .2s ease; }
+.pill:hover { transform: translateY(-1px); }
+.pill:active { transform: scale(.96); }
