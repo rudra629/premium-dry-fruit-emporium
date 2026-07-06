@@ -133,9 +133,24 @@ function RootComponent() {
 
 function PageTransition({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Skip our own scroll when the browser is restoring position on back/forward.
+    let isPop = false;
+    const onPop = () => { isPop = true; };
+    window.addEventListener("popstate", onPop);
+    // Defer so popstate (if any) fires first
+    const id = window.setTimeout(() => {
+      if (isPop) return;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, left: 0, behavior: reduced ? "auto" : "smooth" });
+    }, 0);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.clearTimeout(id);
+    };
   }, [pathname]);
+
   return (
     <div key={pathname} className="page-transition">
       {children}
