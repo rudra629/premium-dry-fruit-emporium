@@ -1,10 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Star, Minus, Plus, ShieldCheck, Truck, Leaf, Heart, Share2, Check } from "lucide-react";
-import { toast } from "sonner";
 import { getProduct, products, type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart-store";
+import { flyToCart } from "@/lib/fly-to-cart";
 
 export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
@@ -49,6 +49,7 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const { add } = useCart();
+  const heroImgRef = useRef<HTMLImageElement>(null);
 
   const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
 
@@ -64,7 +65,7 @@ function ProductPage() {
             {product.bestseller && <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-forest-deep text-gold px-2.5 py-1 rounded-full">Bestseller</span>}
             {product.newArrival && <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-terracotta text-cream px-2.5 py-1 rounded-full">New</span>}
           </div>
-          <img src={product.image} alt={product.name} className="max-h-[560px] drop-shadow-[0_30px_50px_rgba(10,40,24,0.3)]" />
+          <img ref={heroImgRef} src={product.image} alt={product.name} className="max-h-[560px] drop-shadow-[0_30px_50px_rgba(10,40,24,0.3)]" />
         </div>
 
         <div>
@@ -115,8 +116,7 @@ function ProductPage() {
               onClick={() => {
                 add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
                 setAdded(true);
-                toast.success(`${product.name} added to bag`, { duration: 1600 });
-                window.dispatchEvent(new Event("grams:cart-bump"));
+                flyToCart(heroImgRef.current, product.image);
                 setTimeout(() => setAdded(false), 1800);
               }}
               className="flex-1 min-w-[180px] rounded-full bg-forest-deep text-cream py-4 text-sm font-semibold hover:bg-forest transition inline-flex items-center justify-center gap-2"

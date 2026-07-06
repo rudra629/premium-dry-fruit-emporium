@@ -61,14 +61,17 @@ export function Header() {
                 key={n.to}
                 to={n.to}
                 className={cn(
-                  "relative py-1 transition-colors hover:text-forest-deep",
+                  "relative py-1 tx hover:text-forest-deep hover:-translate-y-0.5",
                   pathname === n.to ? "text-forest-deep" : "text-ink/70",
                 )}
               >
                 {n.label}
-                {pathname === n.to && (
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-gold" />
-                )}
+                <span
+                  className={cn(
+                    "absolute -bottom-0.5 left-0 right-0 h-[2px] bg-gold origin-left transition-transform duration-300",
+                    pathname === n.to ? "scale-x-100" : "scale-x-0",
+                  )}
+                />
               </Link>
             ))}
           </nav>
@@ -80,7 +83,7 @@ export function Header() {
             <Link to="/profile" className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label="Profile">
               <User className="w-5 h-5" />
             </Link>
-            <Link ref={cartRef} to="/cart" className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
+            <Link ref={cartRef} to="/cart" data-cart-icon className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-cream text-[10px] font-semibold grid place-items-center">

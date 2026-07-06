@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -117,7 +118,9 @@ function RootComponent() {
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
-              <Outlet />
+              <PageTransition>
+                <Outlet />
+              </PageTransition>
             </main>
             <Footer />
           </div>
@@ -125,5 +128,17 @@ function RootComponent() {
         </CartProvider>
       </SiteProvider>
     </QueryClientProvider>
+  );
+}
+
+function PageTransition({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+  return (
+    <div key={pathname} className="page-transition">
+      {children}
+    </div>
   );
 }

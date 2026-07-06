@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
-import { toast } from "sonner";
+import { useRef } from "react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
+import { flyToCart } from "@/lib/fly-to-cart";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const imgRef = useRef<HTMLImageElement>(null);
   const discount = product.compareAt
     ? Math.round(((product.compareAt - product.price) / product.compareAt) * 100)
     : 0;
@@ -19,6 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <div className="absolute inset-0 flex items-center justify-center p-6 transition-transform duration-500 group-hover:scale-105">
           <img
+            ref={imgRef}
             src={product.image}
             alt={product.name}
             loading="lazy"
@@ -80,8 +83,7 @@ export function ProductCard({ product }: { product: Product }) {
                 price: product.weights[0].price,
                 qty: 1,
               });
-              toast.success(`${product.name} added to bag`, { duration: 1600 });
-              window.dispatchEvent(new Event("grams:cart-bump"));
+              flyToCart(imgRef.current, product.image);
             }}
             className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-forest-deep text-forest-deep text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
           >
