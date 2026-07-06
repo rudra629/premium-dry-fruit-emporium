@@ -49,6 +49,7 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const { add } = useCart();
+  const heroImgRef = useRef<HTMLImageElement>(null);
 
   const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
 
