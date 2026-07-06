@@ -61,14 +61,17 @@ export function Header() {
                 key={n.to}
                 to={n.to}
                 className={cn(
-                  "relative py-1 transition-colors hover:text-forest-deep",
+                  "relative py-1 tx hover:text-forest-deep hover:-translate-y-0.5",
                   pathname === n.to ? "text-forest-deep" : "text-ink/70",
                 )}
               >
                 {n.label}
-                {pathname === n.to && (
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-gold" />
-                )}
+                <span
+                  className={cn(
+                    "absolute -bottom-0.5 left-0 right-0 h-[2px] bg-gold origin-left transition-transform duration-300",
+                    pathname === n.to ? "scale-x-100" : "scale-x-0",
+                  )}
+                />
               </Link>
             ))}
           </nav>
