@@ -118,7 +118,9 @@ function RootComponent() {
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
-              <Outlet />
+              <PageTransition>
+                <Outlet />
+              </PageTransition>
             </main>
             <Footer />
           </div>
