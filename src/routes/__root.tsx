@@ -112,19 +112,22 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isChips = pathname === "/chips";
   return (
     <QueryClientProvider client={queryClient}>
       <SiteProvider>
         <CartProvider>
           <div className="min-h-screen flex flex-col">
-            <Header />
+            {!isChips && <Header />}
             <main className="flex-1">
               <PageTransition>
                 <Outlet />
               </PageTransition>
             </main>
-            <Footer />
+            {!isChips && <Footer />}
           </div>
+          <BrandSwitchButton />
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
