@@ -235,3 +235,20 @@
 .pill { position: relative; transition: color .3s ease, background-color .35s ease, transform .2s ease; }
 .pill:hover { transform: translateY(-1px); }
 .pill:active { transform: scale(.96); }
+
+/* Brand-switch flip overlay */
+@keyframes flip-cover {
+  from { transform: rotateX(-92deg); }
+  to   { transform: rotateX(0deg); }
+}
+@keyframes flip-uncover {
+  from { transform: rotateX(0deg); }
+  to   { transform: rotateX(92deg); }
+}
+.flip-band {
+  backface-visibility: hidden;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-band { animation-duration: .01ms !important; }
+}
