@@ -14,10 +14,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { BrandSwitchButton } from "@/components/site/BrandSwitchButton";
 import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
-import { FlipProvider } from "@/lib/flip-transition";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -113,24 +111,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isChips = pathname === "/chips";
   return (
     <QueryClientProvider client={queryClient}>
       <SiteProvider>
         <CartProvider>
-          <FlipProvider>
-            <div className="min-h-screen flex flex-col">
-              {!isChips && <Header />}
-              <main className="flex-1">
-                <PageTransition>
-                  <Outlet />
-                </PageTransition>
-              </main>
-              {!isChips && <Footer />}
-            </div>
-          </FlipProvider>
-          <BrandSwitchButton />
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+              <PageTransition>
+                <Outlet />
+              </PageTransition>
+            </main>
+            <Footer />
+          </div>
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
