@@ -17,6 +17,7 @@ import { Footer } from "@/components/site/Footer";
 import { BrandSwitchButton } from "@/components/site/BrandSwitchButton";
 import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
+import { FlipProvider } from "@/lib/flip-transition";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
