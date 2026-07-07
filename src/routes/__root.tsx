@@ -119,15 +119,17 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <SiteProvider>
         <CartProvider>
-          <div className="min-h-screen flex flex-col">
-            {!isChips && <Header />}
-            <main className="flex-1">
-              <PageTransition>
-                <Outlet />
-              </PageTransition>
-            </main>
-            {!isChips && <Footer />}
-          </div>
+          <FlipProvider>
+            <div className="min-h-screen flex flex-col">
+              {!isChips && <Header />}
+              <main className="flex-1">
+                <PageTransition>
+                  <Outlet />
+                </PageTransition>
+              </main>
+              {!isChips && <Footer />}
+            </div>
+          </FlipProvider>
           <BrandSwitchButton />
           <Toaster position="top-center" richColors />
         </CartProvider>
