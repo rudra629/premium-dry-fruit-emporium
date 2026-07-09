@@ -17,6 +17,8 @@ import { Footer } from "@/components/site/Footer";
 import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
+import { ModeToggle } from "@/components/site/ModeToggle";
+import { useReveal } from "@/lib/use-reveal";
 
 function NotFoundComponent() {
   return (
@@ -124,6 +126,7 @@ function RootComponent() {
             </main>
             <Footer />
           </div>
+          <ModeToggle />
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
@@ -133,13 +136,12 @@ function RootComponent() {
 
 function PageTransition({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useReveal(pathname);
 
   useEffect(() => {
-    // Skip our own scroll when the browser is restoring position on back/forward.
     let isPop = false;
     const onPop = () => { isPop = true; };
     window.addEventListener("popstate", onPop);
-    // Defer so popstate (if any) fires first
     const id = window.setTimeout(() => {
       if (isPop) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -157,3 +159,4 @@ function PageTransition({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
