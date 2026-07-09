@@ -26,12 +26,13 @@ export function useReveal(pathname: string) {
       const targets = new Set<Element>();
       root.querySelectorAll(selector).forEach((el) => targets.add(el));
 
-      targets.forEach((el, i) => {
+      let i = 0;
+      targets.forEach((el) => {
         if (!el.classList.contains("reveal")) {
           el.classList.add("reveal");
-          // Stagger children slightly for a nicer pop
           (el as HTMLElement).style.setProperty("--reveal-delay", `${(i % 4) * 80}ms`);
         }
+        i++;
       });
 
       const io = new IntersectionObserver(
