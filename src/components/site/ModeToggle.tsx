@@ -6,29 +6,29 @@ export function ModeToggle() {
   const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isCrunch = pathname.startsWith("/crunch");
-  const [phase, setPhase] = useState<"idle" | "flipping">("idle");
+  const [phase, setPhase] = useState<"idle" | "playing">("idle");
 
-  // Apply body theme class for crunch mode
   useEffect(() => {
     document.documentElement.classList.toggle("crunch-mode", isCrunch);
     return () => document.documentElement.classList.remove("crunch-mode");
   }, [isCrunch]);
 
   const handleClick = async () => {
-    if (phase === "flipping") return;
-    // If entering crunch and not already on home, go home first
+    if (phase === "playing") return;
     if (!isCrunch && pathname !== "/") {
       await router.navigate({ to: "/" });
-      await new Promise((r) => setTimeout(r, 350));
+      await new Promise((r) => setTimeout(r, 300));
     }
-    setPhase("flipping");
-    // Mid-flip, swap the route
+    setPhase("playing");
+    // Swap route while curtain is fully closed
     window.setTimeout(() => {
       router.navigate({ to: isCrunch ? "/" : "/crunch" });
-    }, 550);
-    // End flip
-    window.setTimeout(() => setPhase("idle"), 1150);
+    }, 800);
+    window.setTimeout(() => setPhase("idle"), 1750);
   };
+
+  const targetLabel = isCrunch ? "COZY" : "CRUNCH";
+  const targetSub = isCrunch ? "Welcome home" : "Turn it up";
 
   return (
     <>
@@ -46,11 +46,28 @@ export function ModeToggle() {
         <span className="mode-toggle-glow" aria-hidden />
       </button>
 
-      {phase === "flipping" && (
-        <div className="flip-stage" aria-hidden>
-          <div className={`flip-card ${isCrunch ? "to-cozy" : "to-crunch"}`}>
-            <div className="flip-face flip-front" />
-            <div className="flip-face flip-back" />
+      {phase === "playing" && (
+        <div className={`curtain-stage ${isCrunch ? "to-cozy" : "to-crunch"}`} aria-hidden>
+          <div className="curtain curtain-top">
+            <div className="curtain-grain" />
+          </div>
+          <div className="curtain-bottom-wrap">
+            <div className="curtain curtain-bottom">
+              <div className="curtain-grain" />
+            </div>
+          </div>
+          <div className="curtain-center">
+            <div className="curtain-eyebrow">
+              <span>✦</span>
+              <span>{isCrunch ? "Entering" : "Entering"}</span>
+              <span>✦</span>
+            </div>
+            <div className="curtain-word" data-text={targetLabel}>
+              {targetLabel.split("").map((c, i) => (
+                <span key={i} style={{ animationDelay: `${0.55 + i * 0.05}s` }}>{c}</span>
+              ))}
+            </div>
+            <div className="curtain-sub">{targetSub}</div>
           </div>
         </div>
       )}
