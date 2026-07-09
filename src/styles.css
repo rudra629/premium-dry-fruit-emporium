@@ -320,61 +320,139 @@
   .mode-toggle-label { max-width: 130px; }
 }
 
-/* ============ Flip Transition Overlay ============ */
-.flip-stage {
+/* ============ Cinematic Curtain Transition ============ */
+.curtain-stage {
   position: fixed;
   inset: 0;
   z-index: 100;
-  perspective: 1800px;
   pointer-events: none;
+  overflow: hidden;
 }
-.flip-card {
-  position: absolute; inset: 0;
-  transform-style: preserve-3d;
-  animation: flip-y 1.1s cubic-bezier(.7,.05,.3,1) forwards;
+.curtain {
+  position: absolute;
+  left: 0; right: 0;
+  height: 52%;
+  overflow: hidden;
+  will-change: transform;
 }
-.flip-face {
-  position: absolute; inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.curtain-top {
+  top: 0;
+  transform: translateY(-101%);
+  animation: curtain-top 1.7s cubic-bezier(.83,0,.17,1) forwards;
 }
-.flip-front {
-  background: var(--cream);
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(46,70,55,0.08), transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(212,163,80,0.15), transparent 60%);
+.curtain-bottom-wrap { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; }
+.curtain-bottom {
+  bottom: 0;
+  height: 100%;
+  transform: translateY(101%);
+  animation: curtain-bottom 1.7s cubic-bezier(.83,0,.17,1) forwards;
 }
-.flip-back {
-  transform: rotateY(180deg);
-  background: #0d0d0f;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255,122,61,0.35), transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(255,209,102,0.25), transparent 60%);
+@keyframes curtain-top {
+  0%   { transform: translateY(-101%); }
+  35%  { transform: translateY(0); }
+  65%  { transform: translateY(0); }
+  100% { transform: translateY(-101%); }
 }
-/* When going TO crunch, front is cozy (cream) -> back is crunch (dark) */
-.flip-card.to-crunch .flip-front { background: var(--cream); }
-.flip-card.to-crunch .flip-back  { background: #0d0d0f; }
-/* When going TO cozy, front is crunch -> back is cozy */
-.flip-card.to-cozy .flip-front {
-  background: #0d0d0f;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255,122,61,0.35), transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(255,209,102,0.25), transparent 60%);
-}
-.flip-card.to-cozy .flip-back {
-  background: var(--cream);
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(46,70,55,0.08), transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(212,163,80,0.15), transparent 60%);
+@keyframes curtain-bottom {
+  0%   { transform: translateY(101%); }
+  35%  { transform: translateY(0); }
+  65%  { transform: translateY(0); }
+  100% { transform: translateY(101%); }
 }
 
-@keyframes flip-y {
-  0%   { transform: rotateY(0deg); }
-  100% { transform: rotateY(180deg); }
+/* Destination themes on the curtain */
+.curtain-stage.to-crunch .curtain {
+  background:
+    radial-gradient(ellipse at 20% 40%, rgba(255,122,61,0.35), transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(255,209,102,0.28), transparent 55%),
+    linear-gradient(180deg, #0a0a0c 0%, #141216 100%);
 }
+.curtain-stage.to-cozy .curtain {
+  background:
+    radial-gradient(ellipse at 20% 40%, rgba(212,163,80,0.22), transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(46,70,55,0.18), transparent 55%),
+    linear-gradient(180deg, #f5ecd6 0%, #eadfc4 100%);
+}
+
+.curtain-grain {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.curtain-stage.to-cozy .curtain-grain {
+  background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+}
+
+/* Center kinetic type */
+.curtain-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  opacity: 0;
+  animation: curtain-center 1.7s ease forwards;
+}
+@keyframes curtain-center {
+  0%, 25% { opacity: 0; }
+  35%, 65% { opacity: 1; }
+  75%, 100% { opacity: 0; }
+}
+.curtain-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+}
+.curtain-stage.to-crunch .curtain-eyebrow { color: #ffb26b; }
+.curtain-stage.to-cozy   .curtain-eyebrow { color: var(--forest-deep); }
+
+.curtain-word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(64px, 18vw, 240px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  display: flex;
+  gap: 0.02em;
+}
+.curtain-word span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(60%) rotate(6deg);
+  animation: letter-in .55s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes letter-in {
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+.curtain-stage.to-crunch .curtain-word {
+  color: #fdf6e6;
+  text-shadow: 0 0 40px rgba(255,178,107,0.35);
+}
+.curtain-stage.to-crunch .curtain-word span:nth-child(odd) { color: #ffb26b; }
+.curtain-stage.to-cozy .curtain-word { color: var(--forest-deep); }
+.curtain-stage.to-cozy .curtain-word span:nth-child(odd) { color: var(--gold); }
+
+.curtain-sub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(14px, 1.6vw, 20px);
+  opacity: .7;
+}
+.curtain-stage.to-crunch .curtain-sub { color: #fdf6e6; }
+.curtain-stage.to-cozy   .curtain-sub { color: var(--forest-deep); }
+
 @media (prefers-reduced-motion: reduce) {
-  .flip-card { animation-duration: .01s; }
+  .curtain-top, .curtain-bottom { animation-duration: .3s; }
+  .curtain-word span { animation-duration: .01s; }
 }
+
 
 /* ============ Crunch Mode Theme (opposite palette) ============ */
 .crunch-scope {
