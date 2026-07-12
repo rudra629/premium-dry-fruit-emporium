@@ -393,9 +393,7 @@
 
 /* ——— Cozy state (dark → crunch) ——— */
 .mode-toggle-btn.is-cozy .mode-toggle-inner {
-  background:
-    radial-gradient(120% 180% at 100% 0%, rgba(255,178,107,.35) 0%, transparent 55%),
-    linear-gradient(135deg, #0f0f11 0%, #1c1410 55%, #3a1e10 100%);
+  background: linear-gradient(135deg, #0f0f11 0%, #1c1410 55%, #3a1e10 100%);
   color: #ffd7a0;
   border: 1px solid rgba(255,209,102,.25);
 }
@@ -406,31 +404,13 @@
 
 /* ——— Crunch state (light → cozy) ——— */
 .mode-toggle-btn.is-crunch .mode-toggle-inner {
-  background:
-    radial-gradient(120% 180% at 100% 0%, rgba(46,70,55,.18) 0%, transparent 55%),
-    linear-gradient(135deg, #fdf7ec 0%, #f0e4c8 100%);
+  background: linear-gradient(135deg, #fdf7ec 0%, #f0e4c8 100%);
   color: var(--forest-deep);
   border: 1px solid rgba(46,70,55,.22);
 }
 .mode-toggle-btn.is-crunch .mode-toggle-disc {
   background: linear-gradient(135deg, var(--forest) 0%, var(--forest-deep) 100%);
   color: var(--gold);
-}
-
-/* Glow — kept, refined */
-.mode-toggle-glow {
-  position: absolute; inset: -6px;
-  border-radius: 999px;
-  background: conic-gradient(from 0deg, #ffb26b, #ff7a3d, #ffd166, #ffb26b);
-  filter: blur(18px);
-  opacity: 0;
-  z-index: 0;
-  transition: opacity .4s ease;
-  animation: mt-spin 8s linear infinite;
-}
-.mode-toggle-btn:hover .mode-toggle-glow { opacity: .5; }
-.mode-toggle-btn.is-crunch .mode-toggle-glow {
-  background: conic-gradient(from 0deg, var(--gold), var(--forest), var(--gold-soft), var(--gold));
 }
 
 @media (max-width: 500px) {
