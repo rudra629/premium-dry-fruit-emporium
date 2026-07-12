@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useRouterState } from "@tanstack/react-router";
-import { Zap, Coffee } from "lucide-react";
+import { Zap, Coffee, ArrowRight } from "lucide-react";
 
 export function ModeToggle() {
   const router = useRouter();
