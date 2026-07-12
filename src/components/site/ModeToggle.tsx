@@ -37,7 +37,6 @@ export function ModeToggle() {
         className={`mode-toggle-btn ${isCrunch ? "is-crunch" : "is-cozy"}`}
         aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
       >
-        <span className="mode-toggle-glow" aria-hidden />
         <span className="mode-toggle-inner">
           <span className="mode-toggle-disc" aria-hidden>
             {isCrunch ? <Coffee /> : <Zap />}
