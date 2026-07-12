@@ -419,7 +419,7 @@
   .mode-toggle-label { max-width: 140px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mode-toggle-btn, .mode-toggle-btn::before, .mode-toggle-glow { animation: none; }
+  .mode-toggle-btn, .mode-toggle-btn::before { animation: none; }
   .mode-toggle-btn:hover .mode-toggle-sheen { animation: none; }
 }
 
