@@ -569,7 +569,6 @@
 @media (prefers-reduced-motion: reduce) {
   .curtain-top, .curtain-bottom { animation-duration: .3s; }
   .curtain-word span { animation-duration: .01s; }
-  .curtain-stage::after { animation: none; opacity: 0; }
 }
 
 
