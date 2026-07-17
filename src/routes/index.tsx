@@ -192,18 +192,18 @@ function Home() {
         <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
-          <div className="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
-            <div className="w-full md:flex-1">
+          <div className="relative flex flex-col md:flex-row gap-8 md:gap-12 items-center p-8 sm:p-10 md:p-16 md:min-h-[520px]">
+            <div className="w-full md:flex-1 text-center md:text-left">
               <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
-              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
+              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-[1.05] md:leading-none">
                 Walnut<br />
                 <span className="italic text-gold">Whole.</span>
               </h3>
-              <p className="mt-4 md:mt-5 max-w-md text-sm md:text-base text-cream/80 leading-relaxed">
+              <p className="mt-4 md:mt-5 max-w-md mx-auto md:mx-0 text-sm md:text-base text-cream/80 leading-relaxed">
                 California-grown, hand-graded and shipped within 14 days of harvest.
                 One handful = your daily omega-3 in a crunch.
               </p>
-              <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-4 md:gap-6">
+              <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6">
                 <div>
                   <p className="font-display text-3xl md:text-4xl text-gold">₹{featured.price}</p>
                   {featured.compareAt && <p className="text-sm text-cream/50 line-through">₹{featured.compareAt}</p>}
@@ -214,7 +214,7 @@ function Home() {
               </div>
             </div>
             <div className="relative w-full md:flex-1 flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-2/3 sm:w-1/2 md:w-full max-w-[220px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+              <img src={featured.image} alt={featured.name} className="w-4/5 sm:w-2/3 md:w-full max-w-[260px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
