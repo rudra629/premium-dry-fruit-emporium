@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useRouterState } from "@tanstack/react-router";
-import { Zap, Coffee, ArrowRight } from "lucide-react";
+import { Zap, Coffee } from "lucide-react";
 
 export function ModeToggle() {
   const router = useRouter();
@@ -20,7 +20,6 @@ export function ModeToggle() {
       await new Promise((r) => setTimeout(r, 300));
     }
     setPhase("playing");
-    // Swap route while curtain is fully closed
     window.setTimeout(() => {
       router.navigate({ to: isCrunch ? "/" : "/crunch" });
     }, 800);
@@ -29,27 +28,28 @@ export function ModeToggle() {
 
   const targetLabel = isCrunch ? "COZY" : "CRUNCH";
   const targetSub = isCrunch ? "Welcome home" : "Turn it up";
+  const Icon = isCrunch ? Coffee : Zap;
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className={`mode-toggle-btn ${isCrunch ? "is-crunch" : "is-cozy"}`}
-        aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
-      >
-        <span className="mode-toggle-inner">
-          <span className="mode-toggle-disc" aria-hidden>
-            {isCrunch ? <Coffee /> : <Zap />}
+      <div className="fixed z-[55] right-4 bottom-4 md:right-6 md:bottom-6 pointer-events-none">
+        <button
+          onClick={handleClick}
+          aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
+          className="pointer-events-auto tx inline-flex items-center gap-2 rounded-full border backdrop-blur-md px-4 py-2.5 text-xs font-semibold tracking-[0.14em] uppercase shadow-[0_10px_30px_-12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5"
+          style={{
+            background: "rgb(var(--color-surface) / 0.5)",
+            borderColor: "rgb(var(--color-surface) / 0.7)",
+            color: "rgb(var(--color-text-primary))",
+          }}
+        >
+          <Icon className="h-3.5 w-3.5" />
+          <span>
+            <span className="hidden sm:inline">Enter </span>
+            {isCrunch ? "Cozy Mode" : "Crunch Mode"}
           </span>
-          <span className="mode-toggle-label">
-            {isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
-          </span>
-          <span className="mode-toggle-arrow" aria-hidden>
-            <ArrowRight />
-          </span>
-          <span className="mode-toggle-sheen" aria-hidden />
-        </span>
-      </button>
+        </button>
+      </div>
 
       {phase === "playing" && (
         <div className={`curtain-stage ${isCrunch ? "to-cozy" : "to-crunch"}`} aria-hidden>
@@ -64,7 +64,7 @@ export function ModeToggle() {
           <div className="curtain-center">
             <div className="curtain-eyebrow">
               <span>✦</span>
-              <span>{isCrunch ? "Entering" : "Entering"}</span>
+              <span>Entering</span>
               <span>✦</span>
             </div>
             <div className="curtain-word" data-text={targetLabel}>

@@ -50,40 +50,41 @@
 :root {
   --radius: 0.875rem;
 
-  --cream: oklch(0.965 0.02 85);
-  --forest-deep: oklch(0.22 0.055 155);
-  --forest: oklch(0.32 0.07 155);
-  --gold: oklch(0.75 0.14 82);
-  --gold-soft: oklch(0.88 0.08 85);
-  --terracotta: oklch(0.62 0.16 40);
-  --ink: oklch(0.15 0.015 90);
+  /* Forest & Terracotta — site default palette
+     cream #f5f0e0 · forest #1a3c2a · terracotta #c4654a · peach #e8a87c */
+  --cream: oklch(0.955 0.025 88);
+  --forest-deep: oklch(0.34 0.06 155);
+  --forest: oklch(0.42 0.06 152);
+  --gold: oklch(0.79 0.095 55);          /* peach — soft accent */
+  --gold-soft: oklch(0.88 0.06 60);
+  --terracotta: oklch(0.62 0.14 42);     /* primary CTA */
+  --ink: oklch(0.22 0.04 150);
 
-  /* Semantic dynamic tokens — every theme redefines these */
-  --color-surface: 255 255 255;
-  --color-text-primary: 20 32 24;
+  --color-surface: 245 240 224;
+  --color-text-primary: 26 60 42;
   --color-text-secondary: 92 96 88;
-  --color-accent-hex: #C97A2B;
-  --color-accent-fg: #FFF7E4;
+  --color-accent-hex: #C4654A;
+  --color-accent-fg: #F5F0E0;
 
   --background: var(--cream);
   --foreground: var(--ink);
-  --card: oklch(0.99 0.008 85);
+  --card: oklch(0.98 0.015 85);
   --card-foreground: var(--ink);
-  --popover: oklch(0.99 0.008 85);
+  --popover: oklch(0.98 0.015 85);
   --popover-foreground: var(--ink);
   --primary: var(--forest-deep);
   --primary-foreground: var(--cream);
-  --secondary: var(--gold);
-  --secondary-foreground: var(--forest-deep);
-  --muted: oklch(0.93 0.015 85);
-  --muted-foreground: oklch(0.45 0.02 90);
+  --secondary: var(--terracotta);
+  --secondary-foreground: var(--cream);
+  --muted: oklch(0.93 0.02 82);
+  --muted-foreground: oklch(0.48 0.03 90);
   --accent: var(--terracotta);
   --accent-foreground: var(--cream);
   --destructive: oklch(0.58 0.22 27);
   --destructive-foreground: var(--cream);
-  --border: oklch(0.88 0.02 85);
-  --input: oklch(0.9 0.015 85);
-  --ring: var(--forest);
+  --border: oklch(0.86 0.025 75);
+  --input: oklch(0.9 0.02 80);
+  --ring: var(--terracotta);
 }
 
 .dark {
@@ -119,7 +120,7 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background-color: #FFF7E6;
+    background-color: #F5F0E0;
     position: relative;
   }
   /* Dynamic pastel mesh gradient — slow drift, sits behind content */
@@ -130,12 +131,12 @@
     z-index: -2;
     pointer-events: none;
     background-image:
-      radial-gradient(38% 42% at 18% 22%, #FFDAB9 0%, rgba(255,218,185,0) 65%),
-      radial-gradient(42% 46% at 82% 18%, #FFF0C3 0%, rgba(255,240,195,0) 68%),
-      radial-gradient(46% 50% at 24% 82%, #E0ECD7 0%, rgba(224,236,215,0) 68%),
-      radial-gradient(44% 48% at 78% 78%, #FCE4D8 0%, rgba(252,228,216,0) 68%),
-      radial-gradient(60% 60% at 50% 50%, #FFF6E4 0%, #FBEED3 100%);
-    filter: blur(28px) saturate(108%);
+      radial-gradient(38% 42% at 18% 22%, #E8A87C 0%, rgba(232,168,124,0) 62%),
+      radial-gradient(42% 46% at 82% 18%, #F2D8BE 0%, rgba(242,216,190,0) 65%),
+      radial-gradient(46% 50% at 24% 82%, #C9D6C1 0%, rgba(201,214,193,0) 66%),
+      radial-gradient(44% 48% at 78% 78%, #E4B79A 0%, rgba(228,183,154,0) 66%),
+      radial-gradient(60% 60% at 50% 50%, #F7EFDD 0%, #EDDFC4 100%);
+    filter: blur(30px) saturate(110%);
     animation: mesh-drift 22s ease-in-out infinite alternate;
   }
   /* Tactile paper grain — sits above mesh, below content */
