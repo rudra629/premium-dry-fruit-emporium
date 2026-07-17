@@ -46,7 +46,7 @@ export function ProductCard({ product }: { product: Product }) {
       <Link
         to="/product/$slug"
         params={{ slug: product.slug }}
-        className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_14px_40px_rgb(0,0,0,0.08)] transition-shadow duration-500"
+        className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-white/30 backdrop-blur-[2px] border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.05)] hover:shadow-[0_18px_45px_rgb(0,0,0,0.09)] transition-shadow duration-500"
       >
         <div
           className="absolute inset-0 flex items-center justify-center p-6 cursor-zoom-in overflow-hidden"
@@ -64,7 +64,7 @@ export function ProductCard({ product }: { product: Product }) {
               transition: "transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), transform-origin 0.12s ease-out",
               willChange: "transform, transform-origin",
             }}
-            className="max-h-full max-w-full object-contain drop-shadow-[0_20px_30px_rgba(10,40,24,0.22)] pointer-events-none select-none"
+            className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_22px_34px_rgba(10,40,24,0.22)] pointer-events-none select-none"
           />
         </div>
 
