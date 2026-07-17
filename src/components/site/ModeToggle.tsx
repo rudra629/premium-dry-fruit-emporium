@@ -41,28 +41,30 @@ export function ModeToggle() {
       <button
         onClick={handleClick}
         aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
-        className="mode-toggle-btn group focus-visible:outline-none"
+        className={[
+          "mode-toggle-btn group fixed z-[60]",
+          "right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)]",
+          "inline-flex items-center justify-center gap-2",
+          "rounded-full border backdrop-blur-md",
+          "px-5 py-3 sm:px-6 sm:py-3.5",
+          "text-[11px] sm:text-xs font-semibold uppercase tracking-widest",
+          "shadow-[0_8px_30px_-8px_rgba(0,0,0,0.25)]",
+          "transition-all duration-300 ease-out",
+          "hover:scale-[1.02] hover:shadow-[0_12px_36px_-10px_rgba(0,0,0,0.35)]",
+          "active:scale-95",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          isCrunch ? "focus-visible:ring-white/60" : "focus-visible:ring-forest-deep/40",
+          surfaceClass,
+        ].join(" ")}
       >
-        <span
-          className={[
-            "relative inline-flex items-center justify-center gap-2",
-            "rounded-full border backdrop-blur-md",
-            "px-5 py-3 sm:px-6 sm:py-3.5",
-            "text-[11px] sm:text-xs font-semibold uppercase tracking-widest",
-            "transition-all duration-300 ease-out",
-            surfaceClass,
-          ].join(" ")}
-        >
-          {isCrunch ? (
-            <Coffee className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-500 group-hover:rotate-[-12deg]" />
-          ) : (
-            <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-500 group-hover:rotate-12" />
-          )}
-          <span>{isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}</span>
-          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 -ml-0.5 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-        </span>
+        {isCrunch ? (
+          <Coffee className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-500 group-hover:rotate-[-12deg]" />
+        ) : (
+          <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-500 group-hover:rotate-12" />
+        )}
+        <span>{isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}</span>
+        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 -ml-0.5 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
       </button>
-
 
       {phase === "playing" && (
         <div className={`curtain-stage ${isCrunch ? "to-cozy" : "to-crunch"}`} aria-hidden>
