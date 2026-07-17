@@ -28,7 +28,7 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-forest-deep text-cream">
+      <section className="relative overflow-hidden bg-forest-deep text-cream min-h-screen flex flex-col justify-start md:justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-70"
           style={{ backgroundImage: `url(${heroBg})` }}
@@ -37,12 +37,13 @@ function Home() {
         <div className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
 
-        <div className="container-x relative px-4 pt-20 pb-16 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 md:gap-12 items-center">
-          <div>
+        <div className="container-x relative px-4 pt-[120px] pb-16 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 md:gap-12 items-start md:items-center">
+          <div className="w-full">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-[0.95] md:leading-[0.92] font-normal tracking-tight">
+            <h1 className="mt-6 font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-tight md:leading-[0.92] font-normal tracking-tight w-full break-words [text-wrap:balance]">
+
               Snack like{" "}
               <span className="italic text-gold relative inline-block">
                 nature
