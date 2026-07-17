@@ -58,6 +58,13 @@
   --terracotta: oklch(0.62 0.16 40);
   --ink: oklch(0.15 0.015 90);
 
+  /* Semantic dynamic tokens — every theme redefines these */
+  --color-surface: 255 255 255;
+  --color-text-primary: 20 32 24;
+  --color-text-secondary: 92 96 88;
+  --color-accent-hex: #C97A2B;
+  --color-accent-fg: #FFF7E4;
+
   --background: var(--cream);
   --foreground: var(--ink);
   --card: oklch(0.99 0.008 85);
