@@ -33,9 +33,6 @@ export function ModeToggle() {
     ? "bg-white/15 hover:bg-white/25 text-cream"
     : "bg-white/30 hover:bg-white/45 text-forest-deep";
 
-  const conicGradient =
-    "conic-gradient(from 0deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4)";
-
   return (
     <>
       <div
@@ -44,19 +41,13 @@ export function ModeToggle() {
         {/* Blurred glow layer */}
         <div
           aria-hidden
-          className="absolute -inset-1 rounded-full opacity-60 group-hover:opacity-100 transition duration-500 blur-xl pointer-events-none"
-          style={{
-            background: conicGradient,
-            animation: "spin 3s linear infinite",
-          }}
+          className="absolute -inset-1 rounded-full opacity-40 group-hover:opacity-75 transition duration-500 blur-md pointer-events-none bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)] animate-[spin_4s_linear_infinite]"
         />
         {/* Crisp border layer (ring only via mask) */}
         <div
           aria-hidden
-          className="absolute inset-0 rounded-full pointer-events-none"
+          className="absolute inset-0 rounded-full pointer-events-none bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)] animate-[spin_4s_linear_infinite]"
           style={{
-            background: conicGradient,
-            animation: "spin 3s linear infinite",
             padding: "2px",
             mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
             WebkitMask:
