@@ -42,7 +42,7 @@ export function ModeToggle() {
             {isCrunch ? <Coffee /> : <Zap />}
           </span>
           <span className="mode-toggle-label">
-            {isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
+            {isCrunch ? "Cozy Mode" : "Crunch Mode"}
           </span>
           <span className="mode-toggle-arrow" aria-hidden>
             <ArrowRight />
