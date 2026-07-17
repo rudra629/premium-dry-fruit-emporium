@@ -28,7 +28,7 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
+      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-70"
           style={{ backgroundImage: `url(${heroBg})` }}
