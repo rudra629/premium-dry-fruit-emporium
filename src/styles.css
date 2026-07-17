@@ -120,7 +120,7 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background-color: #FFF7E6;
+    background-color: #F5F0E0;
     position: relative;
   }
   /* Dynamic pastel mesh gradient — slow drift, sits behind content */
@@ -131,12 +131,12 @@
     z-index: -2;
     pointer-events: none;
     background-image:
-      radial-gradient(38% 42% at 18% 22%, #FFDAB9 0%, rgba(255,218,185,0) 65%),
-      radial-gradient(42% 46% at 82% 18%, #FFF0C3 0%, rgba(255,240,195,0) 68%),
-      radial-gradient(46% 50% at 24% 82%, #E0ECD7 0%, rgba(224,236,215,0) 68%),
-      radial-gradient(44% 48% at 78% 78%, #FCE4D8 0%, rgba(252,228,216,0) 68%),
-      radial-gradient(60% 60% at 50% 50%, #FFF6E4 0%, #FBEED3 100%);
-    filter: blur(28px) saturate(108%);
+      radial-gradient(38% 42% at 18% 22%, #E8A87C 0%, rgba(232,168,124,0) 62%),
+      radial-gradient(42% 46% at 82% 18%, #F2D8BE 0%, rgba(242,216,190,0) 65%),
+      radial-gradient(46% 50% at 24% 82%, #C9D6C1 0%, rgba(201,214,193,0) 66%),
+      radial-gradient(44% 48% at 78% 78%, #E4B79A 0%, rgba(228,183,154,0) 66%),
+      radial-gradient(60% 60% at 50% 50%, #F7EFDD 0%, #EDDFC4 100%);
+    filter: blur(30px) saturate(110%);
     animation: mesh-drift 22s ease-in-out infinite alternate;
   }
   /* Tactile paper grain — sits above mesh, below content */
