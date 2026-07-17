@@ -42,9 +42,14 @@ function Home() {
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-4 py-1.5 text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-display text-[clamp(3rem,8vw,7rem)] leading-[0.9] font-medium">
-              Snack like <span className="italic text-gold">nature</span>
-              <br /> intended.
+            <h1 className="mt-6 font-editorial text-[clamp(3.2rem,9vw,8rem)] leading-[0.92] font-normal tracking-tight">
+              Snack like{" "}
+              <span className="italic text-gold relative inline-block">
+                nature
+                <span aria-hidden className="absolute -bottom-2 left-0 right-0 h-[6px] bg-gold/40 rounded-full blur-[2px]" />
+              </span>
+              <br />
+              <span className="italic text-cream/95">intended.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
