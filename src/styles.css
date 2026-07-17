@@ -112,47 +112,45 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background-color: #FDFAF6;
-    background-image:
-      radial-gradient(1200px 760px at 50% 0%, #FFFDF9 0%, #FDFAF6 42%, transparent 72%),
-      radial-gradient(ellipse at top, #FDFAF6 0%, #F6ECD8 54%, #F0E5D1 100%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-color: #FFF7E6;
     position: relative;
   }
-  /* Tactile cream-paper grain — fixed behind content, visible through transparent page sections */
+  /* Dynamic pastel mesh gradient — slow drift, sits behind content */
   body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    inset: -20%;
+    z-index: -2;
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.34;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.72'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    background-repeat: repeat;
+    background-image:
+      radial-gradient(38% 42% at 18% 22%, #FFDAB9 0%, rgba(255,218,185,0) 65%),
+      radial-gradient(42% 46% at 82% 18%, #FFF0C3 0%, rgba(255,240,195,0) 68%),
+      radial-gradient(46% 50% at 24% 82%, #E0ECD7 0%, rgba(224,236,215,0) 68%),
+      radial-gradient(44% 48% at 78% 78%, #FCE4D8 0%, rgba(252,228,216,0) 68%),
+      radial-gradient(60% 60% at 50% 50%, #FFF6E4 0%, #FBEED3 100%);
+    filter: blur(28px) saturate(108%);
+    animation: mesh-drift 22s ease-in-out infinite alternate;
   }
+  /* Tactile paper grain — sits above mesh, below content */
   body::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.18;
-    mix-blend-mode: multiply;
-    background-image:
-      radial-gradient(circle at 18px 22px, rgba(74, 50, 26, 0.16) 0 0.65px, transparent 0.9px),
-      radial-gradient(circle at 84px 72px, rgba(255, 255, 255, 0.7) 0 0.8px, transparent 1px),
-      linear-gradient(105deg, transparent 0 48%, rgba(92, 63, 31, 0.06) 49%, transparent 51% 100%);
-    background-size: 96px 96px, 132px 132px, 260px 260px;
+    z-index: -1;
+    opacity: 0.28;
+    mix-blend-mode: color-burn;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.72'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+  }
+  @keyframes mesh-drift {
+    0%   { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+    50%  { transform: translate3d(2%, -1.5%, 0) rotate(1.5deg) scale(1.04); }
+    100% { transform: translate3d(-1.5%, 2%, 0) rotate(-1.2deg) scale(1.02); }
   }
   body > * { position: relative; z-index: 1; }
-  html.crunch-mode body { background-image: none; background-color: #0d0d0f; }
+  html.crunch-mode body { background-color: #0d0d0f; }
   html.crunch-mode body::before, html.crunch-mode body::after { display: none; }
 
   h1, h2, h3, h4, .font-display { font-family: var(--font-display); font-feature-settings: "ss01"; letter-spacing: -0.02em; }
