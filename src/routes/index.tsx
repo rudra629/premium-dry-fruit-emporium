@@ -192,7 +192,7 @@ function Home() {
         <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
-          <div className="relative flex flex-col md:flex-row gap-8 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
+          <div className="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
             <div className="w-full md:flex-1">
               <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
               <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
