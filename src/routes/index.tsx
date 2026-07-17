@@ -28,7 +28,7 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
+      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-70"
           style={{ backgroundImage: `url(${heroBg})` }}
@@ -37,7 +37,7 @@ function Home() {
         <div className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
 
-        <div className="container-x relative px-4 pt-0 pb-16 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 md:gap-12 items-start md:items-center">
+        <div className="container-x relative px-4 pt-0 pb-4 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-6 md:gap-12 items-start md:items-center">
           <div className="relative z-10 mt-[120px] w-full transform-none md:mt-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
@@ -107,7 +107,7 @@ function Home() {
         </div>
 
         {/* Hero mobile pouches — overlapping composition like desktop */}
-        <div className="lg:hidden container-x relative px-4 pb-16 -mt-2 w-full">
+        <div className="lg:hidden container-x relative px-4 pb-6 mt-2 w-full">
           <div className="relative mx-auto w-full max-w-md h-[360px] sm:h-[440px]">
             <div className="absolute top-2 left-2 w-[42%] float-slow">
               <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
@@ -192,7 +192,7 @@ function Home() {
         <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
-          <div className="relative flex flex-col md:flex-row gap-8 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
+          <div className="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
             <div className="w-full md:flex-1">
               <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
               <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
@@ -214,7 +214,7 @@ function Home() {
               </div>
             </div>
             <div className="relative w-full md:flex-1 flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-sm md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+              <img src={featured.image} alt={featured.name} className="w-2/3 sm:w-1/2 md:w-full max-w-[220px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
