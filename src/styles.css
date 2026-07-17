@@ -60,9 +60,11 @@
   --terracotta: oklch(0.62 0.14 42);     /* primary CTA */
   --ink: oklch(0.22 0.04 150);
 
-  --color-surface: 245 240 224;
+  --color-surface: 255 255 255;                /* card / glass surface (white for frosted look) */
+  --color-background: #F5F0E0;
   --color-text-primary: 26 60 42;
   --color-text-secondary: 92 96 88;
+  --color-accent: #C4654A;
   --color-accent-hex: #C4654A;
   --color-accent-fg: #F5F0E0;
 
