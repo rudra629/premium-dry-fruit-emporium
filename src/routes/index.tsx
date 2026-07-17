@@ -46,8 +46,8 @@ function Home() {
               Snack like{" "}
               <span className="italic text-gold relative inline-block">
                 nature
-                <span aria-hidden className="absolute -bottom-2 left-0 right-0 h-[6px] bg-gold/40 rounded-full blur-[2px]" />
               </span>
+
               <br />
               <span className="italic text-cream/95">intended.</span>
             </h1>

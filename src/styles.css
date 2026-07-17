@@ -113,12 +113,15 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(1400px 900px at 8% -4%, color-mix(in oklab, var(--gold) 14%, transparent), transparent 60%),
-      radial-gradient(1100px 800px at 100% 10%, color-mix(in oklab, var(--forest) 10%, transparent), transparent 60%),
-      radial-gradient(900px 700px at 50% 100%, color-mix(in oklab, var(--terracotta) 8%, transparent), transparent 55%),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.32  0 0 0 0 0.24  0 0 0 0 0.14  0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
-    background-attachment: fixed, fixed, fixed, fixed;
-    background-size: auto, auto, auto, 240px 240px;
+      radial-gradient(1400px 900px at 8% -4%, color-mix(in oklab, var(--gold) 18%, transparent), transparent 60%),
+      radial-gradient(1100px 800px at 100% 10%, color-mix(in oklab, var(--forest) 12%, transparent), transparent 60%),
+      radial-gradient(900px 700px at 50% 100%, color-mix(in oklab, var(--terracotta) 12%, transparent), transparent 55%),
+      repeating-radial-gradient(circle at 20% 30%, color-mix(in oklab, var(--gold) 6%, transparent) 0, transparent 2px),
+      repeating-radial-gradient(circle at 70% 60%, color-mix(in oklab, var(--terracotta) 5%, transparent) 0, transparent 2px),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36  0 0 0 0 0.26  0 0 0 0 0.14  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/></svg>");
+    background-attachment: fixed, fixed, fixed, fixed, fixed, fixed;
+    background-size: auto, auto, auto, 6px 6px, 8px 8px, 320px 320px;
+
   }
   html.crunch-mode body { background-image: none; }
   h1, h2, h3, h4, .font-display { font-family: var(--font-display); font-feature-settings: "ss01"; letter-spacing: -0.02em; }
