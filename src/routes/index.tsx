@@ -214,7 +214,7 @@ function Home() {
               </div>
             </div>
             <div className="relative w-full md:flex-1 flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-sm md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+              <img src={featured.image} alt={featured.name} className="w-2/3 sm:w-1/2 md:w-full max-w-[220px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
