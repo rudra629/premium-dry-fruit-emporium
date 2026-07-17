@@ -610,3 +610,49 @@ html.crunch-mode header button {
 }
 html.crunch-mode header a:hover { color: #ffb26b; }
 
+
+/* ============ Fruit Loader ============ */
+.fruit-loader {
+  position: relative;
+  width: 92px;
+  height: 92px;
+}
+.fruit-loader-ring {
+  position: absolute;
+  inset: 0;
+  animation: fruit-spin 4.5s linear infinite;
+}
+.fruit-loader-item {
+  position: absolute;
+  left: 50%; top: 50%;
+  font-size: 22px;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * (360deg / var(--n))))
+    translateY(-38px);
+  animation: fruit-bob 1.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.12s);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+}
+.fruit-loader-core {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 14px; height: 14px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, var(--gold), color-mix(in oklab, var(--forest-deep) 60%, var(--gold)));
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 30px color-mix(in oklab, var(--gold) 55%, transparent);
+  animation: fruit-pulse 1.6s ease-in-out infinite;
+}
+@keyframes fruit-spin { to { transform: rotate(360deg); } }
+@keyframes fruit-bob {
+  0%, 100% { font-size: 20px; }
+  50%      { font-size: 26px; }
+}
+@keyframes fruit-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: .9; }
+  50%      { transform: translate(-50%, -50%) scale(1.35); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fruit-loader-ring, .fruit-loader-item, .fruit-loader-core { animation: none; }
+}
