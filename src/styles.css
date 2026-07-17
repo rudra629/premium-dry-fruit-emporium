@@ -153,6 +153,90 @@
   html.crunch-mode body { background-color: #0d0d0f; }
   html.crunch-mode body::before, html.crunch-mode body::after { display: none; }
 
+  /* ============ Client-Review Theme Palettes ============
+     Smooth transitions across bg, text, border, and buttons */
+  body,
+  body::before {
+    transition: background-color 700ms ease-in-out, background-image 700ms ease-in-out, filter 700ms ease-in-out;
+  }
+  * {
+    transition-property: color, background-color, border-color, fill, stroke;
+    transition-duration: 700ms;
+    transition-timing-function: ease-in-out;
+  }
+  /* opt-out for elements that manage their own transforms/shadows */
+  .no-theme-tx, .no-theme-tx * { transition: none; }
+
+  /* ---- Theme 1: Saffron & Spice ---- */
+  html.theme-saffron {
+    --cream: oklch(0.955 0.045 70);
+    --forest-deep: oklch(0.36 0.13 40);   /* deep terracotta as primary text */
+    --forest: oklch(0.44 0.14 42);
+    --gold: oklch(0.78 0.16 80);          /* rich saffron */
+    --gold-soft: oklch(0.9 0.09 82);
+    --terracotta: oklch(0.58 0.18 38);
+    --primary: var(--forest-deep);
+    --secondary: var(--gold);
+    --accent: var(--terracotta);
+    --ring: var(--forest);
+    --border: oklch(0.86 0.05 65);
+  }
+  html.theme-saffron body { background-color: #FFEFD8; }
+  html.theme-saffron body::before {
+    background-image:
+      radial-gradient(38% 42% at 18% 22%, #FFC79A 0%, rgba(255,199,154,0) 65%),
+      radial-gradient(42% 46% at 82% 18%, #FFE1A8 0%, rgba(255,225,168,0) 68%),
+      radial-gradient(46% 50% at 24% 82%, #F9CBB0 0%, rgba(249,203,176,0) 68%),
+      radial-gradient(44% 48% at 78% 78%, #FFD9B0 0%, rgba(255,217,176,0) 68%),
+      radial-gradient(60% 60% at 50% 50%, #FFF1DA 0%, #FBE2C0 100%);
+  }
+
+  /* ---- Theme 2: Lush Orchard ---- */
+  html.theme-orchard {
+    --cream: oklch(0.955 0.04 145);
+    --forest-deep: oklch(0.28 0.08 155);
+    --forest: oklch(0.36 0.09 155);
+    --gold: oklch(0.62 0.17 155);         /* vibrant emerald */
+    --gold-soft: oklch(0.85 0.11 148);
+    --terracotta: oklch(0.6 0.14 55);
+    --primary: var(--forest-deep);
+    --secondary: var(--gold);
+    --ring: var(--forest);
+    --border: oklch(0.85 0.04 145);
+  }
+  html.theme-orchard body { background-color: #E9F1DE; }
+  html.theme-orchard body::before {
+    background-image:
+      radial-gradient(38% 42% at 18% 22%, #C9DFB3 0%, rgba(201,223,179,0) 65%),
+      radial-gradient(42% 46% at 82% 18%, #DDECBF 0%, rgba(221,236,191,0) 68%),
+      radial-gradient(46% 50% at 24% 82%, #BFE0C6 0%, rgba(191,224,198,0) 68%),
+      radial-gradient(44% 48% at 78% 78%, #E4EFCE 0%, rgba(228,239,206,0) 68%),
+      radial-gradient(60% 60% at 50% 50%, #EEF6DF 0%, #D9E9C4 100%);
+  }
+
+  /* ---- Theme 3: Royal Harvest ---- */
+  html.theme-royal {
+    --cream: oklch(0.955 0.03 340);
+    --forest-deep: oklch(0.28 0.09 320);  /* dark eggplant */
+    --forest: oklch(0.36 0.1 322);
+    --gold: oklch(0.56 0.2 350);          /* rich berry */
+    --gold-soft: oklch(0.86 0.09 340);
+    --terracotta: oklch(0.55 0.19 355);
+    --primary: var(--forest-deep);
+    --secondary: var(--gold);
+    --ring: var(--forest);
+    --border: oklch(0.86 0.03 335);
+  }
+  html.theme-royal body { background-color: #F3E4EF; }
+  html.theme-royal body::before {
+    background-image:
+      radial-gradient(38% 42% at 18% 22%, #E9CBE3 0%, rgba(233,203,227,0) 65%),
+      radial-gradient(42% 46% at 82% 18%, #F1D6E0 0%, rgba(241,214,224,0) 68%),
+      radial-gradient(46% 50% at 24% 82%, #DDC7E6 0%, rgba(221,199,230,0) 68%),
+      radial-gradient(44% 48% at 78% 78%, #F4D9EA 0%, rgba(244,217,234,0) 68%),
+      radial-gradient(60% 60% at 50% 50%, #F8E7F2 0%, #E9CFE1 100%);
+  }
+
   h1, h2, h3, h4, .font-display { font-family: var(--font-display); font-feature-settings: "ss01"; letter-spacing: -0.02em; }
   .font-editorial { font-family: "Instrument Serif", "Fraunces", ui-serif, Georgia, serif; letter-spacing: -0.015em; }
 }

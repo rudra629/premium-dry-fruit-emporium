@@ -18,6 +18,7 @@ import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/site/ModeToggle";
+import { ThemeSwitcher } from "@/components/site/ThemeSwitcher";
 import { useReveal } from "@/lib/use-reveal";
 import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
 
@@ -129,6 +130,7 @@ function RootComponent() {
             <Footer />
           </div>
           <ModeToggle />
+          <ThemeSwitcher />
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
