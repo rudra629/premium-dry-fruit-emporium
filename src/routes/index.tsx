@@ -106,12 +106,30 @@ function Home() {
           </div>
         </div>
 
-        {/* Hero mobile pouches */}
-        <div className="lg:hidden container-x relative px-4 pb-14 -mt-4">
-          <div className="grid grid-cols-3 gap-3 w-full max-w-sm mx-auto">
-            {[products[0], products[6], products[3]].map((p) => (
-              <img key={p.slug} src={p.image} alt={p.name} className="w-full drop-shadow-2xl" />
-            ))}
+        {/* Hero mobile pouches — overlapping composition like desktop */}
+        <div className="lg:hidden container-x relative px-4 pb-16 -mt-2 w-full">
+          <div className="relative mx-auto w-full max-w-md h-[360px] sm:h-[440px]">
+            <div className="absolute top-2 left-2 w-[42%] float-slow">
+              <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
+            </div>
+            <div className="absolute top-0 right-2 w-[46%] float-slower">
+              <img src={products[0].image} alt="Walnut" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)] rotate-[6deg]" />
+            </div>
+            <div className="absolute bottom-2 left-[18%] w-[52%] z-10 float-slow" style={{ animationDelay: "1.5s" }}>
+              <img src={products[6].image} alt="Mango" className="w-full drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)] rotate-[-3deg]" />
+            </div>
+            <div className="absolute -bottom-1 right-0 w-[42%] float-slower" style={{ animationDelay: "2s" }}>
+              <img src={products[5].image} alt="Pumpkin seeds" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[10deg]" />
+            </div>
+
+            {/* Floating rating card */}
+            <div className="absolute top-[38%] -left-1 bg-cream text-ink rounded-2xl p-3 shadow-glow w-40 sm:w-48 z-20">
+              <div className="flex items-center gap-1 text-gold">
+                {[...Array(5)].map((_, i) => (<Star key={i} className="w-3 h-3 fill-gold" />))}
+              </div>
+              <p className="mt-1.5 text-xs sm:text-sm leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
+              <p className="mt-1 text-[10px] sm:text-xs text-muted-foreground">— Riya, Mumbai</p>
+            </div>
           </div>
         </div>
 
