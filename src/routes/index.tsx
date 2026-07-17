@@ -136,7 +136,7 @@ function Home() {
         <div className="grid md:grid-cols-4 gap-6">
           {[
             { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
-            { icon: ShieldCheck, title: "Lab tested", desc: "Every batch tested for freshness & purity." },
+            { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
             { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
             { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
           ].map((v) => (
