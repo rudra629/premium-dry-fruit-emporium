@@ -136,7 +136,7 @@ function ProductPage() {
 
           <div className="mt-8 grid grid-cols-3 gap-3 text-xs">
             <div className="flex items-start gap-2 p-3 rounded-xl border border-border/60"><Truck className="w-4 h-4 mt-0.5 text-forest-deep" /><span>Free shipping over ₹899</span></div>
-            <div className="flex items-start gap-2 p-3 rounded-xl border border-border/60"><ShieldCheck className="w-4 h-4 mt-0.5 text-forest-deep" /><span>Lab-tested batches</span></div>
+            <div className="flex items-start gap-2 p-3 rounded-xl border border-border/60"><ShieldCheck className="w-4 h-4 mt-0.5 text-forest-deep" /><span>Nitrogen-flushed freshness</span></div>
             <div className="flex items-start gap-2 p-3 rounded-xl border border-border/60"><Leaf className="w-4 h-4 mt-0.5 text-forest-deep" /><span>Recyclable pouch</span></div>
           </div>
         </div>

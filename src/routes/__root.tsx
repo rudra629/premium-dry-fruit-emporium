@@ -19,6 +19,7 @@ import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/site/ModeToggle";
 import { useReveal } from "@/lib/use-reveal";
+import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
 
 function NotFoundComponent() {
   return (
@@ -87,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap",
       },
     ],
   }),
@@ -113,6 +114,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useSmoothScroll();
   return (
     <QueryClientProvider client={queryClient}>
       <SiteProvider>
@@ -145,7 +147,12 @@ function PageTransition({ children }: { children: ReactNode }) {
     const id = window.setTimeout(() => {
       if (isPop) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: 0, left: 0, behavior: reduced ? "auto" : "smooth" });
+      const lenis = getLenis();
+      if (lenis && !reduced) {
+        lenis.scrollTo(0, { duration: 1.1, immediate: false });
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: reduced ? "auto" : "smooth" });
+      }
     }, 0);
     return () => {
       window.removeEventListener("popstate", onPop);

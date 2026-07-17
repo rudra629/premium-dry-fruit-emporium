@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite } from "@/lib/site-store";
-import { Skeleton } from "@/components/ui/skeleton";
+import { FruitLoader } from "@/components/site/FruitLoader";
 
 type Search = { cat?: string; q?: string };
 
@@ -103,17 +103,9 @@ function Shop() {
 
       {/* Grid */}
       <section className="container-x py-12">
-        <p className="text-sm text-muted-foreground mb-6">{loading ? "Loading…" : `${filtered.length} products`}</p>
+        <p className="text-sm text-muted-foreground mb-6">{loading ? "\u00A0" : `${filtered.length} products`}</p>
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex flex-col gap-3">
-                <Skeleton className="aspect-[4/5] rounded-2xl" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-6 w-1/2" />
-              </div>
-            ))}
-          </div>
+          <FruitLoader label="Picking the freshest bites…" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-display text-3xl text-forest-deep">Nothing matches that.</p>
