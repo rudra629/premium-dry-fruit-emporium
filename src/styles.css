@@ -223,10 +223,11 @@
 }
 .page-transition {
   animation: page-enter .32s ease-out both;
-  background-color: var(--color-background);
+  background-color: transparent;
   min-height: 100%;
   will-change: opacity, transform;
 }
+
 @media (prefers-reduced-motion: reduce) {
   .page-transition { animation: none; }
 }
