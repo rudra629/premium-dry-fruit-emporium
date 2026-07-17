@@ -334,7 +334,27 @@
 }
 .mode-toggle-btn.is-crunch::before { color: var(--gold); }
 
+/* Google-style animated gradient border on hover */
+.mode-toggle-btn::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 999px;
+  background: conic-gradient(from 0deg, #4285F4 0%, #EA4335 25%, #FBBC05 50%, #34A853 75%, #4285F4 100%);
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+  pointer-events: none;
+  z-index: -1;
+}
+.mode-toggle-btn:hover::after {
+  opacity: 1;
+  transform: scale(1);
+  animation: mt-gradient-spin 2.2s linear infinite;
+}
+
 .mode-toggle-inner {
+
   --mt-shadow:
     0 22px 40px -18px rgba(0,0,0,.55),
     0 6px 14px -6px rgba(0,0,0,.35),
