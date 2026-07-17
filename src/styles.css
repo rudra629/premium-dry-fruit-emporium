@@ -228,9 +228,11 @@
     --muted: oklch(0.94 0.03 145);
     --card: oklch(0.99 0.02 145);
 
-    --color-surface: 246 252 236;
+    --color-surface: 255 255 255;
+    --color-background: #E9F1DE;
     --color-text-primary: 12 46 30;
     --color-text-secondary: 70 100 78;
+    --color-accent: #0F9D58;
     --color-accent-hex: #0F9D58;
     --color-accent-fg: #F2FBED;
   }
