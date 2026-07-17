@@ -29,10 +29,10 @@ export function ModeToggle() {
   const targetLabel = isCrunch ? "COZY" : "CRUNCH";
   const targetSub = isCrunch ? "Welcome home" : "Turn it up";
 
-  // Dark glass on main site, light glass on /crunch
+  // Light frosted glass on /crunch (dark page), premium dark glass on main site
   const themeClasses = isCrunch
-    ? "bg-white/20 text-neutral-900 border border-neutral-900/10 hover:bg-white/30"
-    : "bg-black/80 text-white border border-white/10 hover:bg-black/90";
+    ? "bg-white/85 text-neutral-900 border border-white/60 hover:bg-white shadow-[0_10px_40px_-8px_rgba(255,178,107,0.5)]"
+    : "bg-forest-deep/90 text-cream border border-gold/30 hover:bg-forest-deep shadow-[0_12px_40px_-8px_rgba(10,40,24,0.55)]";
 
   return (
     <>
@@ -40,15 +40,28 @@ export function ModeToggle() {
         <button
           onClick={handleClick}
           aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
-          className={`group rounded-full px-6 py-3 font-medium text-sm transition-all duration-300 shadow-lg backdrop-blur-md flex items-center justify-center gap-2 hover:scale-105 active:scale-95 ${themeClasses}`}
+          className={`group relative overflow-hidden rounded-full pl-2 pr-5 py-2 font-medium text-sm transition-all duration-300 backdrop-blur-md flex items-center gap-2.5 hover:scale-[1.03] active:scale-95 ${themeClasses}`}
         >
-          <span className="inline-flex items-center justify-center transition-transform duration-500 group-hover:rotate-180">
+          <span
+            className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-transform duration-500 group-hover:rotate-[360deg] ${
+              isCrunch ? "bg-neutral-900 text-white" : "bg-gold text-forest-deep"
+            }`}
+          >
             {isCrunch ? <Coffee className="w-4 h-4" /> : <Zap className="w-4 h-4" />}
           </span>
-          <span className="tracking-wide">
+          <span className="tracking-wide whitespace-nowrap">
             {isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
           </span>
-          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          <ArrowRight className="w-4 h-4 -ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
+            style={{
+              background: isCrunch
+                ? "linear-gradient(90deg, transparent, rgba(255,178,107,0.35), transparent)"
+                : "linear-gradient(90deg, transparent, rgba(233,196,106,0.25), transparent)",
+            }}
+          />
         </button>
       </div>
 
