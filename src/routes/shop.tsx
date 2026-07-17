@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite } from "@/lib/site-store";
-import { Skeleton } from "@/components/ui/skeleton";
+import { FruitLoader } from "@/components/site/FruitLoader";
 
 type Search = { cat?: string; q?: string };
 
