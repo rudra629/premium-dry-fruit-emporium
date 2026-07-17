@@ -60,9 +60,11 @@
   --terracotta: oklch(0.62 0.14 42);     /* primary CTA */
   --ink: oklch(0.22 0.04 150);
 
-  --color-surface: 245 240 224;
+  --color-surface: 255 255 255;                /* card / glass surface (white for frosted look) */
+  --color-background: #F5F0E0;
   --color-text-primary: 26 60 42;
   --color-text-secondary: 92 96 88;
+  --color-accent: #C4654A;
   --color-accent-hex: #C4654A;
   --color-accent-fg: #F5F0E0;
 
@@ -191,9 +193,11 @@
     --muted: oklch(0.94 0.04 68);
     --card: oklch(0.99 0.02 70);
 
-    --color-surface: 255 246 232;
+    --color-surface: 255 255 255;
+    --color-background: #FFEFD8;
     --color-text-primary: 66 34 18;
     --color-text-secondary: 130 88 60;
+    --color-accent: #E4A020;
     --color-accent-hex: #E4A020;
     --color-accent-fg: #3A1F0C;
   }
@@ -224,9 +228,11 @@
     --muted: oklch(0.94 0.03 145);
     --card: oklch(0.99 0.02 145);
 
-    --color-surface: 246 252 236;
+    --color-surface: 255 255 255;
+    --color-background: #E9F1DE;
     --color-text-primary: 12 46 30;
     --color-text-secondary: 70 100 78;
+    --color-accent: #0F9D58;
     --color-accent-hex: #0F9D58;
     --color-accent-fg: #F2FBED;
   }
@@ -257,9 +263,11 @@
     --muted: oklch(0.94 0.02 335);
     --card: oklch(0.99 0.015 335);
 
-    --color-surface: 253 240 248;
+    --color-surface: 255 255 255;
+    --color-background: #F3E4EF;
     --color-text-primary: 46 20 60;
     --color-text-secondary: 108 76 118;
+    --color-accent: #B5195E;
     --color-accent-hex: #B5195E;
     --color-accent-fg: #FBEAF3;
   }
@@ -385,6 +393,50 @@
 
 /* Nav / button micro-transition helper */
 @utility tx { transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .25s ease, opacity .25s ease, box-shadow .25s ease; }
+
+/* Shared floating glass pill — used by ThemeSwitcher trigger AND ModeToggle
+   so both floating buttons look identical across every theme. */
+@utility glass-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: rgb(var(--color-text-primary));
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow:
+    0 10px 30px -12px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: transform .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease;
+  cursor: pointer;
+}
+.glass-pill:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.glass-pill:active { transform: translateY(0) scale(.97); }
+.glass-pill svg { color: currentColor; }
+
+/* Crunch (dark) mode inverts the glass to dark frosted so pills stay readable */
+html.crunch-mode .glass-pill {
+  background: rgba(20, 18, 22, 0.45);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #fdf6e6;
+  box-shadow:
+    0 10px 30px -12px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+html.crunch-mode .glass-pill:hover {
+  background: rgba(28, 24, 28, 0.6);
+  border-color: rgba(255, 255, 255, 0.24);
+}
 
 /* Grid item stagger — apply to children with inline animation-delay */
 @keyframes grid-item-in {
