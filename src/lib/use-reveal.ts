@@ -1,9 +1,15 @@
 import { useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 /**
- * Wow.js-style scroll reveal.
- * Auto-tags common section-level elements inside <main> and observes them,
- * adding `.in-view` when they scroll into the viewport.
+ * GSAP-powered pop-in scroll reveal.
+ * Auto-tags section-level blocks inside <main> and pops them in with a
+ * bouncy back-out ease as they enter the viewport.
  */
 export function useReveal(pathname: string) {
   useEffect(() => {
@@ -11,60 +17,42 @@ export function useReveal(pathname: string) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
-    // Give the page a tick to render
+    let ctx: gsap.Context | null = null;
     const rafId = requestAnimationFrame(() => {
       const root = document.querySelector("main");
       if (!root) return;
 
-      // Tag section-level blocks + explicit opt-ins
-      const selector = [
-        "section",
-        "article",
-        "[data-reveal]",
-        "main > div > section",
-      ].join(",");
-      const targets = new Set<Element>();
-      root.querySelectorAll(selector).forEach((el) => targets.add(el));
+      const selector = ["section", "article", "[data-reveal]"].join(",");
+      const targets = Array.from(root.querySelectorAll<HTMLElement>(selector));
 
-      let i = 0;
-      targets.forEach((el) => {
-        if (!el.classList.contains("reveal")) {
-          el.classList.add("reveal");
-          (el as HTMLElement).style.setProperty("--reveal-delay", `${(i % 4) * 80}ms`);
-        }
-        i++;
+      ctx = gsap.context(() => {
+        targets.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 44, scale: 0.965 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.95,
+              ease: "back.out(1.35)",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 88%",
+                once: true,
+              },
+            },
+          );
+        });
       });
 
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add("in-view");
-              io.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: "0px 0px -8% 0px" },
-      );
-
-      targets.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        // Elements already above the fold get revealed immediately
-        if (rect.top < window.innerHeight * 0.9) {
-          el.classList.add("in-view");
-        } else {
-          io.observe(el);
-        }
-      });
-
-      // store for cleanup
-      (window as unknown as { __reveal_io?: IntersectionObserver }).__reveal_io = io;
+      ScrollTrigger.refresh();
     });
 
     return () => {
       cancelAnimationFrame(rafId);
-      const w = window as unknown as { __reveal_io?: IntersectionObserver };
-      w.__reveal_io?.disconnect();
+      ctx?.revert();
+      ScrollTrigger.getAll().forEach((s) => s.kill());
     };
   }, [pathname]);
 }
