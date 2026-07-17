@@ -31,7 +31,7 @@ export function ModeToggle() {
 
   const surfaceClass = isCrunch
     ? "bg-white/15 hover:bg-white/25 text-cream"
-    : "bg-white/30 hover:bg-white/45 text-forest-deep";
+    : "bg-gray-900/70 hover:bg-gray-900/85 text-white/95";
 
   return (
     <>
