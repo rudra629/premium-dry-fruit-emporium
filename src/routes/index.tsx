@@ -37,12 +37,12 @@ function Home() {
         <div className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
 
-        <div className="container-x relative pt-16 pb-24 md:pt-24 md:pb-36 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
+        <div className="container-x relative px-4 pt-20 pb-16 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 md:gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-4 py-1.5 text-[11px] tracking-[0.24em] uppercase text-gold">
-              <Sparkles className="w-3.5 h-3.5" /> Batch of July · Freshly Packed
+            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-editorial text-[clamp(3.2rem,9vw,8rem)] leading-[0.92] font-normal tracking-tight">
+            <h1 className="mt-6 font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-[0.95] md:leading-[0.92] font-normal tracking-tight">
               Snack like{" "}
               <span className="italic text-gold relative inline-block">
                 nature
@@ -51,28 +51,28 @@ function Home() {
               <br />
               <span className="italic text-cream/95">intended.</span>
             </h1>
-            <p className="mt-6 max-w-lg text-lg text-cream/80 leading-relaxed">
+            <p className="mt-5 md:mt-6 max-w-lg text-base md:text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
               like the farm they came from. No fillers. No BS.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div className="mt-8 md:mt-9 flex flex-wrap items-center gap-3 md:gap-4">
               <Link
                 to="/shop"
-                className="group inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition"
+                className="group inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-6 md:px-7 py-3.5 md:py-4 text-sm font-semibold hover:bg-cream transition"
               >
                 Shop the collection
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/story"
-                className="inline-flex items-center gap-2 rounded-full border border-cream/25 px-7 py-4 text-sm font-medium hover:bg-cream/10 transition"
+                className="inline-flex items-center gap-2 rounded-full border border-cream/25 px-6 md:px-7 py-3.5 md:py-4 text-sm font-medium hover:bg-cream/10 transition"
               >
                 Our sourcing story
               </Link>
             </div>
 
-            <div className="mt-14 grid grid-cols-3 gap-6 max-w-lg">
+            <div className="mt-10 md:mt-14 grid grid-cols-3 gap-4 md:gap-6 max-w-lg">
               <Stat n="12+" l="Origins" />
               <Stat n="47k" l="Happy snackers" />
               <Stat n="4.8★" l="Avg. rating" />
@@ -106,13 +106,14 @@ function Home() {
         </div>
 
         {/* Hero mobile pouches */}
-        <div className="lg:hidden container-x relative pb-16 -mt-8">
-          <div className="grid grid-cols-3 gap-3">
+        <div className="lg:hidden container-x relative px-4 pb-14 -mt-4">
+          <div className="grid grid-cols-3 gap-3 w-full max-w-sm mx-auto">
             {[products[0], products[6], products[3]].map((p) => (
               <img key={p.slug} src={p.image} alt={p.name} className="w-full drop-shadow-2xl" />
             ))}
           </div>
         </div>
+
       </section>
 
       {/* Marquee */}
@@ -168,37 +169,38 @@ function Home() {
       </section>
 
       {/* Featured huge banner */}
-      <section className="container-x py-20">
-        <div className="relative rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
+      <section className="container-x px-4 py-12 md:px-0 md:py-20">
+        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/85 to-transparent" />
-          <div className="relative grid md:grid-cols-2 gap-8 items-center p-8 md:p-16 min-h-[520px]">
-            <div>
-              <p className="text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
-              <h3 className="font-display text-5xl md:text-7xl mt-3 leading-none">
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
+          <div className="relative flex flex-col md:flex-row gap-8 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
+            <div className="w-full md:flex-1">
+              <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
+              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
                 Walnut<br />
                 <span className="italic text-gold">Whole.</span>
               </h3>
-              <p className="mt-5 max-w-md text-cream/80 leading-relaxed">
+              <p className="mt-4 md:mt-5 max-w-md text-sm md:text-base text-cream/80 leading-relaxed">
                 California-grown, hand-graded and shipped within 14 days of harvest.
                 One handful = your daily omega-3 in a crunch.
               </p>
-              <div className="mt-8 flex items-center gap-6">
+              <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-4 md:gap-6">
                 <div>
-                  <p className="font-display text-4xl text-gold">₹{featured.price}</p>
+                  <p className="font-display text-3xl md:text-4xl text-gold">₹{featured.price}</p>
                   {featured.compareAt && <p className="text-sm text-cream/50 line-through">₹{featured.compareAt}</p>}
                 </div>
-                <Link to="/product/$slug" params={{ slug: featured.slug }} className="rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-2">
+                <Link to="/product/$slug" params={{ slug: featured.slug }} className="rounded-full bg-gold text-forest-deep px-6 md:px-7 py-3.5 md:py-4 text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-2">
                   Shop walnuts <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
-            <div className="relative flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-md drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+            <div className="relative w-full md:flex-1 flex justify-center">
+              <img src={featured.image} alt={featured.name} className="w-full max-w-sm md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Categories */}
       <section className="container-x py-8">
