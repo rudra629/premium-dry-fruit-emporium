@@ -36,12 +36,7 @@ export function ModeToggle() {
         <button
           onClick={handleClick}
           aria-label={isCrunch ? "Enter Cozy Mode" : "Enter Crunch Mode"}
-          className="pointer-events-auto tx inline-flex items-center gap-2 rounded-full border backdrop-blur-md px-4 py-2.5 text-xs font-semibold tracking-[0.14em] uppercase shadow-[0_10px_30px_-12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5"
-          style={{
-            background: "rgb(var(--color-surface) / 0.5)",
-            borderColor: "rgb(var(--color-surface) / 0.7)",
-            color: "rgb(var(--color-text-primary))",
-          }}
+          className="glass-pill pointer-events-auto"
         >
           <Icon className="h-3.5 w-3.5" />
           <span>
