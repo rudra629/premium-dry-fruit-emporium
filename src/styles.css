@@ -338,20 +338,20 @@
 .mode-toggle-btn::after {
   content: "";
   position: absolute;
-  inset: -3.5px;
+  inset: -4px;
   border-radius: 999px;
   background:
     conic-gradient(
       from 0deg,
-      #B88A44 0%,
-      #D4A340 14%,
-      #F0D6A0 26%,
-      #D4A340 38%,
-      #C17A3D 50%,
-      #D4A340 62%,
-      #E8C880 74%,
-      #B88A44 86%,
-      #D4A340 100%
+      #C69C4D 0%,
+      #E8B84D 12%,
+      #FFF4D9 24%,
+      #E8B84D 36%,
+      #C17A3D 48%,
+      #D4A340 60%,
+      #F5D88C 72%,
+      #C69C4D 84%,
+      #E8B84D 100%
     );
   opacity: 0;
   transform: scale(0.96);
@@ -365,9 +365,9 @@
   transform: scale(1);
   animation: mt-gradient-spin 2.6s linear infinite;
   box-shadow:
-    0 0 24px rgba(212, 163, 64, 0.60),
-    0 0 48px rgba(212, 163, 64, 0.36),
-    0 0 72px rgba(255, 178, 107, 0.20);
+    0 0 26px rgba(232, 184, 77, 0.62),
+    0 0 52px rgba(232, 184, 77, 0.38),
+    0 0 80px rgba(255, 219, 153, 0.22);
 }
 
 .mode-toggle-inner {
