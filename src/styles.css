@@ -297,6 +297,9 @@
 @keyframes mt-gradient-spin {
   to { transform: rotate(360deg); }
 }
+@keyframes ai-border-spin {
+  to { transform: rotate(360deg); }
+}
 
 
 .mode-toggle-btn {
