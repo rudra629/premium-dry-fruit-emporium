@@ -161,34 +161,44 @@
   html.crunch-mode body::before, html.crunch-mode body::after { display: none; }
 
   /* ============ Client-Review Theme Palettes ============
-     Smooth transitions across bg, text, border, and buttons */
+     Smooth transitions across bg, text, border, and buttons.
+     Selectors use [data-theme] on <html> (set by ThemeSwitcher).
+     Class selectors (html.theme-*) retained for backward compat. */
   body,
   body::before {
     transition: background-color 700ms ease-in-out, background-image 700ms ease-in-out, filter 700ms ease-in-out;
   }
   * {
     transition-property: color, background-color, border-color, fill, stroke;
-    transition-duration: 700ms;
+    transition-duration: 500ms;
     transition-timing-function: ease-in-out;
   }
-  /* opt-out for elements that manage their own transforms/shadows */
   .no-theme-tx, .no-theme-tx * { transition: none; }
 
   /* ---- Theme 1: Saffron & Spice ---- */
+  html[data-theme='saffron'],
   html.theme-saffron {
-    --cream: oklch(0.955 0.045 70);
-    --forest-deep: oklch(0.36 0.13 40);   /* deep terracotta as primary text */
-    --forest: oklch(0.44 0.14 42);
-    --gold: oklch(0.78 0.16 80);          /* rich saffron */
+    --cream: oklch(0.96 0.045 68);              /* warm surface / bg tint */
+    --forest-deep: oklch(0.34 0.11 40);         /* deep terracotta-brown text */
+    --forest: oklch(0.42 0.12 42);
+    --gold: oklch(0.78 0.17 78);                /* saffron accent */
     --gold-soft: oklch(0.9 0.09 82);
     --terracotta: oklch(0.58 0.18 38);
-    --primary: var(--forest-deep);
-    --secondary: var(--gold);
-    --accent: var(--terracotta);
-    --ring: var(--forest);
+    --ink: oklch(0.28 0.08 40);                 /* body text */
+    --muted-foreground: oklch(0.5 0.06 45);
     --border: oklch(0.86 0.05 65);
+    --muted: oklch(0.94 0.04 68);
+    --card: oklch(0.99 0.02 70);
+
+    --color-surface: 255 246 232;
+    --color-text-primary: 66 34 18;
+    --color-text-secondary: 130 88 60;
+    --color-accent-hex: #E4A020;
+    --color-accent-fg: #3A1F0C;
   }
+  html[data-theme='saffron'] body,
   html.theme-saffron body { background-color: #FFEFD8; }
+  html[data-theme='saffron'] body::before,
   html.theme-saffron body::before {
     background-image:
       radial-gradient(38% 42% at 18% 22%, #FFC79A 0%, rgba(255,199,154,0) 65%),
@@ -199,19 +209,29 @@
   }
 
   /* ---- Theme 2: Lush Orchard ---- */
+  html[data-theme='orchard'],
   html.theme-orchard {
-    --cream: oklch(0.955 0.04 145);
-    --forest-deep: oklch(0.28 0.08 155);
+    --cream: oklch(0.96 0.04 145);
+    --forest-deep: oklch(0.28 0.09 155);         /* deep forest text */
     --forest: oklch(0.36 0.09 155);
-    --gold: oklch(0.62 0.17 155);         /* vibrant emerald */
+    --gold: oklch(0.62 0.18 152);                /* emerald accent */
     --gold-soft: oklch(0.85 0.11 148);
     --terracotta: oklch(0.6 0.14 55);
-    --primary: var(--forest-deep);
-    --secondary: var(--gold);
-    --ring: var(--forest);
+    --ink: oklch(0.24 0.07 155);
+    --muted-foreground: oklch(0.46 0.05 150);
     --border: oklch(0.85 0.04 145);
+    --muted: oklch(0.94 0.03 145);
+    --card: oklch(0.99 0.02 145);
+
+    --color-surface: 246 252 236;
+    --color-text-primary: 12 46 30;
+    --color-text-secondary: 70 100 78;
+    --color-accent-hex: #0F9D58;
+    --color-accent-fg: #F2FBED;
   }
+  html[data-theme='orchard'] body,
   html.theme-orchard body { background-color: #E9F1DE; }
+  html[data-theme='orchard'] body::before,
   html.theme-orchard body::before {
     background-image:
       radial-gradient(38% 42% at 18% 22%, #C9DFB3 0%, rgba(201,223,179,0) 65%),
@@ -222,19 +242,29 @@
   }
 
   /* ---- Theme 3: Royal Harvest ---- */
+  html[data-theme='royal'],
   html.theme-royal {
     --cream: oklch(0.955 0.03 340);
-    --forest-deep: oklch(0.28 0.09 320);  /* dark eggplant */
+    --forest-deep: oklch(0.28 0.09 320);         /* dark eggplant text */
     --forest: oklch(0.36 0.1 322);
-    --gold: oklch(0.56 0.2 350);          /* rich berry */
+    --gold: oklch(0.56 0.22 350);                /* berry accent */
     --gold-soft: oklch(0.86 0.09 340);
     --terracotta: oklch(0.55 0.19 355);
-    --primary: var(--forest-deep);
-    --secondary: var(--gold);
-    --ring: var(--forest);
+    --ink: oklch(0.24 0.09 322);
+    --muted-foreground: oklch(0.46 0.06 328);
     --border: oklch(0.86 0.03 335);
+    --muted: oklch(0.94 0.02 335);
+    --card: oklch(0.99 0.015 335);
+
+    --color-surface: 253 240 248;
+    --color-text-primary: 46 20 60;
+    --color-text-secondary: 108 76 118;
+    --color-accent-hex: #B5195E;
+    --color-accent-fg: #FBEAF3;
   }
+  html[data-theme='royal'] body,
   html.theme-royal body { background-color: #F3E4EF; }
+  html[data-theme='royal'] body::before,
   html.theme-royal body::before {
     background-image:
       radial-gradient(38% 42% at 18% 22%, #E9CBE3 0%, rgba(233,203,227,0) 65%),
@@ -243,6 +273,7 @@
       radial-gradient(44% 48% at 78% 78%, #F4D9EA 0%, rgba(244,217,234,0) 68%),
       radial-gradient(60% 60% at 50% 50%, #F8E7F2 0%, #E9CFE1 100%);
   }
+
 
   h1, h2, h3, h4, .font-display { font-family: var(--font-display); font-feature-settings: "ss01"; letter-spacing: -0.02em; }
   .font-editorial { font-family: "Instrument Serif", "Fraunces", ui-serif, Georgia, serif; letter-spacing: -0.015em; }
