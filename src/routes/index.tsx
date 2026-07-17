@@ -213,7 +213,7 @@ function Home() {
               </div>
             </div>
             <div className="relative flex-1 flex justify-center shrink-0">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-[210px] sm:max-w-[220px] md:max-w-md drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] md:drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+              <img src={featured.image} alt={featured.name} className="w-full max-w-[260px] sm:max-w-[280px] md:max-w-md drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] md:drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
 
           </div>
