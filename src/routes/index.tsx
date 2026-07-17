@@ -106,29 +106,29 @@ function Home() {
           </div>
         </div>
 
-        {/* Hero mobile pouches — overlapping composition like desktop */}
-        <div className="lg:hidden container-x relative px-4 pb-6 mt-2 w-full">
-          <div className="relative mx-auto w-full max-w-md h-[360px] sm:h-[440px]">
-            <div className="absolute top-2 left-2 w-[42%] float-slow">
-              <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
+        {/* Hero mobile pouches — tight overlapping composition like desktop */}
+        <div className="lg:hidden container-x relative px-4 pb-6 mt-0 w-full">
+          <div className="relative mx-auto w-full max-w-xs h-[300px] sm:h-[360px]">
+            <div className="absolute top-0 left-0 w-[46%] float-slow">
+              <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
             </div>
-            <div className="absolute top-0 right-2 w-[46%] float-slower">
-              <img src={products[0].image} alt="Walnut" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)] rotate-[6deg]" />
+            <div className="absolute top-0 right-0 w-[50%] float-slower">
+              <img src={products[0].image} alt="Walnut" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.7)] rotate-[6deg]" />
             </div>
-            <div className="absolute bottom-2 left-[18%] w-[52%] z-10 float-slow" style={{ animationDelay: "1.5s" }}>
-              <img src={products[6].image} alt="Mango" className="w-full drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)] rotate-[-3deg]" />
+            <div className="absolute bottom-0 left-[12%] w-[56%] z-10 float-slow" style={{ animationDelay: "1.5s" }}>
+              <img src={products[6].image} alt="Mango" className="w-full drop-shadow-[0_20px_32px_rgba(0,0,0,0.7)] rotate-[-3deg]" />
             </div>
-            <div className="absolute -bottom-1 right-0 w-[42%] float-slower" style={{ animationDelay: "2s" }}>
-              <img src={products[5].image} alt="Pumpkin seeds" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[10deg]" />
+            <div className="absolute -bottom-2 right-0 w-[46%] float-slower" style={{ animationDelay: "2s" }}>
+              <img src={products[5].image} alt="Pumpkin seeds" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.6)] rotate-[10deg]" />
             </div>
 
             {/* Floating rating card */}
-            <div className="absolute top-[38%] -left-1 bg-cream text-ink rounded-2xl p-3 shadow-glow w-40 sm:w-48 z-20">
+            <div className="absolute top-[36%] -left-2 bg-cream text-ink rounded-2xl p-3 shadow-glow w-36 sm:w-44 z-20">
               <div className="flex items-center gap-1 text-gold">
                 {[...Array(5)].map((_, i) => (<Star key={i} className="w-3 h-3 fill-gold" />))}
               </div>
-              <p className="mt-1.5 text-xs sm:text-sm leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
-              <p className="mt-1 text-[10px] sm:text-xs text-muted-foreground">— Riya, Mumbai</p>
+              <p className="mt-1.5 text-[11px] sm:text-xs leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">— Riya, Mumbai</p>
             </div>
           </div>
         </div>
@@ -192,18 +192,18 @@ function Home() {
         <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
-          <div className="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
-            <div className="w-full md:flex-1">
+          <div className="relative flex flex-col md:flex-row gap-8 md:gap-12 items-center p-8 sm:p-10 md:p-16 md:min-h-[520px]">
+            <div className="w-full md:flex-1 text-center md:text-left">
               <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
-              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
+              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-[1.05] md:leading-none">
                 Walnut<br />
                 <span className="italic text-gold">Whole.</span>
               </h3>
-              <p className="mt-4 md:mt-5 max-w-md text-sm md:text-base text-cream/80 leading-relaxed">
+              <p className="mt-4 md:mt-5 max-w-md mx-auto md:mx-0 text-sm md:text-base text-cream/80 leading-relaxed">
                 California-grown, hand-graded and shipped within 14 days of harvest.
                 One handful = your daily omega-3 in a crunch.
               </p>
-              <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-4 md:gap-6">
+              <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6">
                 <div>
                   <p className="font-display text-3xl md:text-4xl text-gold">₹{featured.price}</p>
                   {featured.compareAt && <p className="text-sm text-cream/50 line-through">₹{featured.compareAt}</p>}
@@ -214,7 +214,7 @@ function Home() {
               </div>
             </div>
             <div className="relative w-full md:flex-1 flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-2/3 sm:w-1/2 md:w-full max-w-[220px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+              <img src={featured.image} alt={featured.name} className="w-4/5 sm:w-2/3 md:w-full max-w-[260px] sm:max-w-xs md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
