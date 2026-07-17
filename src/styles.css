@@ -294,11 +294,10 @@
   0%   { transform: scale(.85); opacity: .55; }
   100% { transform: scale(1.6);  opacity: 0;   }
 }
-@keyframes googleGradient {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes mt-gradient-spin {
+  to { transform: rotate(360deg); }
 }
+
 
 .mode-toggle-btn {
   position: fixed;
