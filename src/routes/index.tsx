@@ -37,12 +37,12 @@ function Home() {
         <div className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
 
-        <div className="container-x relative pt-16 pb-24 md:pt-24 md:pb-36 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
+        <div className="container-x relative px-4 pt-20 pb-16 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 md:gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-4 py-1.5 text-[11px] tracking-[0.24em] uppercase text-gold">
-              <Sparkles className="w-3.5 h-3.5" /> Batch of July · Freshly Packed
+            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-editorial text-[clamp(3.2rem,9vw,8rem)] leading-[0.92] font-normal tracking-tight">
+            <h1 className="mt-6 font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-[0.95] md:leading-[0.92] font-normal tracking-tight">
               Snack like{" "}
               <span className="italic text-gold relative inline-block">
                 nature
@@ -51,28 +51,28 @@ function Home() {
               <br />
               <span className="italic text-cream/95">intended.</span>
             </h1>
-            <p className="mt-6 max-w-lg text-lg text-cream/80 leading-relaxed">
+            <p className="mt-5 md:mt-6 max-w-lg text-base md:text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
               like the farm they came from. No fillers. No BS.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div className="mt-8 md:mt-9 flex flex-wrap items-center gap-3 md:gap-4">
               <Link
                 to="/shop"
-                className="group inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition"
+                className="group inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-6 md:px-7 py-3.5 md:py-4 text-sm font-semibold hover:bg-cream transition"
               >
                 Shop the collection
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/story"
-                className="inline-flex items-center gap-2 rounded-full border border-cream/25 px-7 py-4 text-sm font-medium hover:bg-cream/10 transition"
+                className="inline-flex items-center gap-2 rounded-full border border-cream/25 px-6 md:px-7 py-3.5 md:py-4 text-sm font-medium hover:bg-cream/10 transition"
               >
                 Our sourcing story
               </Link>
             </div>
 
-            <div className="mt-14 grid grid-cols-3 gap-6 max-w-lg">
+            <div className="mt-10 md:mt-14 grid grid-cols-3 gap-4 md:gap-6 max-w-lg">
               <Stat n="12+" l="Origins" />
               <Stat n="47k" l="Happy snackers" />
               <Stat n="4.8★" l="Avg. rating" />
@@ -106,13 +106,14 @@ function Home() {
         </div>
 
         {/* Hero mobile pouches */}
-        <div className="lg:hidden container-x relative pb-16 -mt-8">
-          <div className="grid grid-cols-3 gap-3">
+        <div className="lg:hidden container-x relative px-4 pb-14 -mt-4">
+          <div className="grid grid-cols-3 gap-3 w-full max-w-sm mx-auto">
             {[products[0], products[6], products[3]].map((p) => (
               <img key={p.slug} src={p.image} alt={p.name} className="w-full drop-shadow-2xl" />
             ))}
           </div>
         </div>
+
       </section>
 
       {/* Marquee */}
