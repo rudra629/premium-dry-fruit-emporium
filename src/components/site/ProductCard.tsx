@@ -46,7 +46,11 @@ export function ProductCard({ product }: { product: Product }) {
       <Link
         to="/product/$slug"
         params={{ slug: product.slug }}
-        className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 shadow-[0_10px_36px_-14px_rgba(10,59,36,0.18)] hover:shadow-[0_22px_50px_-16px_rgba(10,59,36,0.28)] transition-shadow duration-500"
+        className="relative block aspect-[4/5] overflow-hidden rounded-2xl backdrop-blur-md border shadow-[0_10px_36px_-14px_rgba(10,59,36,0.18)] hover:shadow-[0_22px_50px_-16px_rgba(10,59,36,0.28)] transition-shadow duration-500"
+        style={{
+          background: "rgb(var(--color-surface) / 0.4)",
+          borderColor: "rgb(var(--color-surface) / 0.7)",
+        }}
       >
         <div
           className="absolute inset-0 flex items-center justify-center p-6 cursor-zoom-in overflow-hidden"
