@@ -169,37 +169,38 @@ function Home() {
       </section>
 
       {/* Featured huge banner */}
-      <section className="container-x py-20">
-        <div className="relative rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
+      <section className="container-x px-4 py-12 md:px-0 md:py-20">
+        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/85 to-transparent" />
-          <div className="relative grid md:grid-cols-2 gap-8 items-center p-8 md:p-16 min-h-[520px]">
-            <div>
-              <p className="text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
-              <h3 className="font-display text-5xl md:text-7xl mt-3 leading-none">
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
+          <div className="relative flex flex-col md:flex-row gap-8 md:gap-8 items-start md:items-center p-6 sm:p-8 md:p-16 md:min-h-[520px]">
+            <div className="w-full md:flex-1">
+              <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
+              <h3 className="font-display text-5xl sm:text-6xl md:text-7xl mt-3 leading-tight md:leading-none">
                 Walnut<br />
                 <span className="italic text-gold">Whole.</span>
               </h3>
-              <p className="mt-5 max-w-md text-cream/80 leading-relaxed">
+              <p className="mt-4 md:mt-5 max-w-md text-sm md:text-base text-cream/80 leading-relaxed">
                 California-grown, hand-graded and shipped within 14 days of harvest.
                 One handful = your daily omega-3 in a crunch.
               </p>
-              <div className="mt-8 flex items-center gap-6">
+              <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-4 md:gap-6">
                 <div>
-                  <p className="font-display text-4xl text-gold">₹{featured.price}</p>
+                  <p className="font-display text-3xl md:text-4xl text-gold">₹{featured.price}</p>
                   {featured.compareAt && <p className="text-sm text-cream/50 line-through">₹{featured.compareAt}</p>}
                 </div>
-                <Link to="/product/$slug" params={{ slug: featured.slug }} className="rounded-full bg-gold text-forest-deep px-7 py-4 text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-2">
+                <Link to="/product/$slug" params={{ slug: featured.slug }} className="rounded-full bg-gold text-forest-deep px-6 md:px-7 py-3.5 md:py-4 text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-2">
                   Shop walnuts <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
-            <div className="relative flex justify-center">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-md drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+            <div className="relative w-full md:flex-1 flex justify-center">
+              <img src={featured.image} alt={featured.name} className="w-full max-w-sm md:max-w-md mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Categories */}
       <section className="container-x py-8">
