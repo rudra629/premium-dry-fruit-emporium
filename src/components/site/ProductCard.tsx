@@ -64,7 +64,7 @@ export function ProductCard({ product }: { product: Product }) {
               transition: "transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), transform-origin 0.12s ease-out",
               willChange: "transform, transform-origin",
             }}
-            className="max-h-full max-w-full object-contain drop-shadow-[0_20px_30px_rgba(10,40,24,0.22)] pointer-events-none select-none"
+            className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_22px_34px_rgba(10,40,24,0.22)] pointer-events-none select-none"
           />
         </div>
 
