@@ -365,7 +365,8 @@
   pointer-events: none;
   z-index: -1;
 }
-.mode-toggle-btn:hover::after {
+.mode-toggle-btn:hover::after,
+.mode-toggle-btn.force-hover::after {
   opacity: 1;
   transform: scale(1);
   animation: mt-gradient-spin 2.6s linear infinite;
