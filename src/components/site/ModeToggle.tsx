@@ -36,17 +36,17 @@ export function ModeToggle() {
   return (
     <>
       <div
-        className="group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full"
+        className="group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full transition-transform duration-300 ease-out group-hover:scale-[1.02]"
       >
-        {/* Blurred glow layer — static at rest, spins only on hover */}
+        {/* Blurred glow layer — static, subtle at rest, brighter on hover */}
         <div
           aria-hidden
-          className="absolute -inset-1 rounded-full opacity-0 group-hover:opacity-70 transition-all duration-500 blur-md pointer-events-none bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)] group-hover:animate-[spin_5s_linear_infinite]"
+          className="absolute -inset-1 rounded-full opacity-40 group-hover:opacity-75 transition-opacity duration-500 blur-md pointer-events-none bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)]"
         />
-        {/* Crisp border layer (ring only via mask) — static at rest, spins only on hover */}
+        {/* Crisp border layer (ring only via mask) — always visible and static */}
         <div
           aria-hidden
-          className="absolute inset-0 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-500 bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)] group-hover:animate-[spin_5s_linear_infinite]"
+          className="absolute inset-0 rounded-full pointer-events-none bg-[conic-gradient(from_0deg,#4285F4_0%,#EA4335_25%,#FBBC05_50%,#34A853_75%,#4285F4_100%)]"
           style={{
             padding: "2px",
             mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
