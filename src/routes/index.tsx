@@ -107,7 +107,7 @@ function Home() {
         </div>
 
         {/* Hero mobile pouches — overlapping composition like desktop */}
-        <div className="lg:hidden container-x relative px-4 pb-16 -mt-2 w-full">
+        <div className="lg:hidden container-x relative px-4 pb-6 mt-2 w-full">
           <div className="relative mx-auto w-full max-w-md h-[360px] sm:h-[440px]">
             <div className="absolute top-2 left-2 w-[42%] float-slow">
               <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
