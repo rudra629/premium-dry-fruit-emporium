@@ -334,23 +334,45 @@
 }
 .mode-toggle-btn.is-crunch::before { color: var(--gold); }
 
-/* Google-style animated gradient border on hover */
+/* Premium animated gradient border on hover */
 .mode-toggle-btn::after {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: -2.5px;
   border-radius: 999px;
-  background: conic-gradient(from 0deg, #4285F4 0%, #EA4335 25%, #FBBC05 50%, #34A853 75%, #4285F4 100%);
+  padding: 2.5px;
+  background:
+    conic-gradient(
+      from 0deg,
+      #B88A44 0%,
+      #D4A340 14%,
+      #F0D6A0 26%,
+      #D4A340 38%,
+      #C17A3D 50%,
+      #D4A340 62%,
+      #E8C880 74%,
+      #B88A44 86%,
+      #D4A340 100%
+    );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
   transform: scale(0.96);
-  transition: opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1);
+  transition: opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
   pointer-events: none;
   z-index: -1;
 }
 .mode-toggle-btn:hover::after {
   opacity: 1;
   transform: scale(1);
-  animation: mt-gradient-spin 2.2s linear infinite;
+  animation: mt-gradient-spin 2.6s linear infinite;
+  box-shadow:
+    0 0 22px rgba(212, 163, 64, 0.55),
+    0 0 44px rgba(212, 163, 64, 0.32),
+    0 0 66px rgba(255, 178, 107, 0.18);
 }
 
 .mode-toggle-inner {
