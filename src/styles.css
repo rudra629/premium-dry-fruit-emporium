@@ -117,17 +117,18 @@
     background-attachment: fixed;
     position: relative;
   }
-  /* Tactile grain overlay — SVG noise, fixed, non-interactive */
+  /* Tactile grain overlay — inline SVG fractal noise, fixed, non-interactive */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.035;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.10  0 0 0 0 0.05  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size: 240px 240px;
+    opacity: 0.11;
+    mix-blend-mode: color-burn;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+    background-repeat: repeat;
   }
   body > * { position: relative; z-index: 1; }
   html.crunch-mode body { background-image: none; background-color: #0d0d0f; }
