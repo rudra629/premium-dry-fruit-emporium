@@ -360,8 +360,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.mode-toggle-btn:hover::after,
-.mode-toggle-btn.force-hover::after {
+.mode-toggle-btn:hover::after {
   opacity: 1;
   transform: scale(1);
   filter: brightness(1.12) saturate(1.08);
