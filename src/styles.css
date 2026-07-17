@@ -338,24 +338,25 @@
 .mode-toggle-btn::after {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -4.5px;
   border-radius: 999px;
   background:
     conic-gradient(
       from 0deg,
       #C69C4D 0%,
-      #E8B84D 12%,
-      #FFF4D9 24%,
-      #E8B84D 36%,
-      #C17A3D 48%,
-      #D4A340 60%,
-      #F5D88C 72%,
-      #C69C4D 84%,
-      #E8B84D 100%
+      #E8B84D 10%,
+      #FFF8E6 20%,
+      #E8B84D 32%,
+      #C17A3D 44%,
+      #D4A340 56%,
+      #F8E4A8 68%,
+      #C69C4D 80%,
+      #E8B84D 92%,
+      #C69C4D 100%
     );
   opacity: 0;
   transform: scale(0.96);
-  transition: opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease, filter .35s ease;
   pointer-events: none;
   z-index: -1;
 }
@@ -363,11 +364,12 @@
 .mode-toggle-btn.force-hover::after {
   opacity: 1;
   transform: scale(1);
+  filter: brightness(1.12) saturate(1.08);
   animation: mt-gradient-spin 2.6s linear infinite;
   box-shadow:
-    0 0 26px rgba(232, 184, 77, 0.62),
-    0 0 52px rgba(232, 184, 77, 0.38),
-    0 0 80px rgba(255, 219, 153, 0.22);
+    0 0 28px rgba(232, 184, 77, 0.68),
+    0 0 56px rgba(232, 184, 77, 0.42),
+    0 0 88px rgba(255, 219, 153, 0.26);
 }
 
 .mode-toggle-inner {
