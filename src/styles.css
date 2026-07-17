@@ -279,18 +279,67 @@
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* ============ Floating Mode Toggle Button (Glassmorphic) ============ */
+/* ============ Floating Mode Toggle Button (Glass + AI Border) ============ */
 @keyframes mt-float {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-3px); }
 }
+@keyframes mt-ai-spin {
+  to { transform: rotate(360deg); }
+}
+
 .mode-toggle-btn {
   animation: mt-float 5s ease-in-out infinite;
+  isolation: isolate;
 }
 .mode-toggle-btn:hover { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) {
-  .mode-toggle-btn { animation: none; }
+
+/* Shared conic gradient for border + glow */
+.mode-toggle-btn::before,
+.mode-toggle-btn::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    #4285F4, #EA4335, #FBBC05, #34A853, #4285F4
+  );
+  animation: mt-ai-spin 4s linear infinite;
 }
+
+/* Spinning border ring — masked to a 2px stroke */
+.mode-toggle-btn::before {
+  inset: 0;
+  padding: 2px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  z-index: 1;
+  transition: opacity .3s ease;
+}
+
+/* Blurred outer aura */
+.mode-toggle-btn::after {
+  inset: -6px;
+  filter: blur(12px);
+  opacity: .4;
+  z-index: 0;
+  transition: opacity .3s ease, inset .3s ease;
+}
+.mode-toggle-btn:hover::after { opacity: .65; inset: -8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-toggle-btn,
+  .mode-toggle-btn::before,
+  .mode-toggle-btn::after { animation: none; }
+}
+
 
 
 /* ============ Cinematic Curtain Transition ============ */
