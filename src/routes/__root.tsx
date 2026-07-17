@@ -130,6 +130,7 @@ function RootComponent() {
             <Footer />
           </div>
           <ModeToggle />
+          <ThemeSwitcher />
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
