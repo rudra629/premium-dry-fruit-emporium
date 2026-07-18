@@ -54,7 +54,7 @@
   --cream: oklch(0.965 0.012 150);          /* warm mint-cream */
   --forest-deep: oklch(0.46 0.045 175);     /* deep sage ~#3F6F66 — headlines, primary */
   --forest: oklch(0.60 0.045 170);          /* mid sage ~#659287 */
-  --gold: oklch(0.85 0.055 155);            /* light sage ~#B1D3B9 — accents/badges */
+  --gold: oklch(0.93 0.035 95);             /* luminous ivory — reads as warm cream accent on dark sage */
   --gold-soft: oklch(0.94 0.03 150);        /* pale mint ~#E4F1E1 */
   --terracotta: oklch(0.65 0.13 45);        /* warm clay ~#C97B5E — sole warm pop */
   --ink: oklch(0.22 0.018 175);             /* sage-tinted near-black */
