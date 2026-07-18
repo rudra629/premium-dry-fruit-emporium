@@ -33,7 +33,14 @@ function Shop() {
   const [sort, setSort] = useState<(typeof sorts)[number]>("Featured");
   const [maxPrice, setMaxPrice] = useState(1500);
   const [loading, setLoading] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => { const t = setTimeout(() => setLoading(false), 350); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const filtered = useMemo(() => {
     let list: Product[] = allProducts.slice();
@@ -86,7 +93,7 @@ function Shop() {
       </section>
 
       {/* Toolbar */}
-      <section className="container-x py-8 sticky top-16 md:top-20 bg-cream/90 backdrop-blur z-20 border-b border-border/50 -mt-16 md:-mt-20">
+      <section className={`container-x py-8 sticky top-16 md:top-20 z-20 border-b border-border/50 -mt-16 md:-mt-20 transition-colors duration-300 ${scrolled ? "bg-cream/85 backdrop-blur" : "bg-cream"}`}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {cats.map((c) => (
