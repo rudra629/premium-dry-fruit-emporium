@@ -23,6 +23,16 @@ export type Order = {
   items?: { name: string; qty: number; weight: string; price: number }[];
 };
 
+export type Application = {
+  id: string;
+  name: string;
+  email: string;
+  resumeName: string;
+  resumeDataUrl: string;
+  message?: string;
+  date: string;
+};
+
 type SiteCtx = {
   extraProducts: Product[];
   addProduct: (p: Product) => void;
@@ -36,6 +46,9 @@ type SiteCtx = {
   removeAddress: (id: string) => void;
   bannerWords: string[];
   setBannerWords: (w: string[]) => void;
+  applications: Application[];
+  addApplication: (a: Omit<Application, "id" | "date">) => void;
+  removeApplication: (id: string) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
@@ -75,6 +88,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = useState<Order[]>(DEFAULT_ORDERS);
   const [addresses, setAddresses] = useState<Address[]>(DEFAULT_ADDRESSES);
   const [bannerWords, setBannerWordsState] = useState<string[]>(DEFAULT_BANNER);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -82,6 +96,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setOrders(load("grams:orders", DEFAULT_ORDERS));
     setAddresses(load("grams:addresses", DEFAULT_ADDRESSES));
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
+    setApplications(load("grams:applications", [] as Application[]));
     setHydrated(true);
   }, []);
 
@@ -89,6 +104,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:orders", JSON.stringify(orders)); }, [orders, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:addresses", JSON.stringify(addresses)); }, [addresses, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:banner", JSON.stringify(bannerWords)); }, [bannerWords, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
@@ -109,6 +125,9 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     removeAddress: (id) => setAddresses((prev) => prev.filter((a) => a.id !== id)),
     bannerWords,
     setBannerWords: setBannerWordsState,
+    applications,
+    addApplication: (a) => setApplications((prev) => [{ ...a, id: `app_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
+    removeApplication: (id) => setApplications((prev) => prev.filter((x) => x.id !== id)),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

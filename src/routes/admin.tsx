@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "settings";
 
 function Admin() {
   const [section, setSection] = useState<Section>("dashboard");
@@ -42,6 +42,7 @@ function Admin() {
             { id: "add", label: "Add Product", icon: Plus },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
+            { id: "careers", label: "Careers", icon: Briefcase },
             { id: "settings", label: "Site Settings", icon: Settings2 },
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
             <button
@@ -59,6 +60,7 @@ function Admin() {
         {section === "add" && <AddProductForm />}
         {section === "orders" && <OrdersTable />}
         {section === "customers" && <CustomersTable />}
+        {section === "careers" && <CareersTable />}
         {section === "settings" && <SiteSettings />}
       </div>
     </div>
@@ -537,6 +539,71 @@ function SiteSettings() {
       <button onClick={save} className="rounded-full bg-forest-deep text-cream px-7 py-3.5 text-sm font-semibold hover:bg-forest transition">
         Save banner
       </button>
+    </div>
+  );
+}
+
+function CareersTable() {
+  const { applications, removeApplication } = useSite();
+
+  return (
+    <div className="rounded-2xl bg-card border border-border p-5 md:p-6">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <p className="font-display text-2xl md:text-3xl text-forest-deep">Job applications</p>
+          <p className="text-sm text-muted-foreground">{applications.length} submission{applications.length === 1 ? "" : "s"} from the Careers page.</p>
+        </div>
+        <div className="hidden md:flex w-10 h-10 rounded-full bg-forest-deep/10 items-center justify-center">
+          <Briefcase className="w-5 h-5 text-forest-deep" />
+        </div>
+      </div>
+
+      {applications.length === 0 ? (
+        <div className="rounded-xl bg-muted/50 border border-dashed border-border p-10 text-center">
+          <Briefcase className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+          <p className="font-medium text-forest-deep">No applications yet</p>
+          <p className="text-sm text-muted-foreground mt-1">Submissions from /careers will land here.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {applications.map((a) => (
+            <div key={a.id} className="rounded-xl bg-muted/40 border border-border p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p className="font-semibold text-forest-deep truncate">{a.name}</p>
+                  <p className="text-xs text-muted-foreground">{a.date}</p>
+                </div>
+                <a href={`mailto:${a.email}`} className="text-sm text-forest-deep/80 hover:text-forest-deep transition break-all">{a.email}</a>
+                {a.message && <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{a.message}</p>}
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={a.resumeDataUrl}
+                  download={a.resumeName}
+                  className="inline-flex items-center gap-2 rounded-full bg-forest-deep text-cream px-4 py-2 text-xs font-semibold hover:bg-forest transition"
+                >
+                  <Download className="w-3.5 h-3.5" /> Resume
+                </a>
+                <a
+                  href={a.resumeDataUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-muted border border-border px-4 py-2 text-xs font-semibold hover:bg-card transition"
+                >
+                  <FileText className="w-3.5 h-3.5" /> View
+                </a>
+                <button
+                  onClick={() => { if (confirm("Remove this application?")) removeApplication(a.id); }}
+                  className="w-9 h-9 rounded-full bg-muted border border-border hover:bg-destructive/10 hover:text-destructive grid place-items-center transition"
+                  aria-label="Delete application"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
