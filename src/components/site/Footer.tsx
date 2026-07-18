@@ -12,7 +12,7 @@ export function Footer() {
         <div className="grid lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12">
           <div>
             <Link to="/" className="inline-flex items-center">
-              <img src={gramsLogo.url} alt="Grams" className="h-12 w-auto object-contain brightness-0 invert-0" style={{ filter: "brightness(0) invert(1)" }} />
+              <img src={gramsLogo.url} alt="Grams" className="h-14 w-auto object-contain" />
             </Link>
             <p className="mt-5 max-w-sm text-cream/70 leading-relaxed">
               Beyond snack, it's a lifestyle. Small-batch dry fruits, seeds & nuts sourced from farms that give a damn.
