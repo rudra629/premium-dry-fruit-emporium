@@ -88,6 +88,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = useState<Order[]>(DEFAULT_ORDERS);
   const [addresses, setAddresses] = useState<Address[]>(DEFAULT_ADDRESSES);
   const [bannerWords, setBannerWordsState] = useState<string[]>(DEFAULT_BANNER);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -95,6 +96,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setOrders(load("grams:orders", DEFAULT_ORDERS));
     setAddresses(load("grams:addresses", DEFAULT_ADDRESSES));
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
+    setApplications(load("grams:applications", [] as Application[]));
     setHydrated(true);
   }, []);
 
