@@ -60,6 +60,7 @@ function Admin() {
         {section === "add" && <AddProductForm />}
         {section === "orders" && <OrdersTable />}
         {section === "customers" && <CustomersTable />}
+        {section === "careers" && <CareersTable />}
         {section === "settings" && <SiteSettings />}
       </div>
     </div>
