@@ -93,7 +93,7 @@ function Shop() {
       </section>
 
       {/* Toolbar */}
-      <section className="container-x py-8 sticky top-16 md:top-20 bg-cream/90 backdrop-blur z-20 border-b border-border/50 -mt-16 md:-mt-20">
+      <section className={`container-x py-8 sticky top-16 md:top-20 z-20 border-b border-border/50 -mt-16 md:-mt-20 transition-colors duration-300 ${scrolled ? "bg-cream/85 backdrop-blur" : "bg-cream"}`}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {cats.map((c) => (
