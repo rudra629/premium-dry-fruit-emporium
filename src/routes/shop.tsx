@@ -33,7 +33,14 @@ function Shop() {
   const [sort, setSort] = useState<(typeof sorts)[number]>("Featured");
   const [maxPrice, setMaxPrice] = useState(1500);
   const [loading, setLoading] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => { const t = setTimeout(() => setLoading(false), 350); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const filtered = useMemo(() => {
     let list: Product[] = allProducts.slice();
