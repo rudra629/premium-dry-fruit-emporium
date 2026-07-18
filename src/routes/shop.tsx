@@ -50,7 +50,7 @@ function Shop() {
   return (
     <div>
       {/* Header */}
-      <section className="relative overflow-hidden bg-forest-deep text-cream py-12 md:py-20">
+      <section className="relative overflow-hidden bg-forest-deep text-cream min-h-[55vh] md:min-h-[60vh] flex items-center py-12 md:py-16">
         {/* decorative background */}
         <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
         <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[120px]" />
@@ -61,9 +61,9 @@ function Shop() {
           <circle cx="50" cy="50" r="32" stroke="currentColor" strokeWidth="0.5" />
           <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1 2" />
         </svg>
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/40" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-black/40" />
 
-        <div className="relative container-x">
+        <div className="relative container-x w-full">
           <p className="text-xs tracking-[0.3em] uppercase text-gold">The Collection</p>
           <h1 className="mt-3 font-display text-5xl md:text-7xl">Shop the shelf.</h1>
           <p className="mt-4 max-w-xl text-cream/70">Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.</p>
@@ -83,7 +83,7 @@ function Shop() {
             )}
           </div>
 
-          {/* Toolbar — moved up into the hero */}
+          {/* Toolbar — centered in the hero */}
           <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-cream/5 backdrop-blur border border-cream/10 p-4 md:p-5 max-w-4xl">
             <div className="flex flex-wrap gap-2">
               {cats.map((c) => (
