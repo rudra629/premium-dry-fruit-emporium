@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Twitter, Youtube, Leaf, Mail } from "lucide-react";
+import { Instagram, Twitter, Youtube, Mail } from "lucide-react";
+import gramsLogo from "@/assets/grams-logo.png.asset.json";
 
 export function Footer() {
   return (
@@ -10,11 +11,8 @@ export function Footer() {
       <div className="container-x pt-20 pb-8 relative">
         <div className="grid lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12">
           <div>
-            <Link to="/" className="flex items-center gap-2 font-display text-3xl font-semibold text-cream">
-              <span className="grid place-items-center w-10 h-10 rounded-full bg-gold text-forest-deep">
-                <Leaf className="w-5 h-5" />
-              </span>
-              Grams<span className="text-gold">.</span>
+            <Link to="/" className="inline-flex items-center">
+              <img src={gramsLogo.url} alt="Grams" className="h-14 w-auto object-contain" />
             </Link>
             <p className="mt-5 max-w-sm text-cream/70 leading-relaxed">
               Beyond snack, it's a lifestyle. Small-batch dry fruits, seeds & nuts sourced from farms that give a damn.
