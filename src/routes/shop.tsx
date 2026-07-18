@@ -50,7 +50,7 @@ function Shop() {
   return (
     <div>
       {/* Header */}
-      <section className="relative overflow-hidden bg-forest-deep text-cream py-16 md:py-24">
+      <section className="relative overflow-hidden bg-forest-deep text-cream pt-16 md:pt-24 pb-28 md:pb-36">
         {/* decorative background */}
         <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
         <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[120px]" />
@@ -86,7 +86,7 @@ function Shop() {
       </section>
 
       {/* Toolbar */}
-      <section className="container-x py-8 sticky top-16 md:top-20 bg-cream/90 backdrop-blur z-20 border-b border-border/50 -mt-1">
+      <section className="container-x py-8 sticky top-16 md:top-20 bg-cream/90 backdrop-blur z-20 border-b border-border/50 -mt-16 md:-mt-20">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {cats.map((c) => (
