@@ -348,7 +348,7 @@
 .curtain-stage.to-cozy .curtain {
   background:
     radial-gradient(ellipse at 25% 35%, rgba(212,163,80,0.20), transparent 55%),
-    radial-gradient(ellipse at 80% 75%, rgba(46,70,55,0.16), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(74,44,26,0.18), transparent 55%),
     linear-gradient(180deg, #f5ecd6 0%, #eadfc4 100%);
 }
 
