@@ -48,11 +48,8 @@ export function Header() {
       <AnnouncementBar />
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60">
         <div className="container-x flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="flex items-center gap-2 font-display text-2xl md:text-3xl font-semibold text-forest-deep">
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-forest-deep text-gold">
-              <Leaf className="w-4 h-4" />
-            </span>
-            <span>Grams<span className="text-gold">.</span></span>
+          <Link to="/" className="flex items-center">
+            <img src={gramsLogo.url} alt="Grams" className="h-10 md:h-12 w-auto object-contain" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-9 text-sm font-medium">
