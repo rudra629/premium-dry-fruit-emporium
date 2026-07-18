@@ -125,6 +125,9 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     removeAddress: (id) => setAddresses((prev) => prev.filter((a) => a.id !== id)),
     bannerWords,
     setBannerWords: setBannerWordsState,
+    applications,
+    addApplication: (a) => setApplications((prev) => [{ ...a, id: `app_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
+    removeApplication: (id) => setApplications((prev) => prev.filter((x) => x.id !== id)),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
