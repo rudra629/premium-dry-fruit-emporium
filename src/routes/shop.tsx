@@ -50,7 +50,7 @@ function Shop() {
   return (
     <div>
       {/* Header */}
-      <section className="relative overflow-hidden bg-forest-deep text-cream min-h-[60vh] md:min-h-[70vh] flex flex-col justify-center py-16 md:py-24">
+      <section className="relative overflow-hidden bg-forest-deep text-cream py-12 md:py-20">
         {/* decorative background */}
         <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
         <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[120px]" />
@@ -63,12 +63,12 @@ function Shop() {
         </svg>
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/40" />
 
-        <div className="relative container-x flex flex-col justify-center">
+        <div className="relative container-x">
           <p className="text-xs tracking-[0.3em] uppercase text-gold">The Collection</p>
           <h1 className="mt-3 font-display text-5xl md:text-7xl">Shop the shelf.</h1>
           <p className="mt-4 max-w-xl text-cream/70">Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.</p>
 
-          <div className="mt-10 flex items-center gap-3 bg-cream/10 backdrop-blur border border-cream/20 rounded-full px-5 py-1 max-w-2xl">
+          <div className="mt-6 md:mt-8 flex items-center gap-3 bg-cream/10 backdrop-blur border border-cream/20 rounded-full px-5 py-1 max-w-2xl">
             <Search className="w-5 h-5 text-gold" />
             <input
               value={q}
@@ -84,7 +84,7 @@ function Shop() {
           </div>
 
           {/* Toolbar — moved up into the hero */}
-          <div className="mt-8 md:mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-cream/5 backdrop-blur border border-cream/10 p-4 md:p-5">
+          <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-cream/5 backdrop-blur border border-cream/10 p-4 md:p-5 max-w-4xl">
             <div className="flex flex-wrap gap-2">
               {cats.map((c) => (
                 <button
