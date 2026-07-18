@@ -42,6 +42,7 @@ function Admin() {
             { id: "add", label: "Add Product", icon: Plus },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
+            { id: "careers", label: "Careers", icon: Briefcase },
             { id: "settings", label: "Site Settings", icon: Settings2 },
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
             <button
