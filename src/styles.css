@@ -50,13 +50,14 @@
 :root {
   --radius: 0.875rem;
 
-  --cream: oklch(0.965 0.02 85);
-  --forest-deep: oklch(0.22 0.055 155);
-  --forest: oklch(0.32 0.07 155);
-  --gold: oklch(0.75 0.14 82);
-  --gold-soft: oklch(0.88 0.08 85);
+  --cream: oklch(0.965 0.02 75);
+  --forest-deep: oklch(0.22 0.045 45);
+  --forest: oklch(0.32 0.06 45);
+  --gold: oklch(0.76 0.14 78);
+  --gold-soft: oklch(0.88 0.09 82);
   --terracotta: oklch(0.62 0.16 40);
-  --ink: oklch(0.15 0.015 90);
+  --ink: oklch(0.15 0.015 60);
+
 
   --background: var(--cream);
   --foreground: var(--ink);
