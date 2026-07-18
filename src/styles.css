@@ -116,8 +116,9 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
-    background-color: #FBF3E4;
-    background-image: radial-gradient(ellipse at top, #FBF3E4 0%, #F1E2C2 55%, #EAD6AE 100%);
+    background-color: #FBF9EE;
+    background-image: radial-gradient(ellipse at top, #FDFBF2 0%, #F4EFDA 55%, #ECE6C6 100%);
+
 
     background-attachment: fixed;
     background-repeat: no-repeat;
