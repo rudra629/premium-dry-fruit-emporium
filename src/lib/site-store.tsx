@@ -23,6 +23,16 @@ export type Order = {
   items?: { name: string; qty: number; weight: string; price: number }[];
 };
 
+export type Application = {
+  id: string;
+  name: string;
+  email: string;
+  resumeName: string;
+  resumeDataUrl: string;
+  message?: string;
+  date: string;
+};
+
 type SiteCtx = {
   extraProducts: Product[];
   addProduct: (p: Product) => void;
@@ -36,6 +46,9 @@ type SiteCtx = {
   removeAddress: (id: string) => void;
   bannerWords: string[];
   setBannerWords: (w: string[]) => void;
+  applications: Application[];
+  addApplication: (a: Omit<Application, "id" | "date">) => void;
+  removeApplication: (id: string) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
