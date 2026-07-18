@@ -50,8 +50,20 @@ function Shop() {
   return (
     <div>
       {/* Header */}
-      <section className="bg-forest-deep text-cream py-16 md:py-24">
-        <div className="container-x">
+      <section className="relative overflow-hidden bg-forest-deep text-cream py-16 md:py-24">
+        {/* decorative background */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+        <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[120px]" />
+        <div className="absolute -bottom-40 right-[-80px] w-[520px] h-[520px] rounded-full bg-terracotta/20 blur-[140px]" />
+        <div className="absolute top-1/3 right-1/4 w-[280px] h-[280px] rounded-full bg-forest/40 blur-[100px]" />
+        <svg className="absolute top-8 right-8 w-40 h-40 text-gold/25 hidden md:block" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 3" />
+          <circle cx="50" cy="50" r="32" stroke="currentColor" strokeWidth="0.5" />
+          <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1 2" />
+        </svg>
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/40" />
+
+        <div className="relative container-x">
           <p className="text-xs tracking-[0.3em] uppercase text-gold">The Collection</p>
           <h1 className="mt-3 font-display text-5xl md:text-7xl">Shop the shelf.</h1>
           <p className="mt-4 max-w-xl text-cream/70">Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.</p>

@@ -193,6 +193,14 @@ function Home() {
         <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
+          {/* decorative pattern + glows */}
+          <div className="absolute inset-0 opacity-[0.12] mix-blend-screen" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
+          <div className="absolute -top-24 -left-16 w-[360px] h-[360px] rounded-full bg-gold/25 blur-[110px]" />
+          <div className="absolute -bottom-32 right-1/4 w-[420px] h-[420px] rounded-full bg-terracotta/20 blur-[130px]" />
+          <svg className="absolute bottom-6 left-6 w-32 h-32 text-gold/30 hidden md:block" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 3" />
+            <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.5" />
+          </svg>
           <div className="relative flex flex-row gap-4 sm:gap-8 md:gap-12 items-center p-5 sm:p-10 md:p-16 md:min-h-[520px]">
             <div className="flex-1 min-w-0 text-left">
               <p className="text-[9px] sm:text-[11px] md:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-gold">Product of the month</p>
