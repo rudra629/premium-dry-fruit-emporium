@@ -116,13 +116,14 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
-    background-color: #FBF9EE;
-    background-image: radial-gradient(ellipse at top, #FDFBF2 0%, #F4EFDA 55%, #ECE6C6 100%);
-
-
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-color: #F5EBD3;
+    background-image:
+      url("/__l5e/assets-v1/c4ab3c76-eae4-4124-bc91-e2bb1c930042/paper-texture.jpg"),
+      radial-gradient(ellipse at top, #FDFBF2 0%, #F4EFDA 55%, #ECE6C6 100%);
+    background-blend-mode: multiply, normal;
+    background-attachment: fixed, fixed;
+    background-repeat: repeat, no-repeat;
+    background-size: 600px 400px, 100% 100%;
     position: relative;
   }
   /* Tactile grain overlay — data URI fractal noise, fixed viewport, behind content */
