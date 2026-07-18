@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "settings";
 
 function Admin() {
   const [section, setSection] = useState<Section>("dashboard");
