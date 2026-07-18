@@ -51,13 +51,13 @@
   --radius: 0.875rem;
 
   --cream: oklch(0.97 0.025 95);
-  --forest-deep: oklch(0.42 0.14 138);
-  --forest: oklch(0.58 0.18 135);
+  --forest-deep: oklch(0.12 0 0);
+  --forest: oklch(0.18 0 0);
   --gold: oklch(0.82 0.14 88);
   --gold-soft: oklch(0.92 0.08 92);
   --terracotta: oklch(0.68 0.17 55);
 
-  --ink: oklch(0.22 0.05 140);
+  --ink: oklch(0.12 0 0);
 
 
 
