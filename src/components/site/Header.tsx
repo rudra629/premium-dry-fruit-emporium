@@ -1,8 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, ShoppingBag, User, Menu, X, Leaf } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { cn } from "@/lib/utils";
+import gramsLogo from "@/assets/grams-logo.png.asset.json";
 
 const nav = [
   { to: "/", label: "Home" },
