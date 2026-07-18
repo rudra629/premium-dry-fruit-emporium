@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Twitter, Youtube, Leaf, Mail } from "lucide-react";
+import { Instagram, Twitter, Youtube, Mail } from "lucide-react";
+import gramsLogo from "@/assets/grams-logo.png.asset.json";
 
 export function Footer() {
   return (
