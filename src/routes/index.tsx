@@ -189,9 +189,9 @@ function Home() {
 
       {/* Featured huge banner */}
       <section className="container-x px-4 py-12 md:px-0 md:py-20">
-        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
+        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest text-cream grain grain-after">
           <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest via-forest/85 to-forest/40 md:to-transparent" />
           <div className="relative flex flex-row gap-4 sm:gap-8 md:gap-12 items-center p-5 sm:p-10 md:p-16 md:min-h-[520px]">
             <div className="flex-1 min-w-0 text-left">
               <p className="text-[9px] sm:text-[11px] md:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-gold">Product of the month</p>
