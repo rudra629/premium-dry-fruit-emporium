@@ -50,13 +50,14 @@
 :root {
   --radius: 0.875rem;
 
-  --cream: oklch(0.965 0.02 85);
-  --forest-deep: oklch(0.22 0.055 155);
-  --forest: oklch(0.32 0.07 155);
-  --gold: oklch(0.75 0.14 82);
-  --gold-soft: oklch(0.88 0.08 85);
+  --cream: oklch(0.965 0.02 75);
+  --forest-deep: oklch(0.22 0.045 45);
+  --forest: oklch(0.32 0.06 45);
+  --gold: oklch(0.76 0.14 78);
+  --gold-soft: oklch(0.88 0.09 82);
   --terracotta: oklch(0.62 0.16 40);
-  --ink: oklch(0.15 0.015 90);
+  --ink: oklch(0.15 0.015 60);
+
 
   --background: var(--cream);
   --foreground: var(--ink);
@@ -82,15 +83,16 @@
 .dark {
   --background: var(--forest-deep);
   --foreground: var(--cream);
-  --card: oklch(0.26 0.06 155);
+  --card: oklch(0.26 0.05 45);
   --card-foreground: var(--cream);
-  --popover: oklch(0.26 0.06 155);
+  --popover: oklch(0.26 0.05 45);
   --popover-foreground: var(--cream);
   --primary: var(--gold);
   --primary-foreground: var(--forest-deep);
-  --secondary: oklch(0.3 0.06 155);
+  --secondary: oklch(0.3 0.05 45);
   --secondary-foreground: var(--cream);
-  --muted: oklch(0.28 0.04 155);
+  --muted: oklch(0.28 0.04 45);
+
   --muted-foreground: oklch(0.72 0.03 85);
   --accent: var(--terracotta);
   --accent-foreground: var(--cream);
@@ -111,8 +113,9 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
-    background-color: #FDFAF6;
-    background-image: radial-gradient(ellipse at top, #FDFAF6 0%, #F6ECD8 55%, #F0E5D1 100%);
+    background-color: #FBF3E4;
+    background-image: radial-gradient(ellipse at top, #FBF3E4 0%, #F1E2C2 55%, #EAD6AE 100%);
+
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -345,7 +348,7 @@
 .curtain-stage.to-cozy .curtain {
   background:
     radial-gradient(ellipse at 25% 35%, rgba(212,163,80,0.20), transparent 55%),
-    radial-gradient(ellipse at 80% 75%, rgba(46,70,55,0.16), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(74,44,26,0.18), transparent 55%),
     linear-gradient(180deg, #f5ecd6 0%, #eadfc4 100%);
 }
 
