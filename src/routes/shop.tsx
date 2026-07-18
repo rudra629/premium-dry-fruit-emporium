@@ -50,7 +50,7 @@ function Shop() {
   return (
     <div>
       {/* Header */}
-      <section className="relative overflow-hidden bg-forest-deep text-cream py-16 md:py-24">
+      <section className="relative overflow-hidden bg-forest-deep text-cream min-h-[60vh] md:min-h-[70vh] flex flex-col justify-center py-16 md:py-24">
         {/* decorative background */}
         <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
         <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[120px]" />
@@ -63,7 +63,7 @@ function Shop() {
         </svg>
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/40" />
 
-        <div className="relative container-x">
+        <div className="relative container-x flex flex-col justify-center">
           <p className="text-xs tracking-[0.3em] uppercase text-gold">The Collection</p>
           <h1 className="mt-3 font-display text-5xl md:text-7xl">Shop the shelf.</h1>
           <p className="mt-4 max-w-xl text-cream/70">Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.</p>
@@ -82,33 +82,31 @@ function Shop() {
               </button>
             )}
           </div>
-        </div>
-      </section>
 
-      {/* Toolbar */}
-      <section className="container-x py-8 sticky top-16 md:top-20 bg-cream/90 backdrop-blur z-20 border-b border-border/50 -mt-1">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-2">
-            {cats.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCat(c)}
-                className={`pill rounded-full px-4 py-2 text-sm font-medium ${cat === c ? "bg-forest-deep text-cream" : "bg-muted hover:bg-border"}`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 text-xs">
-              <SlidersHorizontal className="w-4 h-4" />
-              <span>Max ₹{maxPrice}</span>
-              <input type="range" min={199} max={1500} step={50} value={maxPrice} onChange={(e) => setMaxPrice(+e.target.value)} className="accent-forest-deep" />
+          {/* Toolbar — moved up into the hero */}
+          <div className="mt-8 md:mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-cream/5 backdrop-blur border border-cream/10 p-4 md:p-5">
+            <div className="flex flex-wrap gap-2">
+              {cats.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCat(c)}
+                  className={`pill rounded-full px-4 py-2 text-sm font-medium transition-colors ${cat === c ? "bg-gold text-forest-deep" : "bg-cream/10 text-cream hover:bg-cream/20"}`}
+                >
+                  {c}
+                </button>
+              ))}
             </div>
-            <select value={sort} onChange={(e) => setSort(e.target.value as never)} className="rounded-full bg-muted px-4 py-2 text-sm font-medium border border-border">
-              {sorts.map((s) => <option key={s}>{s}</option>)}
-            </select>
+
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2 text-xs text-cream/80">
+                <SlidersHorizontal className="w-4 h-4" />
+                <span>Max ₹{maxPrice}</span>
+                <input type="range" min={199} max={1500} step={50} value={maxPrice} onChange={(e) => setMaxPrice(+e.target.value)} className="accent-gold" />
+              </div>
+              <select value={sort} onChange={(e) => setSort(e.target.value as never)} className="rounded-full bg-cream/10 text-cream px-4 py-2 text-sm font-medium border border-cream/20 focus:outline-none focus:ring-2 focus:ring-gold/50">
+                {sorts.map((s) => <option key={s} value={s} className="text-forest-deep">{s}</option>)}
+              </select>
+            </div>
           </div>
         </div>
       </section>
