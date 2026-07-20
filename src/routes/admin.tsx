@@ -1,39 +1,22 @@
-import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, LogOut, Ticket,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order, type PromoCode } from "@/lib/site-store";
+import { useSite, type Order } from "@/lib/site-store";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "promos" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "settings";
 
 function Admin() {
   const [section, setSection] = useState<Section>("dashboard");
-  const [authed, setAuthed] = useState<boolean | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      setAuthed(sessionStorage.getItem("grams:admin") === "1");
-    } catch { setAuthed(false); }
-  }, []);
-
-  if (authed === null) return null;
-  if (!authed) return <Navigate to="/admin-login" />;
-
-  const logout = () => {
-    try { sessionStorage.removeItem("grams:admin"); } catch { /* ignore */ }
-    toast.success("Signed out");
-    navigate({ to: "/admin-login" });
-  };
 
   return (
     <div className="bg-muted/40 min-h-screen">
@@ -48,12 +31,6 @@ function Admin() {
               <Search className="w-4 h-4 text-muted-foreground" />
               <input placeholder="Search…" className="bg-transparent outline-none text-sm w-40" />
             </div>
-            <button
-              onClick={logout}
-              className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-3 md:px-4 py-2 text-xs font-semibold hover:bg-muted transition"
-            >
-              <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sign out</span>
-            </button>
             <div className="w-10 h-10 rounded-full bg-forest-deep text-gold grid place-items-center font-semibold text-sm shrink-0">AS</div>
           </div>
         </div>
@@ -65,7 +42,6 @@ function Admin() {
             { id: "add", label: "Add Product", icon: Plus },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
-            { id: "promos", label: "Promo Codes", icon: Ticket },
             { id: "careers", label: "Careers", icon: Briefcase },
             { id: "settings", label: "Site Settings", icon: Settings2 },
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
@@ -84,7 +60,6 @@ function Admin() {
         {section === "add" && <AddProductForm />}
         {section === "orders" && <OrdersTable />}
         {section === "customers" && <CustomersTable />}
-        {section === "promos" && <PromoCodesPanel />}
         {section === "careers" && <CareersTable />}
         {section === "settings" && <SiteSettings />}
       </div>
@@ -629,167 +604,6 @@ function CareersTable() {
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-function PromoCodesPanel() {
-  const { promoCodes, addPromoCode, updatePromoCode, removePromoCode } = useSite();
-  const [code, setCode] = useState("");
-  const [description, setDescription] = useState("");
-  const [discountType, setDiscountType] = useState<PromoCode["discountType"]>("percent");
-  const [discountValue, setDiscountValue] = useState(10);
-  const [minOrder, setMinOrder] = useState(0);
-  const [active, setActive] = useState(true);
-
-  const submit = () => {
-    if (!code.trim()) { toast.error("Give the promo code a name"); return; }
-    if (discountValue <= 0) { toast.error("Discount value must be greater than 0"); return; }
-    addPromoCode({
-      code: code.trim().toUpperCase(),
-      description: description || `${discountValue}${discountType === "percent" ? "%" : "₹"} off`,
-      discountType,
-      discountValue,
-      minOrder: minOrder > 0 ? minOrder : undefined,
-      active,
-    });
-    toast.success(`${code.toUpperCase()} added`);
-    setCode(""); setDescription(""); setDiscountValue(10); setMinOrder(0); setActive(true); setDiscountType("percent");
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-6">
-        <div className="flex items-center gap-2">
-          <Ticket className="w-5 h-5 text-forest-deep" />
-          <p className="font-display text-2xl md:text-3xl text-forest-deep">Promo codes</p>
-        </div>
-        <p className="text-sm text-muted-foreground -mt-4">Create, edit and retire the coupons shown at checkout.</p>
-
-        <div className="grid md:grid-cols-6 gap-3">
-          <div className="md:col-span-2">
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Code</p>
-            <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="WELCOME10" className={inputCls} />
-          </div>
-          <div className="md:col-span-2">
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Description</p>
-            <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="10% off first order" className={inputCls} />
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Type</p>
-            <select value={discountType} onChange={(e) => setDiscountType(e.target.value as PromoCode["discountType"])} className={inputCls}>
-              <option value="percent">Percent %</option>
-              <option value="flat">Flat ₹</option>
-            </select>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Value</p>
-            <input type="number" value={discountValue || ""} onChange={(e) => setDiscountValue(+e.target.value)} className={inputCls} />
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Min. order ₹</p>
-            <input type="number" value={minOrder || ""} onChange={(e) => setMinOrder(+e.target.value)} placeholder="0" className={inputCls} />
-          </div>
-          <label className="inline-flex items-center gap-2 text-sm md:col-span-2">
-            <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} /> Active immediately
-          </label>
-          <div className="md:col-span-3 flex md:justify-end">
-            <button onClick={submit} className="rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold hover:bg-forest transition inline-flex items-center gap-2">
-              <Plus className="w-4 h-4" /> Add promo code
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-2xl bg-card border border-border overflow-hidden">
-        <div className="p-5 md:p-6 flex items-center justify-between flex-wrap gap-3">
-          <div>
-            <p className="font-display text-xl md:text-2xl text-forest-deep">Active & scheduled codes</p>
-            <p className="text-sm text-muted-foreground">{promoCodes.length} total · toggle or delete inline</p>
-          </div>
-        </div>
-        {promoCodes.length === 0 ? (
-          <div className="p-10 text-center text-muted-foreground">No promo codes yet — add one above.</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[720px]">
-              <thead className="bg-muted/60 text-xs uppercase tracking-widest text-muted-foreground">
-                <tr>
-                  <th className="text-left p-4">Code</th>
-                  <th className="text-left p-4">Description</th>
-                  <th className="text-left p-4">Discount</th>
-                  <th className="text-left p-4">Min. order</th>
-                  <th className="text-left p-4">Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {promoCodes.map((p) => (
-                  <tr key={p.id} className="border-t border-border">
-                    <td className="p-4">
-                      <input
-                        value={p.code}
-                        onChange={(e) => updatePromoCode(p.id, { code: e.target.value.toUpperCase() })}
-                        className="font-display text-lg text-forest-deep bg-transparent outline-none focus:border-b border-border w-full max-w-[180px]"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <input
-                        value={p.description}
-                        onChange={(e) => updatePromoCode(p.id, { description: e.target.value })}
-                        className="bg-transparent outline-none w-full"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          value={p.discountValue}
-                          onChange={(e) => updatePromoCode(p.id, { discountValue: +e.target.value })}
-                          className="w-16 bg-transparent outline-none border-b border-border font-semibold"
-                        />
-                        <select
-                          value={p.discountType}
-                          onChange={(e) => updatePromoCode(p.id, { discountType: e.target.value as PromoCode["discountType"] })}
-                          className="bg-transparent outline-none text-xs text-muted-foreground"
-                        >
-                          <option value="percent">%</option>
-                          <option value="flat">₹</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <input
-                        type="number"
-                        value={p.minOrder ?? 0}
-                        onChange={(e) => updatePromoCode(p.id, { minOrder: +e.target.value || undefined })}
-                        className="w-20 bg-transparent outline-none border-b border-border"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <button
-                        onClick={() => updatePromoCode(p.id, { active: !p.active })}
-                        className={`text-xs font-semibold px-3 py-1.5 rounded-full transition ${p.active ? "bg-forest-deep text-gold" : "bg-muted text-muted-foreground"}`}
-                      >
-                        {p.active ? "Active" : "Paused"}
-                      </button>
-                    </td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => { if (confirm(`Delete ${p.code}?`)) { removePromoCode(p.id); toast.success("Promo removed"); } }}
-                        className="text-muted-foreground hover:text-terracotta"
-                        aria-label="Delete promo"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
