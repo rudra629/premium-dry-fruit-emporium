@@ -109,6 +109,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [addresses, setAddresses] = useState<Address[]>(DEFAULT_ADDRESSES);
   const [bannerWords, setBannerWordsState] = useState<string[]>(DEFAULT_BANNER);
   const [applications, setApplications] = useState<Application[]>([]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>(DEFAULT_PROMOS);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -117,6 +118,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setAddresses(load("grams:addresses", DEFAULT_ADDRESSES));
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
     setApplications(load("grams:applications", [] as Application[]));
+    setPromoCodes(load("grams:promos", DEFAULT_PROMOS));
     setHydrated(true);
   }, []);
 
@@ -125,6 +127,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:addresses", JSON.stringify(addresses)); }, [addresses, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:banner", JSON.stringify(bannerWords)); }, [bannerWords, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:promos", JSON.stringify(promoCodes)); }, [promoCodes, hydrated]);
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
@@ -148,6 +151,10 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     applications,
     addApplication: (a) => setApplications((prev) => [{ ...a, id: `app_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     removeApplication: (id) => setApplications((prev) => prev.filter((x) => x.id !== id)),
+    promoCodes,
+    addPromoCode: (p) => setPromoCodes((prev) => [{ ...p, id: `promo_${Date.now()}` }, ...prev]),
+    updatePromoCode: (id, patch) => setPromoCodes((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p))),
+    removePromoCode: (id) => setPromoCodes((prev) => prev.filter((p) => p.id !== id)),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
