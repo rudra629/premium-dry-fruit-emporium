@@ -33,6 +33,16 @@ export type Application = {
   date: string;
 };
 
+export type PromoCode = {
+  id: string;
+  code: string;
+  description: string;
+  discountType: "percent" | "flat";
+  discountValue: number;
+  minOrder?: number;
+  active: boolean;
+};
+
 type SiteCtx = {
   extraProducts: Product[];
   addProduct: (p: Product) => void;
@@ -49,6 +59,10 @@ type SiteCtx = {
   applications: Application[];
   addApplication: (a: Omit<Application, "id" | "date">) => void;
   removeApplication: (id: string) => void;
+  promoCodes: PromoCode[];
+  addPromoCode: (p: Omit<PromoCode, "id">) => void;
+  updatePromoCode: (id: string, patch: Partial<PromoCode>) => void;
+  removePromoCode: (id: string) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
@@ -75,6 +89,12 @@ const DEFAULT_ADDRESSES: Address[] = [
   { id: "a2", name: "Aanya Sharma", phone: "+91 98765 43210", line1: "Nexus Coworking, 4th Floor", city: "Mumbai", state: "MH", pincode: "400013", label: "Work" },
 ];
 
+const DEFAULT_PROMOS: PromoCode[] = [
+  { id: "p1", code: "WELCOME10", description: "10% off first order", discountType: "percent", discountValue: 10, minOrder: 499, active: true },
+  { id: "p2", code: "CRUNCH200", description: "Flat ₹200 off above ₹1499", discountType: "flat", discountValue: 200, minOrder: 1499, active: true },
+  { id: "p3", code: "GENZ15", description: "15% off for the Gen-Z pantry", discountType: "percent", discountValue: 15, active: false },
+];
+
 function load<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
@@ -89,6 +109,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [addresses, setAddresses] = useState<Address[]>(DEFAULT_ADDRESSES);
   const [bannerWords, setBannerWordsState] = useState<string[]>(DEFAULT_BANNER);
   const [applications, setApplications] = useState<Application[]>([]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>(DEFAULT_PROMOS);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -97,6 +118,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setAddresses(load("grams:addresses", DEFAULT_ADDRESSES));
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
     setApplications(load("grams:applications", [] as Application[]));
+    setPromoCodes(load("grams:promos", DEFAULT_PROMOS));
     setHydrated(true);
   }, []);
 
@@ -105,6 +127,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:addresses", JSON.stringify(addresses)); }, [addresses, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:banner", JSON.stringify(bannerWords)); }, [bannerWords, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:promos", JSON.stringify(promoCodes)); }, [promoCodes, hydrated]);
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
@@ -128,6 +151,10 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     applications,
     addApplication: (a) => setApplications((prev) => [{ ...a, id: `app_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     removeApplication: (id) => setApplications((prev) => prev.filter((x) => x.id !== id)),
+    promoCodes,
+    addPromoCode: (p) => setPromoCodes((prev) => [{ ...p, id: `promo_${Date.now()}` }, ...prev]),
+    updatePromoCode: (id, patch) => setPromoCodes((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p))),
+    removePromoCode: (id) => setPromoCodes((prev) => prev.filter((p) => p.id !== id)),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
