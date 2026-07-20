@@ -33,6 +33,16 @@ export type Application = {
   date: string;
 };
 
+export type PromoCode = {
+  id: string;
+  code: string;
+  description: string;
+  discountType: "percent" | "flat";
+  discountValue: number;
+  minOrder?: number;
+  active: boolean;
+};
+
 type SiteCtx = {
   extraProducts: Product[];
   addProduct: (p: Product) => void;
@@ -49,6 +59,10 @@ type SiteCtx = {
   applications: Application[];
   addApplication: (a: Omit<Application, "id" | "date">) => void;
   removeApplication: (id: string) => void;
+  promoCodes: PromoCode[];
+  addPromoCode: (p: Omit<PromoCode, "id">) => void;
+  updatePromoCode: (id: string, patch: Partial<PromoCode>) => void;
+  removePromoCode: (id: string) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
