@@ -74,15 +74,6 @@ const DEFAULT_BANNER = [
   "Direct from Farms",
   "Vacuum Sealed",
   "Traceable Origins",
-const DEFAULT_ADDRESSES: Address[] = [
-  { id: "a1", name: "Aanya Sharma", phone: "+91 98765 43210", line1: "12, Palm Grove Apartments", line2: "Linking Road", city: "Mumbai", state: "MH", pincode: "400050", label: "Home" },
-  { id: "a2", name: "Aanya Sharma", phone: "+91 98765 43210", line1: "Nexus Coworking, 4th Floor", city: "Mumbai", state: "MH", pincode: "400013", label: "Work" },
-];
-
-const DEFAULT_PROMOS: PromoCode[] = [
-  { id: "p1", code: "WELCOME10", description: "10% off first order", discountType: "percent", discountValue: 10, minOrder: 499, active: true },
-  { id: "p2", code: "CRUNCH200", description: "Flat ₹200 off above ₹1499", discountType: "flat", discountValue: 200, minOrder: 1499, active: true },
-  { id: "p3", code: "GENZ15", description: "15% off for the Gen-Z pantry", discountType: "percent", discountValue: 15, active: false },
 ];
 
 const DEFAULT_ORDERS: Order[] = [
@@ -96,6 +87,12 @@ const DEFAULT_ORDERS: Order[] = [
 const DEFAULT_ADDRESSES: Address[] = [
   { id: "a1", name: "Aanya Sharma", phone: "+91 98765 43210", line1: "12, Palm Grove Apartments", line2: "Linking Road", city: "Mumbai", state: "MH", pincode: "400050", label: "Home" },
   { id: "a2", name: "Aanya Sharma", phone: "+91 98765 43210", line1: "Nexus Coworking, 4th Floor", city: "Mumbai", state: "MH", pincode: "400013", label: "Work" },
+];
+
+const DEFAULT_PROMOS: PromoCode[] = [
+  { id: "p1", code: "WELCOME10", description: "10% off first order", discountType: "percent", discountValue: 10, minOrder: 499, active: true },
+  { id: "p2", code: "CRUNCH200", description: "Flat ₹200 off above ₹1499", discountType: "flat", discountValue: 200, minOrder: 1499, active: true },
+  { id: "p3", code: "GENZ15", description: "15% off for the Gen-Z pantry", discountType: "percent", discountValue: 15, active: false },
 ];
 
 function load<T>(key: string, fallback: T): T {
