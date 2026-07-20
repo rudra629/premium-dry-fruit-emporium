@@ -1,19 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, LogOut, Ticket,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order } from "@/lib/site-store";
+import { useSite, type Order, type PromoCode } from "@/lib/site-store";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "promos" | "settings";
 
 function Admin() {
   const [section, setSection] = useState<Section>("dashboard");
