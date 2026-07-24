@@ -435,3 +435,22 @@ function Stat({ n, l }: { n: string; l: string }) {
     </div>
   );
 }
+
+function Ornament() {
+  return (
+    <div aria-hidden className="container-x py-6 md:py-8">
+      <div className="flex items-center gap-4 md:gap-6 opacity-70">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor" opacity="0.9" />
+        </svg>
+        <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50">Grams</span>
+        <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor" opacity="0.9" />
+        </svg>
+        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
+      </div>
+    </div>
+  );
+}
+
