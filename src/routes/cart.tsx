@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Minus, Plus, Trash2, ArrowRight, ShoppingBag, Tag } from "lucide-react";
 import { useState } from "react";
-import { useCart } from "@/lib/cart-store";
+import { useCart, MAX_PER_ITEM } from "@/lib/cart-store";
+
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Your Bag — Grams" }, { name: "description", content: "Your Grams shopping bag." }] }),
@@ -52,13 +53,17 @@ function Cart() {
                   </button>
                 </div>
                 <div className="mt-auto flex items-center justify-between gap-3">
-                  <div className="flex items-center rounded-full border border-border overflow-hidden">
-                    <button onClick={() => setQty(i.slug, i.weight, i.qty - 1)} className="w-9 h-9 grid place-items-center hover:bg-muted"><Minus className="w-3.5 h-3.5" /></button>
-                    <span className="w-9 text-center text-sm font-semibold">{i.qty}</span>
-                    <button onClick={() => setQty(i.slug, i.weight, i.qty + 1)} className="w-9 h-9 grid place-items-center hover:bg-muted"><Plus className="w-3.5 h-3.5" /></button>
+                  <div className="flex flex-col items-start gap-1">
+                    <div className="flex items-center rounded-full border border-border overflow-hidden">
+                      <button onClick={() => setQty(i.slug, i.weight, i.qty - 1)} className="w-9 h-9 grid place-items-center hover:bg-muted"><Minus className="w-3.5 h-3.5" /></button>
+                      <span className="w-9 text-center text-sm font-semibold">{i.qty}</span>
+                      <button onClick={() => setQty(i.slug, i.weight, i.qty + 1)} disabled={i.qty >= MAX_PER_ITEM} className="w-9 h-9 grid place-items-center hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"><Plus className="w-3.5 h-3.5" /></button>
+                    </div>
+                    {i.qty >= MAX_PER_ITEM && <span className="text-[10px] uppercase tracking-widest text-terracotta">Max {MAX_PER_ITEM} per product</span>}
                   </div>
                   <p className="font-display text-2xl text-forest-deep">₹{i.price * i.qty}</p>
                 </div>
+
               </div>
             </div>
           ))}

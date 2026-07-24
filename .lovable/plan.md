@@ -1,43 +1,71 @@
-## Hero section tweaks (src/routes/index.tsx)
 
-Scope is strictly the hero. Nothing else changes. Rating card ("Freshest cranberries…— Riya, Mumbai") stays exactly as-is.
+## 1. Product detail page — full-screen hero with auto-slideshow
 
-### 1. Headline copy + RGB "chill"
-Replace `Snack like nature intended.` with:
+**File:** `src/routes/product.$slug.tsx`
 
-```
-Crunch
-chill
-repeat
-```
+Restructure the top of the page so the **first viewport = only image + title/description/origin**. Everything else (price, weights, qty, add-to-cart, badges, shipping strip, story, nutrition, related) moves below the fold.
 
-- Same font sizing/weights as current H1, three lines.
-- Keep generous line-height (do not tighten the gap — use current `leading-tight md:leading-[0.92]` or slightly looser so lines don't collide).
-- `chill` gets a slow RGB color cycle via a new keyframe in `src/styles.css` (`@keyframes hue-cycle` animating `color` through red → orange → yellow → green → cyan → blue → violet → red, ~8s linear infinite). Applied as a utility class (e.g. `animate-hue-cycle`) on the `chill` span, italic like current accent word. Speed intentionally slow, not flashy.
-- `Crunch` and `repeat` keep current cream/italic treatment.
+- Wrap current hero in a `min-h-[calc(100vh-<header>)]` section, 2-column grid on desktop (`lg:grid-cols-2`), stacked on mobile.
+- **Left**: large product image, fills the column height. Fades between `slides[i].image` (200–300ms cross-fade, same slot/size).
+- **Right**: vertically centered
+  - Category eyebrow
+  - `h1` = current slide's `title` (falls back to `product.name`)
+  - Slide `description` paragraph
+  - **Origin** stays fixed (never changes across slides)
+  - Slide dots / progress bar for the auto-swipe
+- Auto-advance every ~4s via `setInterval`; pause on hover; reset on manual dot click. Cleaned up on unmount + slug change.
+- Everything currently under the hero (price block, weight chips, qty + Add-to-bag button, wishlist/share, badges chips, shipping/freshness/recyclable strip, Story, Nutrition, "You might also love") stays intact but rendered **after** the hero section so the user must scroll for it. Add a small scroll-cue chevron at the bottom of the hero.
 
-### 2. Replace pouch stack with a single rotating product
-Reference image shows one large product locked on the right side. Rebuild the right column (both desktop `hidden lg:block` block and the mobile pouches block) as:
+### Slide data source (admin-editable)
 
-- One image slot, fixed position + size (desktop ~w-[420px] centered in the right column; mobile ~w-[70%] centered).
-- Cycles through all `products` (or a curated 6–8 slugs incl. walnut, macadamia, mango, cranberry, pineapple, pumpkin, kiwi, hazelnut) — one product visible at a time.
-- Interval: 500ms as the user asked (`setInterval` 500ms, cleaned up on unmount). No slide/carousel — just swap the `src`, with a subtle 200ms fade/scale so it doesn't feel jarring at that speed.
-- Position and size stay constant across swaps.
-- Floating rating card stays absolutely positioned over/next to the image, unchanged content and styling. Desktop keeps left-center placement; mobile keeps current placement.
+Extend the `Product` type in `src/lib/products.ts`:
 
-### Technical notes
-
-```text
-src/routes/index.tsx
-  - useState + useEffect for rotating index
-  - new <RotatingProduct /> local component
-  - replace desktop pouch-stack div (lines ~109–131)
-  - replace mobile pouch composition (lines ~135–159), preserving rating card
-  - update H1 markup (lines ~70–79)
-
-src/styles.css
-  - @keyframes hue-cycle { 0%,100% color red … through spectrum }
-  - @utility animate-hue-cycle { animation: hue-cycle 8s linear infinite }
+```ts
+slides?: { image: string; title: string; description: string }[];
 ```
 
-No other files, no other sections, no theme/token changes.
+Fallback logic in the page: if `slides` is empty/undefined, synthesise a single slide from `{ image: product.image, title: product.name, description: product.tagline }` — so existing products keep working with zero migration.
+
+### Admin editor
+
+In `src/routes/admin.tsx` `AddProductForm`:
+- New "Detail slideshow" section (below the main image field).
+- Repeating rows: image upload (FileReader → dataURL, same helper as main image) + title input + description textarea + remove button + "Add slide".
+- On submit, include `slides` in the constructed `Product`.
+
+`site-store` needs no schema change (products are persisted as-is in `grams:extra-products`).
+
+For the baked-in `products` array we won't seed slides — they'll just use the single-image fallback until an admin edits them. (Editing baseline products is out of scope; only newly added products get custom slides, matching how the admin panel already works.)
+
+## 2. Cart per-item cap of 30
+
+**File:** `src/lib/cart-store.tsx`
+- In `add`: cap `qty` at 30 when merging (`Math.min(30, existing.qty + i.qty)`); if already at 30, toast "Max 30 per product".
+- In `setQty`: clamp to `Math.min(30, Math.max(1, qty))`.
+
+**Files with qty inputs** — clamp UI + show inline hint:
+- `src/routes/product.$slug.tsx` — the +/- qty stepper (disable `+` at 30).
+- `src/routes/cart.tsx` — same clamp on its qty stepper.
+
+Uses `sonner` toast (already imported across the app) for the max-reached feedback.
+
+## 3. Hide ugly scrollbars in chatbot + admin
+
+**File:** `src/styles.css` — add a utility:
+
+```css
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+```
+
+Apply `no-scrollbar` to:
+- `src/components/site/HealthChat.tsx` — the messages scroll container.
+- `src/routes/admin.tsx` — the horizontal tabs strip (line 39, `overflow-x-auto`) and any `overflow-x-auto` table wrappers.
+
+Scrolling still works; just the visible track/thumb are hidden.
+
+## Out of scope
+- No theme/color changes, no changes to header/footer/home hero.
+- Base catalog products won't get pre-authored slideshows this pass.
