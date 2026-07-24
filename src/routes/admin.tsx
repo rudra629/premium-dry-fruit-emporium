@@ -36,7 +36,7 @@ function Admin() {
           </div>
         </div>
 
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+        <div className="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
           {([
             { id: "dashboard", label: "Dashboard", icon: BarChart3 },
             { id: "products", label: "Products", icon: Boxes },
@@ -238,12 +238,14 @@ function AddProductForm() {
   const [badges, setBadges] = useState<string[]>([]);
   const [badgeInput, setBadgeInput] = useState("");
   const [weights, setWeights] = useState([{ label: "250g", value: "250", price: 0 }]);
+  const [slides, setSlides] = useState<{ image: string; title: string; description: string }[]>([]);
   const [nutrition, setNutrition] = useState([
     { label: "Protein", value: "" },
     { label: "Fibre", value: "" },
     { label: "Omega-3", value: "" },
     { label: "Energy", value: "" },
   ]);
+
 
   const addBadge = () => {
     if (badgeInput.trim()) { setBadges([...badges, badgeInput.trim()]); setBadgeInput(""); }
