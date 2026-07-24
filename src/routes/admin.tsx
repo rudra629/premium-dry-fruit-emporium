@@ -762,3 +762,95 @@ function ReviewsManager() {
   );
 }
 
+
+function SlidesManager() {
+  const { allProducts, productSlides, setProductSlides } = useSite();
+  const [slug, setSlug] = useState<string>(allProducts[0]?.slug ?? "");
+  const product = useMemo(() => allProducts.find((p) => p.slug === slug), [allProducts, slug]);
+
+  const currentSlides: ProductSlide[] = useMemo(() => {
+    if (!product) return [];
+    const stored = productSlides[product.slug];
+    if (stored && stored.length) return stored;
+    if (product.slides && product.slides.length) return product.slides;
+    return [{ image: product.image, title: product.name, description: product.tagline }];
+  }, [product, productSlides]);
+
+  const [draft, setDraft] = useState<ProductSlide[]>(currentSlides);
+
+  // Sync draft when product changes
+  useMemo(() => setDraft(currentSlides), [slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const updateSlide = (i: number, patch: Partial<ProductSlide>) =>
+    setDraft((prev) => prev.map((s, ix) => (ix === i ? { ...s, ...patch } : s)));
+
+  const addSlide = () => {
+    if (!product) return;
+    setDraft((prev) => [...prev, { image: product.image, title: product.name, description: "" }]);
+  };
+  const rmSlide = (i: number) => setDraft((prev) => prev.filter((_, ix) => ix !== i));
+
+  const onImage = (i: number, file: File | null) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => updateSlide(i, { image: String(r.result) });
+    r.readAsDataURL(file);
+  };
+
+  const save = () => {
+    if (!product) return;
+    const clean = draft.filter((s) => s.title.trim() && s.image);
+    if (clean.length === 0) { toast.error("Add at least one slide with title + image"); return; }
+    setProductSlides(product.slug, clean);
+    toast.success(`Slides saved for ${product.name}`);
+  };
+
+  return (
+    <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="font-display text-2xl md:text-3xl text-forest-deep">Product page slides</p>
+          <p className="text-sm text-muted-foreground">Full-viewport hero slides that auto-swipe on the product page. Origin stays fixed.</p>
+        </div>
+        <select
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          className={inputCls + " max-w-xs"}
+        >
+          {allProducts.map((p) => (<option key={p.slug} value={p.slug}>{p.name}</option>))}
+        </select>
+      </div>
+
+      {product && (
+        <div className="space-y-4">
+          {draft.map((s, i) => (
+            <div key={i} className="rounded-xl border border-border p-4 md:p-5 grid md:grid-cols-[140px_1fr_auto] gap-4 items-start">
+              <div className="flex flex-col items-start gap-2">
+                <div className="w-[140px] h-[140px] rounded-lg border border-border overflow-hidden bg-muted grid place-items-center">
+                  {s.image ? <img src={s.image} alt="" className="w-full h-full object-contain" /> : <span className="text-xs text-muted-foreground">No image</span>}
+                </div>
+                <input type="file" accept="image/*" onChange={(e) => onImage(i, e.target.files?.[0] ?? null)} className="text-xs" />
+              </div>
+              <div className="space-y-2">
+                <Field label={`Slide ${i + 1} · Title`}>
+                  <input value={s.title} onChange={(e) => updateSlide(i, { title: e.target.value })} className={inputCls} placeholder="Roasted Turkish Hazelnuts" />
+                </Field>
+                <Field label="Description">
+                  <textarea value={s.description} onChange={(e) => updateSlide(i, { description: e.target.value })} rows={3} className={inputCls} placeholder="Chocolatey, buttery, cocoa-forward…" />
+                </Field>
+              </div>
+              <button onClick={() => rmSlide(i)} className="w-10 h-10 grid place-items-center border border-border rounded-xl hover:text-terracotta shrink-0" aria-label="Remove slide">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+
+          <div className="flex flex-wrap gap-3">
+            <button onClick={addSlide} className="rounded-full bg-muted border border-border px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-1"><Plus className="w-4 h-4" /> Add slide</button>
+            <button onClick={save} className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold hover:bg-forest transition">Save slides</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
