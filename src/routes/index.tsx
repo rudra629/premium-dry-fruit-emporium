@@ -161,24 +161,30 @@ function Home() {
 
 
       {/* Value props */}
-      <section className="container-x py-16 md:py-20">
-        <div className="grid md:grid-cols-4 gap-6">
-          {[
-            { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
-            { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
-            { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
-            { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
-          ].map((v) => (
-            <div key={v.title} className="rounded-2xl border border-border/70 bg-card p-6 hover:-translate-y-1 hover:shadow-card transition">
-              <div className="w-11 h-11 rounded-full bg-forest-deep text-gold grid place-items-center">
-                <v.icon className="w-5 h-5" />
+      <section className="relative py-16 md:py-20" style={{ background: "linear-gradient(180deg, transparent 0%, rgba(20,18,22,0.85) 20%, rgba(20,18,22,0.85) 80%, transparent 100%)" }}>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+        <div className="container-x">
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
+              { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
+              { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
+              { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
+            ].map((v) => (
+              <div key={v.title} className="group relative rounded-2xl border border-white/[0.08] p-6 hover:-translate-y-1 hover:border-gold/40 transition overflow-hidden" style={{ background: "linear-gradient(145deg, #1a1719 0%, #131114 100%)" }}>
+                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-gold/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-gold/25 to-gold/5 border border-gold/30 text-gold grid place-items-center">
+                  <v.icon className="w-5 h-5" />
+                </div>
+                <h3 className="relative mt-4 font-display text-xl text-cream">{v.title}</h3>
+                <p className="relative mt-1 text-sm text-cream/60 leading-relaxed">{v.desc}</p>
               </div>
-              <h3 className="mt-4 font-display text-xl text-forest-deep">{v.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
+
 
       {/* Bestsellers */}
       <section className="container-x py-8">
