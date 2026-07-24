@@ -203,6 +203,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
     setReviews(load("grams:reviews", [] as Review[]));
+    setProductSlidesState(load("grams:product-slides", {} as Record<string, ProductSlide[]>));
     setHydrated(true);
   }, []);
 
@@ -213,6 +214,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:product-slides", JSON.stringify(productSlides)); }, [productSlides, hydrated]);
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
