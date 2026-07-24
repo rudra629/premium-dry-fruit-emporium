@@ -103,7 +103,7 @@ function Home() {
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-5 font-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
+            <h1 className="mt-5 font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
               <span className="italic text-cream/95 block">Crunch</span>
               <span className="italic animate-hue-cycle block">chill</span>
               <span className="italic text-cream/95 block">repeat.</span>
