@@ -4,6 +4,8 @@ import { useRef, useCallback } from "react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 import { flyToCart } from "@/lib/fly-to-cart";
+import { Price } from "@/components/site/Price";
+
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
@@ -99,18 +101,13 @@ export function ProductCard({ product }: { product: Product }) {
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
-          className="mt-1 block font-display text-lg sm:text-xl text-forest-deep leading-tight hover:text-terracotta transition line-clamp-1"
+          className="mt-1 block font-display italic text-lg sm:text-xl text-forest-deep leading-tight hover:text-terracotta transition line-clamp-1"
         >
           {product.name}
         </Link>
         <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">{product.tagline}</p>
         <div className="mt-3 flex items-end justify-between gap-2">
-          <div className="flex items-baseline gap-2 min-w-0">
-            <span className="font-display text-xl sm:text-2xl text-forest-deep">₹{product.price}</span>
-            {product.compareAt && (
-              <span className="text-xs sm:text-sm text-muted-foreground line-through">₹{product.compareAt}</span>
-            )}
-          </div>
+          <Price price={product.price} compareAt={product.compareAt} size="lg" hideDiscountPct className="min-w-0" />
           <button
             type="button"
             onClick={(e) => {
@@ -135,3 +132,4 @@ export function ProductCard({ product }: { product: Product }) {
     </div>
   );
 }
+

@@ -8,6 +8,7 @@ import gramsLogo from "@/assets/grams-logo.png.asset.json";
 const nav = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
+  { to: "/gifting", label: "Gifting" },
   { to: "/story", label: "Our Story" },
   { to: "/contact", label: "Contact" },
 ];
@@ -16,7 +17,7 @@ export function AnnouncementBar() {
   return (
     <div className="bg-forest-deep text-cream text-[11px] md:text-xs tracking-[0.2em] uppercase">
       <div className="container-x flex items-center justify-center gap-8 py-2 overflow-hidden">
-        <span className="hidden md:inline opacity-70">Free shipping over ₹899</span>
+        <span className="hidden md:inline opacity-70 font-mono">FLAT 20% OFF · CODE CRUNCH20</span>
         <span className="text-gold">✦ Freshly packed this week ✦</span>
         <span className="hidden md:inline opacity-70">Cash on delivery available</span>
       </div>
@@ -42,15 +43,13 @@ export function Header() {
     return () => window.removeEventListener("grams:cart-bump", bump);
   }, []);
 
-
-
   return (
     <>
       <AnnouncementBar />
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60">
-        <div className="container-x flex items-center justify-between h-16 md:h-20">
+        <div className="container-x flex items-center justify-between h-20 md:h-28">
           <Link to="/" className="flex items-center">
-            <img src={gramsLogo.url} alt="Grams" className="h-10 md:h-12 w-auto object-contain" />
+            <img src={gramsLogo.url} alt="Grams" className="h-14 md:h-20 w-auto object-contain" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-9 text-sm font-medium">
@@ -84,7 +83,7 @@ export function Header() {
             <Link ref={cartRef} to="/cart" data-cart-icon className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-cream text-[10px] font-semibold grid place-items-center">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-cream text-[10px] font-semibold grid place-items-center font-mono">
                   {count}
                 </span>
               )}

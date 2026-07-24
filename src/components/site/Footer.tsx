@@ -12,8 +12,9 @@ export function Footer() {
         <div className="grid lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12">
           <div>
             <Link to="/" className="inline-flex items-center">
-              <img src={gramsLogo.url} alt="Grams" className="h-14 w-auto object-contain" />
+              <img src={gramsLogo.url} alt="Grams" className="h-20 md:h-24 w-auto object-contain" />
             </Link>
+
             <p className="mt-5 max-w-sm text-cream/70 leading-relaxed">
               Beyond snack, it's a lifestyle. Small-batch dry fruits, seeds & nuts sourced from farms that give a damn.
             </p>
@@ -40,11 +41,13 @@ export function Footer() {
           ]} />
           <FooterCol title="Company" links={[
             { to: "/story", label: "Our Story" },
+            { to: "/gifting", label: "Gifting" },
             { to: "/contact", label: "Contact" },
             { to: "/careers", label: "Work with us" },
             { to: "/profile", label: "My Account" },
             { to: "/admin", label: "Admin" },
           ]} />
+
           <FooterCol title="Support" links={[
             { to: "/contact", label: "Help Center" },
             { to: "/contact", label: "Shipping" },

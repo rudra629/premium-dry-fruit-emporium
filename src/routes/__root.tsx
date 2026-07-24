@@ -18,8 +18,10 @@ import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/site/ModeToggle";
+import { HealthChat } from "@/components/site/HealthChat";
 import { useReveal } from "@/lib/use-reveal";
 import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
+
 
 function NotFoundComponent() {
   return (
@@ -130,7 +132,9 @@ function RootComponent() {
             <Footer />
           </div>
           <ModeToggle />
+          <HealthChat />
           <Toaster position="top-center" richColors />
+
         </CartProvider>
       </SiteProvider>
     </QueryClientProvider>
