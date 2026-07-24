@@ -246,6 +246,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     addReview: (r) => setReviews((prev) => [{ ...r, id: `rev_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     toggleReviewHidden: (id) => setReviews((prev) => prev.map((r) => r.id === id ? { ...r, hidden: !r.hidden } : r)),
     removeReview: (id) => setReviews((prev) => prev.filter((r) => r.id !== id)),
+    productSlides,
+    setProductSlides: (slug, slides) => setProductSlidesState((prev) => ({ ...prev, [slug]: slides })),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
