@@ -18,7 +18,6 @@ import { CartProvider } from "@/lib/cart-store";
 import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/site/ModeToggle";
-import { CustomCursor } from "@/components/site/CustomCursor";
 import { useReveal } from "@/lib/use-reveal";
 import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
 
@@ -130,7 +129,6 @@ function RootComponent() {
             <Footer />
           </div>
           <ModeToggle />
-          <CustomCursor />
           <Toaster position="top-center" richColors />
         </CartProvider>
       </SiteProvider>
