@@ -82,6 +82,8 @@ type SiteCtx = {
   addReview: (r: Omit<Review, "id" | "date">) => void;
   toggleReviewHidden: (id: string) => void;
   removeReview: (id: string) => void;
+  productSlides: Record<string, ProductSlide[]>;
+  setProductSlides: (slug: string, slides: ProductSlide[]) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
