@@ -8,38 +8,22 @@ import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
-import kiwiSlice from "@/assets/products/Dried_Kiwi_F.asset.json";
-import walnutSlice from "@/assets/products/Walnut_Whole_Cali_F.asset.json";
-import mangoSlice from "@/assets/products/Dreid_Mango_F.asset.json";
-import cranberrySlice from "@/assets/products/Dried_Cranberry_F.asset.json";
+import fruitCollage from "@/assets/hero-fruit-collage.png";
 
 const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
   .filter((i) => i < products.length)
   .map((i) => products[i]);
 
-const heroSlices = [
-  { src: kiwiSlice.url, alt: "Kiwi slice", rot: -12 },
-  { src: walnutSlice.url, alt: "Walnut", rot: 6 },
-  { src: mangoSlice.url, alt: "Mango slice", rot: -6 },
-  { src: cranberrySlice.url, alt: "Cranberry", rot: 10 },
-];
-
 function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
-  const dims = size === "md"
-    ? ["w-20 h-20", "w-16 h-16", "w-24 h-24", "w-14 h-14"]
-    : ["w-14 h-14", "w-11 h-11", "w-16 h-16", "w-10 h-10"];
+  const cls = size === "md"
+    ? "w-[280px] md:w-[340px] -bottom-6 -right-4 md:-bottom-10 md:-right-6"
+    : "w-[200px] -bottom-4 -right-2";
   return (
-    <div className="pointer-events-none absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 flex items-end gap-2 md:gap-3 z-20">
-      {heroSlices.map((s, i) => (
-        <div
-          key={s.alt}
-          className={`${dims[i]} rounded-full bg-cream/95 border border-gold/40 shadow-[0_10px_30px_rgba(0,0,0,0.55)] overflow-hidden grid place-items-center`}
-          style={{ transform: `rotate(${s.rot}deg)` }}
-        >
-          <img src={s.src} alt={s.alt} className="w-[130%] h-[130%] object-cover" />
-        </div>
-      ))}
-    </div>
+    <img
+      src={fruitCollage}
+      alt="Assorted dry fruits and nuts"
+      className={`pointer-events-none absolute z-20 drop-shadow-[0_18px_40px_rgba(0,0,0,0.6)] ${cls}`}
+    />
   );
 }
 
