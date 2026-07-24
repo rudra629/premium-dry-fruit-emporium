@@ -620,3 +620,14 @@ header .bg-forest-deep,
 .bg-forest-deep:not(.no-tint) { }
 
 /* Filter pills on dark: bg-muted needs a bit more contrast when text is cream */
+
+/* Hide scrollbars cleanly while keeping scroll behaviour */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/* Product hero slide fade */
+@keyframes slideFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide-fade { animation: slideFade 0.7s cubic-bezier(0.22,1,0.36,1) both; }

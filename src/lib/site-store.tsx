@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { products as baseProducts, type Product } from "./products";
+import { products as baseProducts, type Product, type ProductSlide } from "./products";
 
 export type Address = {
   id: string;
@@ -82,6 +82,8 @@ type SiteCtx = {
   addReview: (r: Omit<Review, "id" | "date">) => void;
   toggleReviewHidden: (id: string) => void;
   removeReview: (id: string) => void;
+  productSlides: Record<string, ProductSlide[]>;
+  setProductSlides: (slug: string, slides: ProductSlide[]) => void;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
@@ -190,6 +192,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [giftBoxes, setGiftBoxes] = useState<GiftBox[]>(DEFAULT_GIFT_BOXES);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [productSlides, setProductSlidesState] = useState<Record<string, ProductSlide[]>>({});
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -200,6 +203,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
     setReviews(load("grams:reviews", [] as Review[]));
+    setProductSlidesState(load("grams:product-slides", {} as Record<string, ProductSlide[]>));
     setHydrated(true);
   }, []);
 
@@ -210,6 +214,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:product-slides", JSON.stringify(productSlides)); }, [productSlides, hydrated]);
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
@@ -241,6 +246,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     addReview: (r) => setReviews((prev) => [{ ...r, id: `rev_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     toggleReviewHidden: (id) => setReviews((prev) => prev.map((r) => r.id === id ? { ...r, hidden: !r.hidden } : r)),
     removeReview: (id) => setReviews((prev) => prev.filter((r) => r.id !== id)),
+    productSlides,
+    setProductSlides: (slug, slides) => setProductSlidesState((prev) => ({ ...prev, [slug]: slides })),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
