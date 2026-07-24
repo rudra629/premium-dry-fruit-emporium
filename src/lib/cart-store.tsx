@@ -1,7 +1,4 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { toast } from "sonner";
-
-export const MAX_QTY_PER_ITEM = 30;
 
 export type CartItem = {
   slug: string;
@@ -45,18 +42,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
       if (idx > -1) {
         const copy = [...prev];
-        const nextQty = copy[idx].qty + i.qty;
-        if (nextQty > MAX_QTY_PER_ITEM) {
-          toast.error(`Limit reached — max ${MAX_QTY_PER_ITEM} per product`);
-          copy[idx] = { ...copy[idx], qty: MAX_QTY_PER_ITEM };
-        } else {
-          copy[idx] = { ...copy[idx], qty: nextQty };
-        }
+        copy[idx] = { ...copy[idx], qty: copy[idx].qty + i.qty };
         return copy;
-      }
-      if (i.qty > MAX_QTY_PER_ITEM) {
-        toast.error(`Limit reached — max ${MAX_QTY_PER_ITEM} per product`);
-        return [...prev, { ...i, qty: MAX_QTY_PER_ITEM }];
       }
       return [...prev, i];
     });
@@ -67,9 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const setQty: CartCtx["setQty"] = (slug, weight, qty) =>
     setItems((prev) =>
       prev.map((p) =>
-        p.slug === slug && p.weight === weight
-          ? { ...p, qty: Math.min(MAX_QTY_PER_ITEM, Math.max(1, qty)) }
-          : p,
+        p.slug === slug && p.weight === weight ? { ...p, qty: Math.max(1, qty) } : p,
       ),
     );
 

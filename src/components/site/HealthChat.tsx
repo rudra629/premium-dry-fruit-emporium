@@ -95,7 +95,7 @@ export function HealthChat() {
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-3 text-sm">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
             {messages.map((m, i) => {
               if (m.kind === "text") {
                 return (
