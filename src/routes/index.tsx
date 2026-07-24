@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite } from "@/lib/site-store";
@@ -7,6 +8,27 @@ import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
+
+const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
+  .filter((i) => i < products.length)
+  .map((i) => products[i]);
+
+function RotatingHeroProduct({ className }: { className?: string }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1200);
+    return () => clearInterval(t);
+  }, []);
+  const p = heroRotation[idx];
+  return (
+    <img
+      key={p.slug}
+      src={p.image}
+      alt={p.name}
+      className={`animate-hero-swap drop-shadow-[0_30px_60px_rgba(0,0,0,0.75)] ${className ?? ""}`}
+    />
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
