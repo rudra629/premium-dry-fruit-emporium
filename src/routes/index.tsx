@@ -16,8 +16,8 @@ const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
 
 function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
   const cls = size === "md"
-    ? "w-[420px] md:w-[520px] bottom-0 -left-12 md:-left-28"
-    : "w-[260px] bottom-0 -left-6";
+    ? "w-[420px] md:w-[520px] -bottom-16 md:-bottom-20 -left-12 md:-left-28"
+    : "w-[260px] -bottom-10 -left-6";
   return (
     <img
       src={fruitCollage}
