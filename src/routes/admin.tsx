@@ -2,18 +2,19 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order } from "@/lib/site-store";
+import { useSite, type Order, type GiftBox, type GiftCategory } from "@/lib/site-store";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "settings";
+
 
 function Admin() {
   const [section, setSection] = useState<Section>("dashboard");
@@ -42,6 +43,8 @@ function Admin() {
             { id: "add", label: "Add Product", icon: Plus },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
+            { id: "gifting", label: "Gifting", icon: Gift },
+            { id: "reviews", label: "Reviews", icon: Star },
             { id: "careers", label: "Careers", icon: Briefcase },
             { id: "settings", label: "Site Settings", icon: Settings2 },
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
@@ -60,12 +63,15 @@ function Admin() {
         {section === "add" && <AddProductForm />}
         {section === "orders" && <OrdersTable />}
         {section === "customers" && <CustomersTable />}
+        {section === "gifting" && <GiftingManager />}
+        {section === "reviews" && <ReviewsManager />}
         {section === "careers" && <CareersTable />}
         {section === "settings" && <SiteSettings />}
       </div>
     </div>
   );
 }
+
 
 function Dashboard() {
   const { orders } = useSite();
@@ -607,3 +613,150 @@ function CareersTable() {
     </div>
   );
 }
+
+function GiftingManager() {
+  const { giftBoxes, addGiftBox, updateGiftBox, removeGiftBox } = useSite();
+  const [name, setName] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [category, setCategory] = useState<GiftCategory>("Corporate");
+  const [price, setPrice] = useState(0);
+  const [compareAt, setCompareAt] = useState(0);
+  const [image, setImage] = useState("");
+  const [contents, setContents] = useState("");
+  const [description, setDescription] = useState("");
+
+  const onImage = (f: File | null) => {
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => setImage(String(r.result));
+    r.readAsDataURL(f);
+  };
+  const submit = () => {
+    if (!name || !price || !image) { toast.error("Name, price, image required"); return; }
+    addGiftBox({
+      category, name, tagline: tagline || name, price,
+      compareAt: compareAt > price ? compareAt : undefined,
+      image, contents: contents.split("\n").map((s) => s.trim()).filter(Boolean),
+      description: description || tagline,
+    });
+    toast.success(`${name} added to Gifting`);
+    setName(""); setTagline(""); setPrice(0); setCompareAt(0); setImage(""); setContents(""); setDescription("");
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Add a gift box</p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Field label="Box name *"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} /></Field>
+          <Field label="Category">
+            <select value={category} onChange={(e) => setCategory(e.target.value as GiftCategory)} className={inputCls}>
+              <option>Corporate</option><option>Birthday</option><option>Festive</option>
+            </select>
+          </Field>
+          <Field label="Tagline" full><input value={tagline} onChange={(e) => setTagline(e.target.value)} className={inputCls} /></Field>
+          <Field label="Price (₹) *"><input type="number" value={price || ""} onChange={(e) => setPrice(+e.target.value)} className={inputCls} /></Field>
+          <Field label="MRP / compare-at (₹)"><input type="number" value={compareAt || ""} onChange={(e) => setCompareAt(+e.target.value)} className={inputCls} /></Field>
+          <Field label="Contents (one per line)" full>
+            <textarea value={contents} onChange={(e) => setContents(e.target.value)} rows={4} className={inputCls} placeholder="Walnut 250g\nMacadamia 200g\nGold foil card" />
+          </Field>
+          <Field label="Description" full>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className={inputCls} />
+          </Field>
+          <Field label="Cover image *" full>
+            <div className="flex items-center gap-3">
+              <input type="file" accept="image/*" onChange={(e) => onImage(e.target.files?.[0] ?? null)} className="text-sm" />
+              {image && <img src={image} alt="" className="w-16 h-16 object-contain rounded-lg border border-border" />}
+            </div>
+          </Field>
+        </div>
+        <button onClick={submit} className="rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold hover:bg-forest transition">Publish gift box</button>
+      </div>
+
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-6">
+        <p className="font-display text-2xl text-forest-deep mb-4">Existing boxes ({giftBoxes.length})</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {giftBoxes.map((g) => (
+            <div key={g.id} className="rounded-xl border border-border p-4 flex gap-3">
+              <img src={g.image} alt="" className="w-16 h-20 object-contain shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] tracking-widest uppercase text-gold">{g.category}</p>
+                <p className="font-semibold text-forest-deep truncate">{g.name}</p>
+                <p className="text-xs text-muted-foreground truncate">₹{g.price}{g.compareAt ? ` · was ₹${g.compareAt}` : ""}</p>
+                <div className="mt-2 flex gap-1.5">
+                  <select
+                    value={g.category}
+                    onChange={(e) => updateGiftBox(g.id, { category: e.target.value as GiftCategory })}
+                    className="text-[11px] rounded-full bg-muted px-2 py-1 border border-border"
+                  >
+                    <option>Corporate</option><option>Birthday</option><option>Festive</option>
+                  </select>
+                  <button onClick={() => { if (confirm("Delete box?")) removeGiftBox(g.id); }} className="text-muted-foreground hover:text-terracotta"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewsManager() {
+  const { reviews, allProducts, toggleReviewHidden, removeReview } = useSite();
+  const nameOf = (slug: string) => allProducts.find((p) => p.slug === slug)?.name ?? slug;
+
+  return (
+    <div className="rounded-2xl bg-card border border-border p-5 md:p-6">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <p className="font-display text-2xl md:text-3xl text-forest-deep">Ratings & Reviews</p>
+          <p className="text-sm text-muted-foreground">{reviews.length} submitted from customers post-delivery.</p>
+        </div>
+      </div>
+      {reviews.length === 0 ? (
+        <div className="rounded-xl bg-muted/50 border border-dashed border-border p-10 text-center">
+          <Star className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+          <p className="font-medium text-forest-deep">No reviews yet</p>
+          <p className="text-sm text-muted-foreground mt-1">Reviews submitted after delivery will appear here.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {reviews.map((r) => (
+            <div key={r.id} className={`rounded-xl border p-4 flex flex-col md:flex-row md:items-start gap-3 ${r.hidden ? "bg-muted/40 border-dashed" : "bg-card border-border"}`}>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-gold">{nameOf(r.productSlug)}</span>
+                  <span className="text-xs text-muted-foreground">· {r.date}</span>
+                  <span className="text-xs text-muted-foreground">· Order {r.orderId}</span>
+                  {r.hidden && <span className="text-[10px] uppercase tracking-widest text-terracotta">Hidden</span>}
+                </div>
+                <div className="mt-1.5 flex items-center gap-1 text-gold">
+                  {[...Array(5)].map((_, i) => <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? "fill-gold" : ""}`} />)}
+                  <span className="ml-2 text-sm font-semibold text-forest-deep">{r.user}</span>
+                </div>
+                <p className="mt-1.5 text-sm text-muted-foreground">{r.text}</p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => toggleReviewHidden(r.id)}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-muted border border-border px-3 py-1.5 text-xs font-semibold hover:bg-card transition"
+                >
+                  {r.hidden ? <><Eye className="w-3.5 h-3.5" /> Show</> : <><EyeOff className="w-3.5 h-3.5" /> Hide</>}
+                </button>
+                <button
+                  onClick={() => { if (confirm("Delete review?")) removeReview(r.id); }}
+                  className="w-9 h-9 rounded-full bg-muted border border-border hover:bg-destructive/10 hover:text-destructive grid place-items-center transition"
+                  aria-label="Delete review"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+

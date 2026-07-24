@@ -158,6 +158,19 @@ function Home() {
           </div>
         </div>
 
+        {/* Promo strip — bottom of hero */}
+        <div className="relative w-full border-t border-white/10 bg-black/40 backdrop-blur-sm">
+          <div className="container-x py-3 md:py-4 flex items-center gap-4 md:gap-8 overflow-x-auto text-[11px] md:text-xs">
+            <span className="inline-flex items-center gap-2 text-gold font-mono tracking-[0.2em] uppercase shrink-0">
+              <Sparkles className="w-3 h-3" /> Flat 20% off · Code CRUNCH20
+            </span>
+            <span className="text-cream/60 shrink-0 hidden sm:inline">Free shipping over ₹899</span>
+            <span className="text-cream/60 shrink-0 hidden md:inline">Cash on delivery available</span>
+            <span className="text-cream/60 shrink-0 hidden md:inline">Small-batch craft</span>
+          </div>
+        </div>
+
+
       </section>
 
       {/* Marquee */}

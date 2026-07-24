@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { User, Package, MapPin, Settings, Heart, LogOut, Edit3, Plus, Check, Clock, Truck, X } from "lucide-react";
+import { User, Package, MapPin, Settings, Heart, LogOut, Edit3, Plus, Check, Clock, Truck, X, Star } from "lucide-react";
+import { toast } from "sonner";
 import { products } from "@/lib/products";
+import { useSite } from "@/lib/site-store";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Account — Grams" }, { name: "description", content: "Manage your Grams account, orders, addresses and preferences." }] }),
   component: Profile,
 });
+
 
 type Tab = "overview" | "orders" | "addresses" | "wishlist" | "settings";
 
@@ -110,6 +113,13 @@ const orders = [
 ];
 
 function Orders() {
+  const { addReview, reviews } = useSite();
+  const [openFor, setOpenFor] = useState<string | null>(null);
+  const [pSlug, setPSlug] = useState<string>("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const hasReviewed = (orderId: string, slug: string) => reviews.some((r) => r.orderId === orderId && r.productSlug === slug);
+
   return (
     <div className="space-y-4">
       {orders.map((o) => (
@@ -132,6 +142,18 @@ function Orders() {
                   <p className="text-sm font-semibold">{p.name}</p>
                   <p className="text-xs text-muted-foreground">₹{p.price}</p>
                 </div>
+                {o.status === "Delivered" && (
+                  hasReviewed(o.id, p.slug) ? (
+                    <span className="ml-2 text-[10px] uppercase tracking-widest text-forest-deep bg-gold/40 px-2 py-1 rounded-full">Reviewed</span>
+                  ) : (
+                    <button
+                      onClick={() => { setOpenFor(o.id); setPSlug(p.slug); setRating(5); setText(""); }}
+                      className="ml-2 inline-flex items-center gap-1 rounded-full bg-forest-deep text-cream px-3 py-1 text-[11px] font-semibold hover:bg-forest transition"
+                    >
+                      <Star className="w-3 h-3" /> Rate
+                    </button>
+                  )
+                )}
               </div>
             ))}
           </div>
@@ -142,9 +164,49 @@ function Orders() {
           </div>
         </div>
       ))}
+
+      {openFor && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setOpenFor(null)}>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-2xl bg-card border border-border p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <p className="font-display text-2xl text-forest-deep">Rate this product</p>
+              <button onClick={() => setOpenFor(null)} className="text-muted-foreground hover:text-forest-deep"><X className="w-5 h-5" /></button>
+            </div>
+            <div className="mt-5 flex gap-1">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <button key={n} onClick={() => setRating(n)}>
+                  <Star className={`w-8 h-8 transition ${n <= rating ? "fill-gold text-gold" : "text-border"}`} />
+                </button>
+              ))}
+            </div>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Tell others what you loved…"
+              rows={4}
+              className="mt-4 w-full rounded-xl border border-border bg-background px-4 py-3 outline-none focus:ring-2 focus:ring-forest-deep text-sm"
+            />
+            <div className="mt-5 flex gap-2 justify-end">
+              <button onClick={() => setOpenFor(null)} className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">Cancel</button>
+              <button
+                onClick={() => {
+                  if (!text.trim()) { toast.error("Add a short note"); return; }
+                  addReview({ orderId: openFor, productSlug: pSlug, user: "Aanya", rating, text: text.trim() });
+                  toast.success("Thanks — your review is live");
+                  setOpenFor(null);
+                }}
+                className="rounded-full bg-forest-deep text-cream px-5 py-2.5 text-sm font-semibold hover:bg-forest transition"
+              >
+                Submit review
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { icon: React.ComponentType<{ className?: string }>; cls: string }> = {
