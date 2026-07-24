@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { products as baseProducts, type Product } from "./products";
+import { products as baseProducts, type Product, type ProductSlide } from "./products";
 
 export type Address = {
   id: string;
