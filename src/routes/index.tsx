@@ -28,16 +28,23 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
+      <section className="relative overflow-visible md:overflow-hidden text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${heroBg})`, filter: "grayscale(0.35) brightness(0.55)" }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroBg})`, filter: "brightness(0.85) contrast(1.05) saturate(0.95)", opacity: 0.75 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/85 via-forest-deep/70 to-forest-deep/95" />
+        {/* Warm vignette + directional darkening for text legibility */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 70% 40%, transparent 0%, rgba(8,7,10,0.35) 45%, rgba(8,7,10,0.85) 100%)" }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent" />
 
+        {/* Warm amber glow orbs */}
+        <div className="absolute -top-24 -left-16 w-[380px] h-[380px] rounded-full bg-gold/15 blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/3 w-[420px] h-[420px] rounded-full bg-terracotta/12 blur-[140px] pointer-events-none" />
 
-        <div className="absolute inset-0 opacity-[0.08]"
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
+
 
         <div className="container-x relative px-4 pt-0 pb-4 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-6 md:gap-12 items-start md:items-center">
           <div className="relative z-10 mt-[120px] w-full transform-none md:mt-0">
@@ -154,24 +161,30 @@ function Home() {
 
 
       {/* Value props */}
-      <section className="container-x py-16 md:py-20">
-        <div className="grid md:grid-cols-4 gap-6">
-          {[
-            { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
-            { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
-            { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
-            { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
-          ].map((v) => (
-            <div key={v.title} className="rounded-2xl border border-border/70 bg-card p-6 hover:-translate-y-1 hover:shadow-card transition">
-              <div className="w-11 h-11 rounded-full bg-forest-deep text-gold grid place-items-center">
-                <v.icon className="w-5 h-5" />
+      <section className="relative py-16 md:py-20" style={{ background: "linear-gradient(180deg, transparent 0%, rgba(20,18,22,0.85) 20%, rgba(20,18,22,0.85) 80%, transparent 100%)" }}>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+        <div className="container-x">
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
+              { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
+              { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
+              { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
+            ].map((v) => (
+              <div key={v.title} className="group relative rounded-2xl border border-white/[0.08] p-6 hover:-translate-y-1 hover:border-gold/40 transition overflow-hidden" style={{ background: "linear-gradient(145deg, #1a1719 0%, #131114 100%)" }}>
+                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-gold/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-gold/25 to-gold/5 border border-gold/30 text-gold grid place-items-center">
+                  <v.icon className="w-5 h-5" />
+                </div>
+                <h3 className="relative mt-4 font-display text-xl text-cream">{v.title}</h3>
+                <p className="relative mt-1 text-sm text-cream/60 leading-relaxed">{v.desc}</p>
               </div>
-              <h3 className="mt-4 font-display text-xl text-forest-deep">{v.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
+
 
       {/* Bestsellers */}
       <section className="container-x py-8">
