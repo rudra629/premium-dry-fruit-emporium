@@ -41,6 +41,7 @@ function Admin() {
             { id: "dashboard", label: "Dashboard", icon: BarChart3 },
             { id: "products", label: "Products", icon: Boxes },
             { id: "add", label: "Add Product", icon: Plus },
+            { id: "slides", label: "Product Slides", icon: Images },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
             { id: "gifting", label: "Gifting", icon: Gift },
