@@ -512,3 +512,59 @@ html.crunch-mode header a:hover { color: #ffb26b; }
 @media (prefers-reduced-motion: reduce) {
   .fruit-loader-ring, .fruit-loader-item, .fruit-loader-core { animation: none; }
 }
+
+
+/* ============ Dark theme utility remapping =============
+   Because the site inherits a light-era class vocabulary (text-forest-deep for
+   headings, bg-cream for surfaces, text-ink for card body), remap those onto a
+   dark palette so the whole app matches the Crunch/Coming-Soon aesthetic. */
+
+.text-forest-deep,
+.hover\:text-forest-deep:hover,
+.group:hover .group-hover\:text-forest-deep { color: var(--cream); }
+.text-forest,
+.hover\:text-forest:hover { color: var(--gold); }
+.text-ink { color: var(--cream); }
+.text-ink\/70 { color: color-mix(in oklab, var(--cream) 70%, transparent); }
+.text-ink\/60 { color: color-mix(in oklab, var(--cream) 60%, transparent); }
+.focus\:border-forest-deep:focus,
+.focus\:ring-forest-deep:focus { border-color: var(--gold); }
+
+/* Opaque cream surfaces (islands like header, filter bar, inputs, floating hero cards)
+   become dark cards on the dark app. Translucent variants (bg-cream/10, /85, etc.)
+   remain useful as light-tint overlays on already-dark parents and are left alone. */
+.bg-cream { background-color: #131316; color: var(--cream); }
+.hover\:bg-cream:hover { background-color: #1a1a1e; color: var(--cream); }
+.bg-cream\/85 { background-color: color-mix(in srgb, #131316 88%, transparent); color: var(--cream); }
+.bg-cream\/95 { background-color: color-mix(in srgb, #131316 95%, transparent); color: var(--cream); }
+
+/* Keep contrast on amber CTAs: dark text on gold */
+.bg-gold.text-forest-deep,
+.bg-gold .text-forest-deep,
+.bg-gold\/90.text-forest-deep,
+.hover\:bg-gold:hover.text-forest-deep { color: #14100a; }
+
+/* ============ Restore original palette inside Crunch / Coming Soon =============
+   The crunch page and any crunch-scoped surface should keep its native look. */
+html.crunch-mode,
+.crunch-scope {
+  --cream: oklch(0.97 0.025 95);
+  --forest-deep: oklch(0.12 0 0);
+  --forest: oklch(0.18 0 0);
+  --gold: oklch(0.82 0.14 88);
+  --ink: oklch(0.12 0 0);
+}
+html.crunch-mode .text-forest-deep,
+.crunch-scope .text-forest-deep { color: oklch(0.12 0 0); }
+html.crunch-mode .text-forest,
+.crunch-scope .text-forest { color: oklch(0.18 0 0); }
+html.crunch-mode .text-ink,
+.crunch-scope .text-ink { color: oklch(0.12 0 0); }
+html.crunch-mode .bg-cream,
+.crunch-scope .bg-cream { background-color: oklch(0.97 0.025 95); color: oklch(0.12 0 0); }
+
+/* Skeleton shimmer needs a dark base now */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 100%);
+  background-size: 800px 100%;
+}
