@@ -16,13 +16,13 @@ const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
 
 function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
   const cls = size === "md"
-    ? "w-[280px] md:w-[340px] -bottom-6 -right-4 md:-bottom-10 md:-right-6"
-    : "w-[200px] -bottom-4 -right-2";
+    ? "w-[420px] md:w-[520px] top-1/2 -translate-y-1/2 -left-24 md:-left-40"
+    : "w-[280px] top-1/2 -translate-y-1/2 -left-10";
   return (
     <img
       src={fruitCollage}
       alt="Assorted dry fruits and nuts"
-      className={`pointer-events-none absolute z-20 drop-shadow-[0_18px_40px_rgba(0,0,0,0.6)] ${cls}`}
+      className={`pointer-events-none absolute z-0 drop-shadow-[0_18px_40px_rgba(0,0,0,0.6)] ${cls}`}
     />
   );
 }
