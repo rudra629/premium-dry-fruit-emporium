@@ -39,7 +39,7 @@ function RotatingHeroProduct({ className }: { className?: string }) {
       key={p.slug}
       src={p.image}
       alt={p.name}
-      className={`animate-hero-swap drop-shadow-[0_30px_60px_rgba(0,0,0,0.75)] ${className ?? ""}`}
+      className={`relative z-10 animate-hero-swap drop-shadow-[0_30px_60px_rgba(0,0,0,0.75)] ${className ?? ""}`}
     />
   );
 }
