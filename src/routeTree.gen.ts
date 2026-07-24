@@ -13,6 +13,7 @@ import { Route as StoryRouteImport } from './routes/story'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
+import { Route as GiftingRouteImport } from './routes/gifting'
 import { Route as CrunchRouteImport } from './routes/crunch'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -41,6 +42,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order-success',
   path: '/order-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiftingRoute = GiftingRouteImport.update({
+  id: '/gifting',
+  path: '/gifting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrunchRoute = CrunchRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/gifting'
     | '/order-success'
     | '/profile'
     | '/shop'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/gifting'
     | '/order-success'
     | '/profile'
     | '/shop'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/gifting'
     | '/order-success'
     | '/profile'
     | '/shop'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   CrunchRoute: typeof CrunchRoute
+  GiftingRoute: typeof GiftingRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ProfileRoute: typeof ProfileRoute
   ShopRoute: typeof ShopRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/order-success'
       fullPath: '/order-success'
       preLoaderRoute: typeof OrderSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gifting': {
+      id: '/gifting'
+      path: '/gifting'
+      fullPath: '/gifting'
+      preLoaderRoute: typeof GiftingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crunch': {
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   CrunchRoute: CrunchRoute,
+  GiftingRoute: GiftingRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ProfileRoute: ProfileRoute,
   ShopRoute: ShopRoute,
@@ -313,13 +334,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
