@@ -26,7 +26,23 @@ function Home() {
   const newArrivals = shown.filter((p) => p.newArrival);
 
   return (
-    <div>
+    <div className="relative">
+      {/* Decorative fixed side rails */}
+      <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2024 · India</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+      <div aria-hidden className="hidden lg:flex fixed right-4 top-0 h-screen z-[1] pointer-events-none items-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl]">Farm · Roast · Pack · Ship</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+
       {/* HERO */}
       <section className="relative overflow-visible md:overflow-hidden text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
         <div
