@@ -101,6 +101,25 @@ function ProductPage() {
             alt={current.title}
             className="max-h-[70vh] lg:max-h-[80vh] drop-shadow-[0_30px_50px_rgba(10,40,24,0.35)] animate-in fade-in zoom-in-95 duration-500"
           />
+
+          {slides.length > 1 && (
+            <>
+              <button
+                onClick={() => setSlideIdx((i) => (i - 1 + slides.length) % slides.length)}
+                aria-label="Previous slide"
+                className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 md:w-13 md:h-13 grid place-items-center rounded-full bg-background/70 backdrop-blur-md border border-border hover:bg-forest-deep hover:text-gold hover:border-forest-deep transition-all shadow-lg hover:scale-110 active:scale-95"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setSlideIdx((i) => (i + 1) % slides.length)}
+                aria-label="Next slide"
+                className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 md:w-13 md:h-13 grid place-items-center rounded-full bg-background/70 backdrop-blur-md border border-border hover:bg-forest-deep hover:text-gold hover:border-forest-deep transition-all shadow-lg hover:scale-110 active:scale-95"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
         </div>
 
         {/* Copy */}
