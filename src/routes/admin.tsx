@@ -36,7 +36,7 @@ function Admin() {
           </div>
         </div>
 
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+        <div className="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
           {([
             { id: "dashboard", label: "Dashboard", icon: BarChart3 },
             { id: "products", label: "Products", icon: Boxes },
