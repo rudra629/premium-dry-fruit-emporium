@@ -8,10 +8,40 @@ import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
+import kiwiSlice from "@/assets/products/Dried_Kiwi_F.asset.json";
+import walnutSlice from "@/assets/products/Walnut_Whole_Cali_F.asset.json";
+import mangoSlice from "@/assets/products/Dreid_Mango_F.asset.json";
+import cranberrySlice from "@/assets/products/Dried_Cranberry_F.asset.json";
 
 const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
   .filter((i) => i < products.length)
   .map((i) => products[i]);
+
+const heroSlices = [
+  { src: kiwiSlice.url, alt: "Kiwi slice", rot: -12 },
+  { src: walnutSlice.url, alt: "Walnut", rot: 6 },
+  { src: mangoSlice.url, alt: "Mango slice", rot: -6 },
+  { src: cranberrySlice.url, alt: "Cranberry", rot: 10 },
+];
+
+function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
+  const dims = size === "md"
+    ? ["w-20 h-20", "w-16 h-16", "w-24 h-24", "w-14 h-14"]
+    : ["w-14 h-14", "w-11 h-11", "w-16 h-16", "w-10 h-10"];
+  return (
+    <div className="pointer-events-none absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 flex items-end gap-2 md:gap-3 z-20">
+      {heroSlices.map((s, i) => (
+        <div
+          key={s.alt}
+          className={`${dims[i]} rounded-full bg-cream/95 border border-gold/40 shadow-[0_10px_30px_rgba(0,0,0,0.55)] overflow-hidden grid place-items-center`}
+          style={{ transform: `rotate(${s.rot}deg)` }}
+        >
+          <img src={s.src} alt={s.alt} className="w-[130%] h-[130%] object-cover" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function RotatingHeroProduct({ className }: { className?: string }) {
   const [idx, setIdx] = useState(0);
@@ -66,7 +96,7 @@ function Home() {
       </div>
 
       {/* HERO */}
-      <section className="relative overflow-visible md:overflow-hidden text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
+      <section className="relative overflow-visible md:overflow-hidden text-cream flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroBg})`, filter: "brightness(0.85) contrast(1.05) saturate(0.95)", opacity: 0.75 }}
@@ -84,12 +114,12 @@ function Home() {
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
 
 
-        <div className="container-x relative px-4 pt-0 pb-4 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-6 md:gap-12 items-start md:items-center">
-          <div className="relative z-10 mt-[120px] w-full transform-none md:mt-0">
+        <div className="container-x relative px-4 pt-6 pb-4 md:px-12 md:pt-10 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 md:gap-10 items-start md:items-center">
+          <div className="relative z-10 w-full">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[9rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
+            <h1 className="mt-5 font-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
               <span className="italic text-cream/95 block">Crunch</span>
               <span className="italic animate-hue-cycle block">chill</span>
               <span className="italic text-cream/95 block">repeat.</span>
@@ -123,10 +153,11 @@ function Home() {
           </div>
 
           {/* Hero rotating product — desktop */}
-          <div className="relative h-[420px] md:h-[560px] hidden lg:block">
+          <div className="relative h-[560px] md:h-[640px] hidden lg:block">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative w-[420px] h-[500px] flex items-center justify-center">
+              <div className="relative w-[560px] h-[620px] flex items-center justify-center">
                 <RotatingHeroProduct className="max-w-full max-h-full w-auto h-auto object-contain" />
+                <HeroSlices size="md" />
               </div>
             </div>
 
@@ -142,9 +173,10 @@ function Home() {
         </div>
 
         {/* Hero mobile — single rotating product */}
-        <div className="lg:hidden container-x relative px-4 pb-6 mt-0 w-full">
-          <div className="relative mx-auto w-full max-w-xs h-[320px] sm:h-[380px] flex items-center justify-center">
-            <RotatingHeroProduct className="max-w-[75%] max-h-full w-auto h-auto object-contain" />
+        <div className="lg:hidden container-x relative px-4 pb-6 mt-2 w-full">
+          <div className="relative mx-auto w-full max-w-sm h-[380px] sm:h-[440px] flex items-center justify-center">
+            <RotatingHeroProduct className="max-w-[95%] max-h-full w-auto h-auto object-contain" />
+            <HeroSlices size="sm" />
 
             {/* Floating rating card */}
             <div className="absolute top-[36%] -left-2 bg-cream text-ink rounded-2xl p-3 shadow-glow w-36 sm:w-44 z-20">
@@ -186,6 +218,7 @@ function Home() {
           ))}
         </div>
       </section>
+
 
 
       {/* Value props */}
