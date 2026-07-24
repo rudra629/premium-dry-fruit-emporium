@@ -62,6 +62,7 @@ function Admin() {
         {section === "dashboard" && <Dashboard />}
         {section === "products" && <ProductsTable />}
         {section === "add" && <AddProductForm />}
+        {section === "slides" && <SlidesManager />}
         {section === "orders" && <OrdersTable />}
         {section === "customers" && <CustomersTable />}
         {section === "gifting" && <GiftingManager />}
