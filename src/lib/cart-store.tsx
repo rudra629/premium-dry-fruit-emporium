@@ -1,4 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+
+export const MAX_QTY_PER_ITEM = 30;
 
 export type CartItem = {
   slug: string;
