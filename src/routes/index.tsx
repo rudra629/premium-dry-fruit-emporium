@@ -28,16 +28,23 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
+      <section className="relative overflow-visible md:overflow-hidden text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${heroBg})`, filter: "grayscale(0.35) brightness(0.55)" }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroBg})`, filter: "brightness(0.85) contrast(1.05) saturate(0.95)", opacity: 0.75 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/85 via-forest-deep/70 to-forest-deep/95" />
+        {/* Warm vignette + directional darkening for text legibility */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 70% 40%, transparent 0%, rgba(8,7,10,0.35) 45%, rgba(8,7,10,0.85) 100%)" }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent" />
 
+        {/* Warm amber glow orbs */}
+        <div className="absolute -top-24 -left-16 w-[380px] h-[380px] rounded-full bg-gold/15 blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/3 w-[420px] h-[420px] rounded-full bg-terracotta/12 blur-[140px] pointer-events-none" />
 
-        <div className="absolute inset-0 opacity-[0.08]"
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
+
 
         <div className="container-x relative px-4 pt-0 pb-4 md:px-12 md:pt-24 md:pb-36 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-6 md:gap-12 items-start md:items-center">
           <div className="relative z-10 mt-[120px] w-full transform-none md:mt-0">
