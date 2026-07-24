@@ -192,6 +192,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [giftBoxes, setGiftBoxes] = useState<GiftBox[]>(DEFAULT_GIFT_BOXES);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [productSlides, setProductSlidesState] = useState<Record<string, ProductSlide[]>>({});
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
