@@ -78,7 +78,8 @@ export function CustomCursor() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseenter", onEnter);
+      document.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("mouseover", onOver);
