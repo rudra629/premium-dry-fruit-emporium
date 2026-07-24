@@ -18,24 +18,29 @@ export function CustomCursor() {
     let rx = mx;
     let ry = my;
     let raf = 0;
-    let visible = false;
 
     const dot = dotRef.current!;
     const ring = ringRef.current!;
 
+    // Show immediately at center so it's visible even before the first mousemove
+    dot.style.opacity = "1";
+    ring.style.opacity = "1";
+    dot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
-      if (!visible) {
-        visible = true;
-        dot.style.opacity = "1";
-        ring.style.opacity = "1";
-      }
+      dot.style.opacity = "1";
+      ring.style.opacity = "1";
       dot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
     };
 
+    const onEnter = () => {
+      dot.style.opacity = "1";
+      ring.style.opacity = "1";
+    };
     const onLeave = () => {
-      visible = false;
       dot.style.opacity = "0";
       ring.style.opacity = "0";
     };
@@ -63,7 +68,8 @@ export function CustomCursor() {
     raf = requestAnimationFrame(tick);
 
     window.addEventListener("mousemove", onMove, { passive: true });
-    window.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mouseenter", onEnter);
+    document.addEventListener("mouseleave", onLeave);
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     window.addEventListener("mouseover", onOver);
@@ -72,7 +78,8 @@ export function CustomCursor() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseenter", onEnter);
+      document.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("mouseover", onOver);
