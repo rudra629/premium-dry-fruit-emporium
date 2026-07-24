@@ -164,7 +164,7 @@ function ProductsTable() {
           <p className="text-sm text-muted-foreground">{rows.length} SKUs in catalog</p>
         </div>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto no-scrollbar">
         <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-muted/60 text-xs uppercase tracking-widest text-muted-foreground">
             <tr>
@@ -401,7 +401,7 @@ function OrdersTable({ compact }: { compact?: boolean }) {
           <p className="text-sm text-muted-foreground">{orders.length} total · change status inline</p>
         </div>
       )}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto no-scrollbar">
         <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-muted/60 text-xs uppercase tracking-widest text-muted-foreground">
             <tr>
@@ -458,7 +458,7 @@ function CustomersTable() {
       <div className="p-5 md:p-6">
         <p className="font-display text-xl md:text-2xl text-forest-deep">Customers</p>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto no-scrollbar">
         <table className="w-full text-sm min-w-[560px]">
           <thead className="bg-muted/60 text-xs uppercase tracking-widest text-muted-foreground">
             <tr>
