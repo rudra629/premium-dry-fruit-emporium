@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, Images,
 } from "lucide-react";
 import { toast } from "sonner";
-import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order, type GiftBox, type GiftCategory } from "@/lib/site-store";
+import { products as baseProducts, type Product, type ProductSlide } from "@/lib/products";
+import { useSite, type Order, type GiftCategory } from "@/lib/site-store";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
