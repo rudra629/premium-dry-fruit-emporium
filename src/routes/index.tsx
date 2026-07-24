@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite } from "@/lib/site-store";
@@ -7,6 +8,27 @@ import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
+
+const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
+  .filter((i) => i < products.length)
+  .map((i) => products[i]);
+
+function RotatingHeroProduct({ className }: { className?: string }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1200);
+    return () => clearInterval(t);
+  }, []);
+  const p = heroRotation[idx];
+  return (
+    <img
+      key={p.slug}
+      src={p.image}
+      alt={p.name}
+      className={`animate-hero-swap drop-shadow-[0_30px_60px_rgba(0,0,0,0.75)] ${className ?? ""}`}
+    />
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,15 +89,10 @@ function Home() {
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
               <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
             </div>
-            <h1 className="mt-6 font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] leading-tight md:leading-[0.92] font-normal tracking-tight w-full break-words [text-wrap:balance]">
-
-              Snack like{" "}
-              <span className="italic text-gold relative inline-block">
-                nature
-              </span>
-
-              <br />
-              <span className="italic text-cream/95">intended.</span>
+            <h1 className="mt-6 font-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[9rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
+              <span className="italic text-cream/95 block">Crunch</span>
+              <span className="italic animate-hue-cycle block">chill</span>
+              <span className="italic text-cream/95 block">repeat.</span>
             </h1>
             <p className="mt-5 md:mt-6 max-w-lg text-base md:text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
@@ -105,19 +122,12 @@ function Home() {
             </div>
           </div>
 
-          {/* Hero pouch stack */}
+          {/* Hero rotating product — desktop */}
           <div className="relative h-[420px] md:h-[560px] hidden lg:block">
-            <div className="absolute top-6 left-8 w-64 float-slow">
-              <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
-            </div>
-            <div className="absolute top-0 right-4 w-72 float-slower">
-              <img src={products[0].image} alt="Walnut" className="w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.7)] rotate-[6deg]" />
-            </div>
-            <div className="absolute bottom-4 left-24 w-80 z-10 float-slow" style={{ animationDelay: "1.5s" }}>
-              <img src={products[6].image} alt="Mango" className="w-full drop-shadow-[0_40px_60px_rgba(0,0,0,0.7)] rotate-[-3deg]" />
-            </div>
-            <div className="absolute -bottom-2 right-0 w-64 float-slower" style={{ animationDelay: "2s" }}>
-              <img src={products[5].image} alt="Pumpkin seeds" className="w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)] rotate-[10deg]" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-[420px] h-[500px] flex items-center justify-center">
+                <RotatingHeroProduct className="max-w-full max-h-full w-auto h-auto object-contain" />
+              </div>
             </div>
 
             {/* Floating rating card */}
@@ -131,21 +141,10 @@ function Home() {
           </div>
         </div>
 
-        {/* Hero mobile pouches — tight overlapping composition like desktop */}
+        {/* Hero mobile — single rotating product */}
         <div className="lg:hidden container-x relative px-4 pb-6 mt-0 w-full">
-          <div className="relative mx-auto w-full max-w-xs h-[300px] sm:h-[360px]">
-            <div className="absolute top-0 left-0 w-[46%] float-slow">
-              <img src={products[3].image} alt="Macadamia" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.6)] rotate-[-8deg]" />
-            </div>
-            <div className="absolute top-0 right-0 w-[50%] float-slower">
-              <img src={products[0].image} alt="Walnut" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.7)] rotate-[6deg]" />
-            </div>
-            <div className="absolute bottom-0 left-[12%] w-[56%] z-10 float-slow" style={{ animationDelay: "1.5s" }}>
-              <img src={products[6].image} alt="Mango" className="w-full drop-shadow-[0_20px_32px_rgba(0,0,0,0.7)] rotate-[-3deg]" />
-            </div>
-            <div className="absolute -bottom-2 right-0 w-[46%] float-slower" style={{ animationDelay: "2s" }}>
-              <img src={products[5].image} alt="Pumpkin seeds" className="w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.6)] rotate-[10deg]" />
-            </div>
+          <div className="relative mx-auto w-full max-w-xs h-[320px] sm:h-[380px] flex items-center justify-center">
+            <RotatingHeroProduct className="max-w-[75%] max-h-full w-auto h-auto object-contain" />
 
             {/* Floating rating card */}
             <div className="absolute top-[36%] -left-2 bg-cream text-ink rounded-2xl p-3 shadow-glow w-36 sm:w-44 z-20">
