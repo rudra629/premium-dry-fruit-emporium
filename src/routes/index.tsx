@@ -30,10 +30,11 @@ function Home() {
       {/* HERO */}
       <section className="relative overflow-visible md:overflow-hidden bg-forest-deep text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center">
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBg})` }}
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: `url(${heroBg})`, filter: "grayscale(0.35) brightness(0.55)" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/60 via-forest-deep/40 to-forest-deep/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/85 via-forest-deep/70 to-forest-deep/95" />
+
 
         <div className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "3px 3px" }} />
