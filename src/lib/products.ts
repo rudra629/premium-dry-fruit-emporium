@@ -9,6 +9,12 @@ import cranberry from "@/assets/products/Dried_Cranberry_F.asset.json";
 import pumpkin from "@/assets/products/Pumpkin_Seeds_F.asset.json";
 import pineapple from "@/assets/products/Dried_Pineapple_F.asset.json";
 
+export type ProductSlide = {
+  image: string;
+  title: string;
+  description: string;
+};
+
 export type Product = {
   slug: string;
   name: string;
@@ -26,6 +32,7 @@ export type Product = {
   weights: { label: string; value: string; price: number }[];
   bestseller?: boolean;
   newArrival?: boolean;
+  slides?: ProductSlide[];
 };
 
 export const products: Product[] = [
