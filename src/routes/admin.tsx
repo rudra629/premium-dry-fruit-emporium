@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "settings";
+type Section = "dashboard" | "products" | "add" | "slides" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "settings";
 
 
 function Admin() {
