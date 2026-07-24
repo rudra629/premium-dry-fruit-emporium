@@ -262,9 +262,19 @@ function AddProductForm() {
     r.readAsDataURL(file);
   };
 
+  const addSlide = () => setSlides([...slides, { image: "", title: "", description: "" }]);
+  const rmSlide = (i: number) => setSlides(slides.filter((_, x) => x !== i));
+  const handleSlideImage = (i: number, file: File | null) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => setSlides((prev) => prev.map((s, ix) => ix === i ? { ...s, image: String(r.result) } : s));
+    r.readAsDataURL(file);
+  };
+
   const submit = () => {
     if (!name || !price || !image) { toast.error("Name, price and image are required"); return; }
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Math.random().toString(36).slice(2, 6);
+    const cleanSlides = slides.filter((s) => s.image && s.title);
     const product: Product = {
       slug, name, tagline: tagline || name, category, price,
       compareAt: compareAt > price ? compareAt : undefined,
@@ -273,6 +283,7 @@ function AddProductForm() {
       nutrition: nutrition.filter((n) => n.value),
       weights: weights.filter((w) => w.label && w.price > 0),
       bestseller, newArrival,
+      slides: cleanSlides.length > 0 ? cleanSlides : undefined,
     };
     if (product.weights.length === 0) { toast.error("Add at least one weight/price"); return; }
     addProduct(product);
@@ -280,8 +291,9 @@ function AddProductForm() {
     // Reset
     setName(""); setTagline(""); setPrice(0); setCompareAt(0); setOrigin(""); setImage("");
     setDescription(""); setBadges([]); setWeights([{ label: "250g", value: "250", price: 0 }]);
-    setBestseller(false); setNewArrival(false);
+    setSlides([]); setBestseller(false); setNewArrival(false);
   };
+
 
   return (
     <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-6">
@@ -371,6 +383,37 @@ function AddProductForm() {
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={5} className={inputCls} placeholder="Slow-cured, hand-picked and packed within 14 days of harvest…" />
       </Field>
 
+      {/* Detail slideshow */}
+      <div className="rounded-2xl border border-dashed border-border p-4 md:p-5">
+        <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">Detail page slideshow</p>
+            <p className="text-[11px] text-muted-foreground/80">Auto-swipes on the product page. Each slide has its own image, title & description. Origin stays fixed. Leave empty to just show the main image + name + tagline.</p>
+          </div>
+          <button onClick={addSlide} className="text-xs font-semibold text-forest-deep hover:text-terracotta inline-flex items-center gap-1"><Plus className="w-3 h-3" /> Add slide</button>
+        </div>
+        <div className="mt-3 space-y-3">
+          {slides.length === 0 && <p className="text-xs text-muted-foreground">No extra slides yet.</p>}
+          {slides.map((s, i) => (
+            <div key={i} className="grid md:grid-cols-[96px_1fr_auto] gap-3 items-start p-3 rounded-xl bg-muted/40 border border-border/60">
+              <div className="flex flex-col gap-2">
+                {s.image ? (
+                  <img src={s.image} alt="" className="w-24 h-24 object-contain rounded-lg border border-border bg-cream" />
+                ) : (
+                  <div className="w-24 h-24 rounded-lg border border-dashed border-border grid place-items-center text-[10px] text-muted-foreground">No image</div>
+                )}
+                <input type="file" accept="image/*" onChange={(e) => handleSlideImage(i, e.target.files?.[0] ?? null)} className="text-[11px]" />
+              </div>
+              <div className="space-y-2">
+                <input value={s.title} onChange={(e) => setSlides(slides.map((x, ix) => ix === i ? { ...x, title: e.target.value } : x))} placeholder="Slide title (e.g. Sun-cured whole kernels)" className={inputCls} />
+                <textarea value={s.description} onChange={(e) => setSlides(slides.map((x, ix) => ix === i ? { ...x, description: e.target.value } : x))} rows={3} placeholder="Slide description shown next to this image." className={inputCls} />
+              </div>
+              <button onClick={() => rmSlide(i)} className="w-10 h-10 grid place-items-center border border-border rounded-xl hover:text-terracotta"><Trash2 className="w-4 h-4" /></button>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="flex gap-3">
         <button onClick={submit} className="rounded-full bg-forest-deep text-cream px-7 py-3.5 text-sm font-semibold hover:bg-forest transition inline-flex items-center gap-2">
           <Plus className="w-4 h-4" /> Save product
@@ -379,6 +422,7 @@ function AddProductForm() {
     </div>
   );
 }
+
 
 const inputCls = "rounded-xl border border-border bg-cream px-4 py-3 text-sm outline-none focus:border-forest-deep w-full";
 
