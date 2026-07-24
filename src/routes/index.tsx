@@ -26,7 +26,23 @@ function Home() {
   const newArrivals = shown.filter((p) => p.newArrival);
 
   return (
-    <div>
+    <div className="relative">
+      {/* Decorative fixed side rails */}
+      <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2024 · India</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+      <div aria-hidden className="hidden lg:flex fixed right-4 top-0 h-screen z-[1] pointer-events-none items-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl]">Farm · Roast · Pack · Ship</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+
       {/* HERO */}
       <section className="relative overflow-visible md:overflow-hidden text-cream md:min-h-screen flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>
         <div
@@ -186,6 +202,23 @@ function Home() {
       </section>
 
 
+      {/* Ornamental divider */}
+      <Ornament />
+
+      {/* "As featured in" logo strip */}
+      <section className="container-x py-10 md:py-12">
+        <div className="flex items-center gap-6 md:gap-10">
+          <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-cream/15" />
+          <p className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-cream/50 whitespace-nowrap">As featured in</p>
+          <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-cream/15" />
+        </div>
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-8 gap-y-4 items-center justify-items-center opacity-70">
+          {["VOGUE", "GQ", "Forbes", "Condé Nast", "Elle", "Mint"].map((n) => (
+            <span key={n} className="font-display italic text-lg md:text-xl text-cream/60 hover:text-gold transition">{n}</span>
+          ))}
+        </div>
+      </section>
+
       {/* Bestsellers */}
       <section className="container-x py-8">
         <div className="flex items-end justify-between gap-6 mb-10">
@@ -201,6 +234,27 @@ function Home() {
           {bestsellers.map((p) => <ProductCard key={p.slug} product={p} />)}
         </div>
       </section>
+
+      {/* Numbers strip */}
+      <section className="container-x py-10 md:py-14">
+        <div className="relative rounded-2xl border border-white/[0.08] overflow-hidden" style={{ background: "linear-gradient(90deg, #101012 0%, #17141a 50%, #101012 100%)" }}>
+          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "radial-gradient(rgba(212,162,76,0.9) 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
+          <div className="relative grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
+            {[
+              { n: "12+", l: "Global origins" },
+              { n: "47k", l: "Happy snackers" },
+              { n: "98%", l: "Reorder rate" },
+              { n: "24h", l: "From roast to pack" },
+            ].map((s) => (
+              <div key={s.l} className="p-6 md:p-8 text-center">
+                <p className="font-display text-4xl md:text-5xl text-gold">{s.n}</p>
+                <p className="mt-1 text-[11px] tracking-[0.3em] uppercase text-cream/60">{s.l}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* Featured huge banner */}
       <section className="container-x px-4 py-12 md:px-0 md:py-20">
@@ -381,3 +435,22 @@ function Stat({ n, l }: { n: string; l: string }) {
     </div>
   );
 }
+
+function Ornament() {
+  return (
+    <div aria-hidden className="container-x py-6 md:py-8">
+      <div className="flex items-center gap-4 md:gap-6 opacity-70">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor" opacity="0.9" />
+        </svg>
+        <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50">Grams</span>
+        <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor" opacity="0.9" />
+        </svg>
+        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
+      </div>
+    </div>
+  );
+}
+
