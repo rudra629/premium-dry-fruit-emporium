@@ -155,17 +155,17 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
   return (
     <div className="fixed inset-0 z-[90] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar rounded-3xl border border-white/10 bg-gradient-to-b from-[#101012] to-black text-cream">
+      <div className="relative w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#101012] to-black text-cream flex flex-col md:grid md:grid-cols-2">
         <button
           onClick={onClose}
           aria-label="Close story"
-          className="sticky top-3 float-right mr-3 z-10 w-10 h-10 rounded-full border border-white/15 bg-black/70 backdrop-blur grid place-items-center hover:border-gold/60 hover:text-gold transition"
+          className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full border border-white/15 bg-black/70 backdrop-blur grid place-items-center hover:border-gold/60 hover:text-gold transition"
         >
           <X className="w-4 h-4" />
         </button>
 
         {imgs.length > 0 && (
-          <div className="relative aspect-[16/9] bg-black grid place-items-center p-8 border-b border-white/10">
+          <div className="relative shrink-0 h-[32vh] md:h-auto bg-black grid place-items-center p-5 md:p-8 border-b md:border-b-0 md:border-r border-white/10">
             <img src={imgs[i]} alt={`${article.title} — image ${i + 1}`} className="max-h-full max-w-full object-contain drop-shadow-[0_24px_50px_rgba(212,162,76,0.25)]" />
             {imgs.length > 1 && (
               <>
@@ -185,12 +185,12 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
           </div>
         )}
 
-        <div className="p-6 md:p-12">
+        <div className={`min-h-0 flex-1 overflow-y-auto no-scrollbar p-6 md:p-10 ${imgs.length ? "" : "md:col-span-2"}`}>
           <p className="text-[10px] tracking-[0.3em] uppercase text-gold">{article.category} · {article.date}</p>
-          <h2 className="mt-3 font-display italic text-3xl md:text-5xl leading-[1.05]">{article.title}</h2>
+          <h2 className="mt-3 font-display italic text-2xl md:text-4xl leading-[1.05]">{article.title}</h2>
           {article.author && <p className="mt-3 text-xs font-mono text-cream/50">By {article.author}</p>}
-          <p className="mt-6 text-lg text-cream/80 leading-relaxed">{article.excerpt}</p>
-          <div className="mt-6 space-y-4 text-cream/70 leading-relaxed">
+          <p className="mt-5 text-base md:text-lg text-cream/80 leading-relaxed">{article.excerpt}</p>
+          <div className="mt-5 space-y-4 text-sm md:text-base text-cream/70 leading-relaxed">
             {article.body.split("\n").filter((l) => l.trim()).map((para, n) => (
               <p key={n}>{para}</p>
             ))}
@@ -199,18 +199,19 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
           {imgs.length > 1 && (
             <div className="mt-8 grid grid-cols-4 gap-2">
               {imgs.map((src, n) => (
-                <button key={n} onClick={() => setI(n)} className={`aspect-square rounded-xl border p-2 bg-black grid place-items-center transition ${n === i ? "border-gold" : "border-white/10 hover:border-white/30"}`}>
-                  <img src={src} alt="" className="max-h-full max-w-full object-contain" />
+                <button key={n} onClick={() => setI(n)} className={`aspect-square rounded-xl border p-1.5 bg-black grid place-items-center transition overflow-hidden ${n === i ? "border-gold" : "border-white/10 hover:border-white/30"}`}>
+                  <img src={src} alt="" className="w-full h-full object-cover rounded-lg" />
                 </button>
               ))}
             </div>
           )}
 
-          <Link to="/contact" className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-6 py-3 text-sm font-semibold hover:bg-cream transition">
+          <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold text-forest-deep px-6 py-3 text-sm font-semibold hover:bg-cream transition">
             Plan a gifting run <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
+
     </div>
   );
 }
