@@ -44,12 +44,17 @@ export function ProductCard({ product }: { product: Product }) {
   }, []);
 
   return (
-    <div className="group relative flex flex-col">
+    <div
+      className="group relative flex flex-col rounded-3xl border border-white/10 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:border-gold/40 hover:shadow-[0_22px_50px_rgba(0,0,0,0.5)] hover:-translate-y-1 transition duration-500"
+      style={{ background: "linear-gradient(160deg, #17151a 0%, #101013 100%)" }}
+    >
       <Link
         to="/product/$slug"
         params={{ slug: product.slug }}
-        className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-transparent border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_18px_45px_rgb(0,0,0,0.08)] transition-shadow duration-500"
+        className="relative block aspect-[4/5] overflow-hidden border-b border-white/10"
+        style={{ background: "radial-gradient(circle at 50% 35%, rgba(212,162,76,0.12) 0%, transparent 60%)" }}
       >
+
         <div
           className="absolute inset-0 flex items-center justify-center p-6 cursor-zoom-in overflow-hidden"
           onMouseMove={handleMove}
