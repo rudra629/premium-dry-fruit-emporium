@@ -58,6 +58,20 @@ export type Review = {
   hidden?: boolean;
 };
 
+export type Coupon = {
+  id: string;
+  code: string;
+  type: "percent" | "flat";
+  value: number;
+  minOrder: number;
+  maxDiscount?: number;
+  expiry?: string;
+  usageLimit?: number;
+  used: number;
+  description?: string;
+  active: boolean;
+};
+
 export type SiteStat = { n: string; l: string };
 
 export type MonthPick = {
@@ -102,6 +116,11 @@ type SiteCtx = {
   addReview: (r: Omit<Review, "id" | "date">) => void;
   toggleReviewHidden: (id: string) => void;
   removeReview: (id: string) => void;
+  coupons: Coupon[];
+  addCoupon: (c: Omit<Coupon, "id" | "used">) => void;
+  updateCoupon: (id: string, patch: Partial<Coupon>) => void;
+  removeCoupon: (id: string) => void;
+  validateCoupon: (code: string, subtotal: number) => { ok: true; coupon: Coupon; discount: number } | { ok: false; reason: string };
   stats: SiteStat[];
   setStats: (s: SiteStat[]) => void;
   monthPicks: MonthPick[];
@@ -122,6 +141,11 @@ const DEFAULT_BANNER = [
   "Direct from Farms",
   "Vacuum Sealed",
   "Traceable Origins",
+];
+
+const DEFAULT_COUPONS: Coupon[] = [
+  { id: "c1", code: "CRUNCH20", type: "percent", value: 20, minOrder: 999, maxDiscount: 500, used: 0, active: true, description: "20% off orders above ₹999" },
+  { id: "c2", code: "FIRSTBITE", type: "flat", value: 150, minOrder: 599, used: 0, active: true, description: "₹150 off your first pantry haul" },
 ];
 
 const DEFAULT_STATS: SiteStat[] = [
@@ -309,6 +333,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [giftBoxes, setGiftBoxes] = useState<GiftBox[]>(DEFAULT_GIFT_BOXES);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [coupons, setCoupons] = useState<Coupon[]>(DEFAULT_COUPONS);
   const [stats, setStatsState] = useState<SiteStat[]>(DEFAULT_STATS);
   const [monthPicks, setMonthPicksState] = useState<MonthPick[]>(DEFAULT_MONTH_PICKS);
   const [contact, setContactState] = useState<ContactInfo>(DEFAULT_CONTACT);
@@ -323,6 +348,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
     setReviews(load("grams:reviews", [] as Review[]));
+    setCoupons(load("grams:coupons", DEFAULT_COUPONS));
     setStatsState(load("grams:stats", DEFAULT_STATS));
     setMonthPicksState(load("grams:month-picks", DEFAULT_MONTH_PICKS));
     setContactState(load("grams:contact", DEFAULT_CONTACT));
@@ -337,6 +363,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:coupons", JSON.stringify(coupons)); }, [coupons, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:month-picks", JSON.stringify(monthPicks)); }, [monthPicks, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:contact", JSON.stringify(contact)); }, [contact, hydrated]);
@@ -373,6 +400,22 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     addReview: (r) => setReviews((prev) => [{ ...r, id: `rev_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     toggleReviewHidden: (id) => setReviews((prev) => prev.map((r) => r.id === id ? { ...r, hidden: !r.hidden } : r)),
     removeReview: (id) => setReviews((prev) => prev.filter((r) => r.id !== id)),
+    coupons,
+    addCoupon: (c) => setCoupons((prev) => [{ ...c, code: c.code.toUpperCase().trim(), id: `cp_${Date.now()}`, used: 0 }, ...prev.filter((x) => x.code.toUpperCase() !== c.code.toUpperCase().trim())]),
+    updateCoupon: (id, patch) => setCoupons((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c))),
+    removeCoupon: (id) => setCoupons((prev) => prev.filter((c) => c.id !== id)),
+    validateCoupon: (code, subtotal) => {
+      const c = coupons.find((x) => x.code.toUpperCase() === code.toUpperCase().trim());
+      if (!c) return { ok: false as const, reason: "Invalid coupon code" };
+      if (!c.active) return { ok: false as const, reason: "This coupon is no longer active" };
+      if (c.expiry && new Date(c.expiry) < new Date(new Date().toDateString())) return { ok: false as const, reason: "This coupon has expired" };
+      if (c.usageLimit && c.used >= c.usageLimit) return { ok: false as const, reason: "Coupon usage limit reached" };
+      if (subtotal < c.minOrder) return { ok: false as const, reason: `Minimum order ₹${c.minOrder} required` };
+      let discount = c.type === "percent" ? Math.round((subtotal * c.value) / 100) : c.value;
+      if (c.maxDiscount) discount = Math.min(discount, c.maxDiscount);
+      discount = Math.min(discount, subtotal);
+      return { ok: true as const, coupon: c, discount };
+    },
     stats,
     setStats: setStatsState,
     monthPicks,
