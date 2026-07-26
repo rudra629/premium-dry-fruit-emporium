@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, COPY_FIELDS, type Order, type GiftBox, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo, type Coupon } from "@/lib/site-store";
+import { useSite, COPY_FIELDS, type Order, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo, type Coupon } from "@/lib/site-store";
 
 
 export const Route = createFileRoute("/admin")({
@@ -768,84 +768,133 @@ function CareersTable() {
 }
 
 function GiftingManager() {
-  const { giftBoxes, addGiftBox, updateGiftBox, removeGiftBox } = useSite();
-  const [name, setName] = useState("");
-  const [tagline, setTagline] = useState("");
+  const { giftArticles, addGiftArticle, updateGiftArticle, removeGiftArticle } = useSite();
+  const [title, setTitle] = useState("");
+  const [excerpt, setExcerpt] = useState("");
+  const [body, setBody] = useState("");
   const [category, setCategory] = useState<GiftCategory>("Corporate");
-  const [price, setPrice] = useState(0);
-  const [compareAt, setCompareAt] = useState(0);
-  const [image, setImage] = useState("");
-  const [contents, setContents] = useState("");
-  const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [editing, setEditing] = useState<string | null>(null);
 
-  const onImage = (f: File | null) => {
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = () => setImage(String(r.result));
-    r.readAsDataURL(f);
-  };
-  const submit = () => {
-    if (!name || !price || !image) { toast.error("Name, price, image required"); return; }
-    addGiftBox({
-      category, name, tagline: tagline || name, price,
-      compareAt: compareAt > price ? compareAt : undefined,
-      image, contents: contents.split("\n").map((s) => s.trim()).filter(Boolean),
-      description: description || tagline,
+  const MAX = 5;
+
+  const onImages = (files: FileList | null) => {
+    if (!files || !files.length) return;
+    const room = MAX - images.length;
+    if (room <= 0) { toast.error("Max 5 images per article"); return; }
+    const list = Array.from(files).slice(0, room);
+    if (files.length > room) toast.error(`Only ${room} more image${room === 1 ? "" : "s"} allowed`);
+    list.forEach((f) => {
+      const r = new FileReader();
+      r.onload = () => setImages((prev) => (prev.length >= MAX ? prev : [...prev, String(r.result)]));
+      r.readAsDataURL(f);
     });
-    toast.success(`${name} added to Gifting`);
-    setName(""); setTagline(""); setPrice(0); setCompareAt(0); setImage(""); setContents(""); setDescription("");
+  };
+
+  const reset = () => {
+    setTitle(""); setExcerpt(""); setBody(""); setAuthor(""); setImages([]); setCategory("Corporate"); setEditing(null);
+  };
+
+  const submit = () => {
+    if (!title || !excerpt || !body) { toast.error("Title, excerpt and story body are required"); return; }
+    if (editing) {
+      updateGiftArticle(editing, { title, excerpt, body, category, author: author || undefined, images });
+      toast.success("Article updated");
+    } else {
+      addGiftArticle({ title, excerpt, body, category, author: author || undefined, images });
+      toast.success(`"${title}" published to Gifting`);
+    }
+    reset();
+  };
+
+  const startEdit = (id: string) => {
+    const a = giftArticles.find((x) => x.id === id);
+    if (!a) return;
+    setEditing(a.id); setTitle(a.title); setExcerpt(a.excerpt); setBody(a.body);
+    setCategory(a.category); setAuthor(a.author ?? ""); setImages(a.images);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className="space-y-6">
       <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
-        <p className="font-display text-2xl md:text-3xl text-forest-deep">Add a gift box</p>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <p className="font-display text-2xl md:text-3xl text-forest-deep">
+            {editing ? "Edit gifting article" : "Publish a gifting article"}
+          </p>
+          {editing && (
+            <button onClick={reset} className="text-xs rounded-full border border-border px-3 py-1.5 hover:bg-muted transition">
+              Cancel edit
+            </button>
+          )}
+        </div>
+
         <div className="grid md:grid-cols-2 gap-4">
-          <Field label="Box name *"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} /></Field>
+          <Field label="Article title *" full><input value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} placeholder="500 boxes, 3 cities, one very long night" /></Field>
           <Field label="Category">
             <select value={category} onChange={(e) => setCategory(e.target.value as GiftCategory)} className={inputCls}>
               <option>Corporate</option><option>Birthday</option><option>Festive</option>
             </select>
           </Field>
-          <Field label="Tagline" full><input value={tagline} onChange={(e) => setTagline(e.target.value)} className={inputCls} /></Field>
-          <Field label="Price (₹) *"><input type="number" value={price || ""} onChange={(e) => setPrice(+e.target.value)} className={inputCls} /></Field>
-          <Field label="MRP / compare-at (₹)"><input type="number" value={compareAt || ""} onChange={(e) => setCompareAt(+e.target.value)} className={inputCls} /></Field>
-          <Field label="Contents (one per line)" full>
-            <textarea value={contents} onChange={(e) => setContents(e.target.value)} rows={4} className={inputCls} placeholder="Walnut 250g\nMacadamia 200g\nGold foil card" />
+          <Field label="Author / byline"><input value={author} onChange={(e) => setAuthor(e.target.value)} className={inputCls} placeholder="Team Grams" /></Field>
+          <Field label="Excerpt (shown on the card) *" full>
+            <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={3} className={inputCls} placeholder="First few lines shown in the 2x2 grid…" />
           </Field>
-          <Field label="Description" full>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className={inputCls} />
+          <Field label="Full story (one paragraph per line) *" full>
+            <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={8} className={inputCls} placeholder="The full article, shown when a visitor opens the story." />
           </Field>
-          <Field label="Cover image *" full>
-            <div className="flex items-center gap-3">
-              <input type="file" accept="image/*" onChange={(e) => onImage(e.target.files?.[0] ?? null)} className="text-sm" />
-              {image && <img src={image} alt="" className="w-16 h-16 object-contain rounded-lg border border-border" />}
+          <Field label={`Images (max ${MAX}) — first one is the cover`} full>
+            <div className="space-y-3">
+              <input type="file" accept="image/*" multiple onChange={(e) => { onImages(e.target.files); e.currentTarget.value = ""; }} className="text-sm" disabled={images.length >= MAX} />
+              <div className="flex flex-wrap gap-3">
+                {images.map((src, i) => (
+                  <div key={i} className="relative w-20 h-20 rounded-lg border border-border grid place-items-center bg-muted/40">
+                    <img src={src} alt="" className="max-w-full max-h-full object-contain" />
+                    {i === 0 && <span className="absolute -top-2 -left-2 text-[9px] uppercase tracking-wider bg-gold text-forest-deep rounded-full px-1.5 py-0.5">Cover</span>}
+                    <button
+                      onClick={() => setImages((prev) => prev.filter((_, n) => n !== i))}
+                      aria-label="Remove image"
+                      className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-card border border-border grid place-items-center hover:text-destructive"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+                {images.length === 0 && <p className="text-xs text-muted-foreground">No images yet — the card will show a placeholder.</p>}
+              </div>
             </div>
           </Field>
         </div>
-        <button onClick={submit} className="rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold hover:bg-forest transition">Publish gift box</button>
+        <button onClick={submit} className="rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold hover:bg-forest transition">
+          {editing ? "Save changes" : "Publish article"}
+        </button>
       </div>
 
       <div className="rounded-2xl bg-card border border-border p-5 md:p-6">
-        <p className="font-display text-2xl text-forest-deep mb-4">Existing boxes ({giftBoxes.length})</p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {giftBoxes.map((g) => (
-            <div key={g.id} className="rounded-xl border border-border p-4 flex gap-3">
-              <img src={g.image} alt="" className="w-16 h-20 object-contain shrink-0" />
+        <p className="font-display text-2xl text-forest-deep mb-4">Live articles ({giftArticles.length})</p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {giftArticles.map((a) => (
+            <div key={a.id} className="rounded-xl border border-border p-4 flex gap-3">
+              <div className="w-20 h-24 shrink-0 rounded-lg bg-muted/40 grid place-items-center overflow-hidden">
+                {a.images[0] ? <img src={a.images[0]} alt="" className="max-w-full max-h-full object-contain" /> : <Gift className="w-6 h-6 text-muted-foreground" />}
+              </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] tracking-widest uppercase text-gold">{g.category}</p>
-                <p className="font-semibold text-forest-deep truncate">{g.name}</p>
-                <p className="text-xs text-muted-foreground truncate">₹{g.price}{g.compareAt ? ` · was ₹${g.compareAt}` : ""}</p>
-                <div className="mt-2 flex gap-1.5">
+                <p className="text-[10px] tracking-widest uppercase text-gold">{a.category} · {a.date}</p>
+                <p className="font-semibold text-forest-deep line-clamp-2">{a.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{a.excerpt}</p>
+                <div className="mt-2 flex items-center gap-2">
                   <select
-                    value={g.category}
-                    onChange={(e) => updateGiftBox(g.id, { category: e.target.value as GiftCategory })}
+                    value={a.category}
+                    onChange={(e) => updateGiftArticle(a.id, { category: e.target.value as GiftCategory })}
                     className="text-[11px] rounded-full bg-muted px-2 py-1 border border-border"
                   >
                     <option>Corporate</option><option>Birthday</option><option>Festive</option>
                   </select>
-                  <button onClick={() => { if (confirm("Delete box?")) removeGiftBox(g.id); }} className="text-muted-foreground hover:text-terracotta"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => startEdit(a.id)} className="text-[11px] rounded-full border border-border px-2.5 py-1 hover:bg-muted transition">Edit</button>
+                  <button onClick={() => { if (confirm("Delete article?")) removeGiftArticle(a.id); }} className="text-muted-foreground hover:text-terracotta"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
+                <p className="mt-1 text-[10px] text-muted-foreground">{a.images.length} image{a.images.length === 1 ? "" : "s"}</p>
               </div>
             </div>
           ))}
