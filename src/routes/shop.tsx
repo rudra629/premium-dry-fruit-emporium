@@ -27,7 +27,7 @@ const sorts = ["Featured", "Price: Low → High", "Price: High → Low", "Rating
 
 function Shop() {
   const search = Route.useSearch();
-  const { allProducts } = useSite();
+  const { allProducts, t } = useSite();
   const [q, setQ] = useState(search.q ?? "");
   const [cat, setCat] = useState<string>(search.cat ?? "All");
   const [sort, setSort] = useState<(typeof sorts)[number]>("Featured");
@@ -71,9 +71,10 @@ function Shop() {
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/40" />
 
         <div className="relative container-x">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">The Collection</p>
-          <h1 className="mt-3 font-display text-5xl md:text-7xl">Shop the shelf.</h1>
-          <p className="mt-4 max-w-xl text-cream/70">Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.</p>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("shop.eyebrow")}</p>
+          <h1 className="mt-3 font-display text-5xl md:text-7xl">{t("shop.title")}</h1>
+          <p className="mt-4 max-w-xl text-cream/70">{t("shop.subtitle")}</p>
+
 
           <div className="mt-10 flex items-center gap-3 bg-cream/10 backdrop-blur border border-cream/20 rounded-full px-5 py-1 max-w-2xl">
             <Search className="w-5 h-5 text-gold" />

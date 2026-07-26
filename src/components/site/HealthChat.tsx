@@ -13,15 +13,16 @@ type Msg =
   | { role: "user"; kind: "text"; text: string };
 
 export function HealthChat() {
+  const { allProducts, t } = useSite();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "bot", kind: "text", text: "Hey — I'm Grams' pantry oracle. What health or daily issue are you facing?" },
+    { role: "bot", kind: "text", text: t("chat.greeting") },
     { role: "bot", kind: "picker" },
   ]);
-  const { allProducts } = useSite();
   const { add } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -74,7 +75,7 @@ export function HealthChat() {
           <Sparkles className="w-3.5 h-3.5" />
           <span className="absolute inset-0 rounded-full ring-2 ring-gold/50 animate-ping" />
         </span>
-        <span>Ask the pantry oracle</span>
+        <span>{t("chat.trigger")}</span>
       </button>
 
       {/* Panel */}
@@ -86,8 +87,9 @@ export function HealthChat() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-display italic text-cream text-lg leading-none">Pantry Oracle</p>
-              <p className="text-[10px] tracking-[0.25em] uppercase text-gold/80 mt-1">Grams · AI Snack Guide</p>
+              <p className="font-display italic text-cream text-lg leading-none">{t("chat.name")}</p>
+              <p className="text-[10px] tracking-[0.25em] uppercase text-gold/80 mt-1">Grams · Health & Nutrition Guide</p>
+
             </div>
             <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-full hover:bg-white/10 grid place-items-center text-cream/70">
               <X className="w-4 h-4" />
