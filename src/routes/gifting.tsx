@@ -149,8 +149,15 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    const lenis = getLenis();
+    lenis?.stop();
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+      lenis?.start();
+    };
   }, [onClose]);
+
 
   return (
     <div className="fixed inset-0 z-[90] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
