@@ -364,10 +364,11 @@ function Home() {
             </div>
           </div>
           <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-gold">The Grams Ritual</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.ritual.eyebrow")}</p>
             <h2 className="font-display text-5xl md:text-6xl text-forest-deep mt-3 leading-[0.95]">
-              A tiny bowl. <br /><span className="italic">A giant reset.</span>
+              {t("home.ritual.title")} <br /><span className="italic">{t("home.ritual.titleItalic")}</span>
             </h2>
+
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
               We built Grams for the in-between moments — the 4pm slumps, the pre-workout
               scrambles, the "I forgot to eat lunch" saves. Snacks that don't cost you your
