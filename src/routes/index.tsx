@@ -338,8 +338,9 @@ function Home() {
       <section className="container-x py-20">
         <div className="flex items-end justify-between gap-6 mb-10">
           <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-gold">Fresh off the shelf</p>
-            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">New Arrivals</h2>
+            <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.new.eyebrow")}</p>
+            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.new.title")}</h2>
+
           </div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -390,8 +391,9 @@ function Home() {
       {/* Testimonials */}
       <section className="container-x py-16">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Word on the street</p>
-          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">Snacked & Approved</h2>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.testimonials.eyebrow")}</p>
+          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.testimonials.title")}</h2>
+
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {[
@@ -416,7 +418,7 @@ function Home() {
         <div className="relative rounded-[2rem] overflow-hidden bg-gold text-forest-deep p-10 md:p-16 text-center">
           <img src={texture1} alt="" className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-30" />
           <div className="relative max-w-2xl mx-auto">
-            <p className="text-xs tracking-[0.3em] uppercase">Join the pantry</p>
+            <p className="text-xs tracking-[0.3em] uppercase">{t("home.newsletter.eyebrow")}</p>
             <h2 className="font-display text-4xl md:text-6xl mt-3 leading-tight">
               Get <span className="italic">10% off</span> your<br /> first bag of goodness.
             </h2>
