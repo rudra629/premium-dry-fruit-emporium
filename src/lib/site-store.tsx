@@ -47,6 +47,17 @@ export type GiftBox = {
   description: string;
 };
 
+export type GiftArticle = {
+  id: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category: GiftCategory;
+  author?: string;
+  date: string;
+  images: string[];
+};
+
 export type Review = {
   id: string;
   productSlug: string;
@@ -112,6 +123,10 @@ type SiteCtx = {
   addGiftBox: (g: Omit<GiftBox, "id">) => void;
   updateGiftBox: (id: string, patch: Partial<GiftBox>) => void;
   removeGiftBox: (id: string) => void;
+  giftArticles: GiftArticle[];
+  addGiftArticle: (a: Omit<GiftArticle, "id" | "date"> & { date?: string }) => void;
+  updateGiftArticle: (id: string, patch: Partial<GiftArticle>) => void;
+  removeGiftArticle: (id: string) => void;
   reviews: Review[];
   addReview: (r: Omit<Review, "id" | "date">) => void;
   toggleReviewHidden: (id: string) => void;
@@ -317,6 +332,49 @@ const DEFAULT_GIFT_BOXES: GiftBox[] = [
   },
 ];
 
+const DEFAULT_GIFT_ARTICLES: GiftArticle[] = [
+  {
+    id: "ga1",
+    title: "500 boxes, 3 cities, one very long night",
+    excerpt: "How we packed a Diwali order for a Bengaluru fintech in 72 hours — hand-numbered, gold-foiled, and delivered before the first diya was lit.",
+    body: "It started with a call on a Tuesday. Five hundred boxes, three cities, and a deadline that made our ops lead laugh out loud.\n\nWe pulled the walnut lot from Ratnagiri, roasted the macadamia in two batches so nothing sat overnight, and set up a packing line in the studio at 9pm. Every box got a hand-numbered card — 001 through 500 — and a gold foil monogram pressed one at a time.\n\nThe last van left at 4:40am. Every single box landed before Diwali morning. The client sent us a photo of the whole floor unwrapping at once. That photo is still on our studio wall.",
+    category: "Corporate",
+    author: "Team Grams",
+    date: "Jul 2, 2026",
+    images: [baseProducts[0].image, baseProducts[3].image],
+  },
+  {
+    id: "ga2",
+    title: "The birthday box that started as an apology",
+    excerpt: "A customer forgot his sister's birthday. What we built for him became our best-selling personalised gift.",
+    body: "He messaged us at 11pm: \"I forgot. Can you fix this?\"\n\nWe built a single box overnight — dried mango, kiwi, pineapple — with a message strip printed in her favourite colour. It shipped next-day.\n\nShe posted it. Then forty people asked for the same thing. That box is now the Birthday Reset, and yes, the message strip is still the most-used feature we've ever shipped.",
+    category: "Birthday",
+    author: "Aanya S.",
+    date: "Jun 18, 2026",
+    images: [baseProducts[6].image],
+  },
+  {
+    id: "ga3",
+    title: "Why our festive boxes are matte black",
+    excerpt: "Everyone else goes red and gold. We went the other way — and the reasoning is more practical than aesthetic.",
+    body: "Festive packaging in India is loud by default. We tested a red-and-gold run in year one and half of it arrived scuffed — bright gloss shows every scratch from transit.\n\nMatte black hides handling, photographs beautifully under warm light, and makes the gold foil read as intentional rather than decorative. It also means the box survives as a keepsake instead of going straight into the bin.\n\nThree festive seasons later, we haven't changed it once.",
+    category: "Festive",
+    author: "Studio Notes",
+    date: "May 30, 2026",
+    images: [baseProducts[1].image, baseProducts[5].image],
+  },
+  {
+    id: "ga4",
+    title: "Inside a corporate gifting run",
+    excerpt: "From the first spreadsheet to the last delivery scan — a full walkthrough of how a bulk order actually happens.",
+    body: "Step one is never the box. It's the list — names, addresses, pincodes, and the twelve people whose office moved last month.\n\nWe clean the list, lock the SKU mix, and produce one sample box for sign-off. Nothing scales until the sample is approved.\n\nThen the line runs: fill, seal, weigh, number, wrap, label, scan. Each box gets a tracking row. Clients get one sheet with every delivery status, updated daily until the last scan clears.",
+    category: "Corporate",
+    author: "Ops Desk",
+    date: "May 12, 2026",
+    images: [baseProducts[4].image, baseProducts[2].image, baseProducts[7].image],
+  },
+];
+
 function load<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
@@ -332,6 +390,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [bannerWords, setBannerWordsState] = useState<string[]>(DEFAULT_BANNER);
   const [applications, setApplications] = useState<Application[]>([]);
   const [giftBoxes, setGiftBoxes] = useState<GiftBox[]>(DEFAULT_GIFT_BOXES);
+  const [giftArticles, setGiftArticles] = useState<GiftArticle[]>(DEFAULT_GIFT_ARTICLES);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>(DEFAULT_COUPONS);
   const [stats, setStatsState] = useState<SiteStat[]>(DEFAULT_STATS);
@@ -347,6 +406,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
+    setGiftArticles(load("grams:gift-articles", DEFAULT_GIFT_ARTICLES));
     setReviews(load("grams:reviews", [] as Review[]));
     setCoupons(load("grams:coupons", DEFAULT_COUPONS));
     setStatsState(load("grams:stats", DEFAULT_STATS));
@@ -362,6 +422,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:banner", JSON.stringify(bannerWords)); }, [bannerWords, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-articles", JSON.stringify(giftArticles)); }, [giftArticles, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:coupons", JSON.stringify(coupons)); }, [coupons, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
@@ -396,6 +457,14 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     addGiftBox: (g) => setGiftBoxes((prev) => [{ ...g, id: `gb_${Date.now()}` }, ...prev]),
     updateGiftBox: (id, patch) => setGiftBoxes((prev) => prev.map((g) => g.id === id ? { ...g, ...patch } : g)),
     removeGiftBox: (id) => setGiftBoxes((prev) => prev.filter((g) => g.id !== id)),
+    giftArticles,
+    addGiftArticle: (a) => setGiftArticles((prev) => [{
+      ...a,
+      id: `ga_${Date.now()}`,
+      date: a.date || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    }, ...prev]),
+    updateGiftArticle: (id, patch) => setGiftArticles((prev) => prev.map((a) => a.id === id ? { ...a, ...patch } : a)),
+    removeGiftArticle: (id) => setGiftArticles((prev) => prev.filter((a) => a.id !== id)),
     reviews,
     addReview: (r) => setReviews((prev) => [{ ...r, id: `rev_${Date.now()}`, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]),
     toggleReviewHidden: (id) => setReviews((prev) => prev.map((r) => r.id === id ? { ...r, hidden: !r.hidden } : r)),
