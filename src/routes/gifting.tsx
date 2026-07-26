@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Gift, Sparkles, ArrowRight, Package, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSite, type GiftCategory, type GiftArticle } from "@/lib/site-store";
+import { getLenis } from "@/lib/smooth-scroll";
 
 export const Route = createFileRoute("/gifting")({
   head: () => ({
@@ -144,18 +146,39 @@ function Gifting() {
 function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: () => void }) {
   const [i, setI] = useState(0);
   const imgs = article.images.length ? article.images : [];
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    const lenis = getLenis();
+    lenis?.stop();
+
+    // Smooth-scroll libs swallow wheel events globally — drive the panel manually.
+    const onWheel = (e: WheelEvent) => {
+      const el = bodyRef.current;
+      if (!el) return;
+      e.preventDefault();
+      e.stopPropagation();
+      el.scrollTop += e.deltaY;
+    };
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("wheel", onWheel, { capture: true } as EventListenerOptions);
+      document.body.style.overflow = "";
+      lenis?.start();
+    };
   }, [onClose]);
 
-  return (
-    <div className="fixed inset-0 z-[90] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
+
+
+  return createPortal(
+    <div className="fixed inset-0 z-[200] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#101012] to-black text-cream flex flex-col md:grid md:grid-cols-2">
+      <div className="relative w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#101012] to-black text-cream flex flex-col md:grid md:grid-cols-2 md:grid-rows-[minmax(0,1fr)] h-[92vh]">
         <button
           onClick={onClose}
           aria-label="Close story"
@@ -165,7 +188,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
         </button>
 
         {imgs.length > 0 && (
-          <div className="relative shrink-0 h-[32vh] md:h-auto bg-black grid place-items-center p-5 md:p-8 border-b md:border-b-0 md:border-r border-white/10">
+          <div className="relative shrink-0 h-[32vh] md:h-full md:min-h-0 bg-black grid place-items-center p-5 md:p-8 border-b md:border-b-0 md:border-r border-white/10">
             <img src={imgs[i]} alt={`${article.title} — image ${i + 1}`} className="max-h-full max-w-full object-contain drop-shadow-[0_24px_50px_rgba(212,162,76,0.25)]" />
             {imgs.length > 1 && (
               <>
@@ -185,7 +208,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
           </div>
         )}
 
-        <div className={`min-h-0 flex-1 overflow-y-auto no-scrollbar p-6 md:p-10 ${imgs.length ? "" : "md:col-span-2"}`}>
+        <div ref={bodyRef} data-lenis-prevent className={`min-h-0 h-full flex-1 overflow-y-auto overscroll-contain no-scrollbar p-6 md:p-10 ${imgs.length ? "" : "md:col-span-2"}`}>
           <p className="text-[10px] tracking-[0.3em] uppercase text-gold">{article.category} · {article.date}</p>
           <h2 className="mt-3 font-display italic text-2xl md:text-4xl leading-[1.05]">{article.title}</h2>
           {article.author && <p className="mt-3 text-xs font-mono text-cream/50">By {article.author}</p>}
@@ -212,6 +235,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
         </div>
       </div>
 
-    </div>
+    </div>,
+    document.body
   );
 }
