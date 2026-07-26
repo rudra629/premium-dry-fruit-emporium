@@ -185,9 +185,6 @@ export const COPY_FIELDS: { key: string; label: string; group: string }[] = [
   { key: "contact.title", label: "Contact — title", group: "Contact" },
   { key: "contact.titleItalic", label: "Contact — italic line", group: "Contact" },
   { key: "contact.subtitle", label: "Contact — subtitle", group: "Contact" },
-  { key: "chat.trigger", label: "Chatbot — button label", group: "Chatbot" },
-  { key: "chat.name", label: "Chatbot — name", group: "Chatbot" },
-  { key: "chat.greeting", label: "Chatbot — greeting", group: "Chatbot" },
 ];
 
 const DEFAULT_COPY: CopyMap = {
