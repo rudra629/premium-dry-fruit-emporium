@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Gift, Sparkles, ArrowRight, Package, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSite, type GiftCategory, type GiftArticle } from "@/lib/site-store";
 import { getLenis } from "@/lib/smooth-scroll";
@@ -174,8 +175,8 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
 
 
 
-  return (
-    <div className="fixed inset-0 z-[90] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
+  return createPortal(
+    <div className="fixed inset-0 z-[200] grid place-items-center p-3 md:p-8" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#101012] to-black text-cream flex flex-col md:grid md:grid-cols-2 md:grid-rows-[minmax(0,1fr)] h-[92vh]">
         <button
@@ -234,6 +235,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
         </div>
       </div>
 
-    </div>
+    </div>,
+    document.body
   );
 }
