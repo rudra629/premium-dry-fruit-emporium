@@ -30,7 +30,7 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
 function RotatingHeroProduct({ className }: { className?: string }) {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1200);
+    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1000);
     return () => clearInterval(t);
   }, []);
   const p = heroRotation[idx];
@@ -55,11 +55,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { allProducts, bannerWords } = useSite();
+  const { allProducts, bannerWords, stats, monthPicks, t } = useSite();
   const shown = allProducts;
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
-  const featured = shown.find((p) => p.slug === "walnut-whole-california") ?? shown[0];
   const newArrivals = shown.filter((p) => p.newArrival);
+
 
   return (
     <div className="relative">
@@ -105,8 +105,13 @@ function Home() {
             </div>
             <h1 className="mt-5 font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
               <span className="italic text-cream/95 block">Crunch</span>
-              <span className="italic animate-hue-cycle block">chill</span>
+              <span className="italic block">
+                {"chill".split("").map((ch, i) => (
+                  <span key={i} className="animate-hue-cycle inline-block" style={{ animationDelay: `${i * -0.55}s` }}>{ch}</span>
+                ))}
+              </span>
               <span className="italic text-cream/95 block">repeat.</span>
+
             </h1>
             <p className="mt-5 md:mt-6 max-w-lg text-base md:text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
@@ -130,10 +135,9 @@ function Home() {
             </div>
 
             <div className="mt-10 md:mt-14 grid grid-cols-3 gap-4 md:gap-6 max-w-lg">
-              <Stat n="12+" l="Origins" />
-              <Stat n="47k" l="Happy snackers" />
-              <Stat n="4.8★" l="Avg. rating" />
+              {stats.map((s) => <Stat key={s.l} n={s.n} l={s.l} />)}
             </div>
+
           </div>
 
           {/* Hero rotating product — desktop */}
@@ -144,16 +148,8 @@ function Home() {
                 <HeroSlices size="md" />
               </div>
             </div>
-
-            {/* Floating rating card */}
-            <div className="absolute top-1/2 -left-6 bg-cream text-ink rounded-2xl p-4 shadow-glow w-56 z-20">
-              <div className="flex items-center gap-1 text-gold">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-3.5 h-3.5 fill-gold" />))}
-              </div>
-              <p className="mt-2 text-sm leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
-              <p className="mt-1 text-xs text-muted-foreground">— Riya, Mumbai</p>
-            </div>
           </div>
+
         </div>
 
         {/* Hero mobile — single rotating product */}
@@ -161,16 +157,8 @@ function Home() {
           <div className="relative mx-auto w-full max-w-sm h-[380px] sm:h-[440px] flex items-center justify-center">
             <RotatingHeroProduct className="max-w-[95%] max-h-full w-auto h-auto object-contain" />
             <HeroSlices size="sm" />
-
-            {/* Floating rating card */}
-            <div className="absolute top-[36%] -left-2 bg-cream text-ink rounded-2xl p-3 shadow-glow w-36 sm:w-44 z-20">
-              <div className="flex items-center gap-1 text-gold">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-3 h-3 fill-gold" />))}
-              </div>
-              <p className="mt-1.5 text-[11px] sm:text-xs leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
-              <p className="mt-1 text-[10px] text-muted-foreground">— Riya, Mumbai</p>
-            </div>
           </div>
+
         </div>
 
         {/* Promo strip — bottom of hero */}
