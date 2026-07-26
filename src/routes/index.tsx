@@ -30,7 +30,7 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
 function RotatingHeroProduct({ className }: { className?: string }) {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1200);
+    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1000);
     return () => clearInterval(t);
   }, []);
   const p = heroRotation[idx];
@@ -55,11 +55,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { allProducts, bannerWords } = useSite();
+  const { allProducts, bannerWords, stats, monthPicks, t } = useSite();
   const shown = allProducts;
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
-  const featured = shown.find((p) => p.slug === "walnut-whole-california") ?? shown[0];
   const newArrivals = shown.filter((p) => p.newArrival);
+
 
   return (
     <div className="relative">
@@ -105,8 +105,13 @@ function Home() {
             </div>
             <h1 className="mt-5 font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
               <span className="italic text-cream/95 block">Crunch</span>
-              <span className="italic animate-hue-cycle block">chill</span>
+              <span className="italic block">
+                {"chill".split("").map((ch, i) => (
+                  <span key={i} className="animate-hue-cycle inline-block" style={{ animationDelay: `${i * -0.55}s` }}>{ch}</span>
+                ))}
+              </span>
               <span className="italic text-cream/95 block">repeat.</span>
+
             </h1>
             <p className="mt-5 md:mt-6 max-w-lg text-base md:text-lg text-cream/80 leading-relaxed">
               Small-batch dry fruits, obsessively-sourced nuts, and seeds that actually taste
@@ -130,10 +135,9 @@ function Home() {
             </div>
 
             <div className="mt-10 md:mt-14 grid grid-cols-3 gap-4 md:gap-6 max-w-lg">
-              <Stat n="12+" l="Origins" />
-              <Stat n="47k" l="Happy snackers" />
-              <Stat n="4.8★" l="Avg. rating" />
+              {stats.map((s) => <Stat key={s.l} n={s.n} l={s.l} />)}
             </div>
+
           </div>
 
           {/* Hero rotating product — desktop */}
@@ -144,16 +148,8 @@ function Home() {
                 <HeroSlices size="md" />
               </div>
             </div>
-
-            {/* Floating rating card */}
-            <div className="absolute top-1/2 -left-6 bg-cream text-ink rounded-2xl p-4 shadow-glow w-56 z-20">
-              <div className="flex items-center gap-1 text-gold">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-3.5 h-3.5 fill-gold" />))}
-              </div>
-              <p className="mt-2 text-sm leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
-              <p className="mt-1 text-xs text-muted-foreground">— Riya, Mumbai</p>
-            </div>
           </div>
+
         </div>
 
         {/* Hero mobile — single rotating product */}
@@ -161,16 +157,8 @@ function Home() {
           <div className="relative mx-auto w-full max-w-sm h-[380px] sm:h-[440px] flex items-center justify-center">
             <RotatingHeroProduct className="max-w-[95%] max-h-full w-auto h-auto object-contain" />
             <HeroSlices size="sm" />
-
-            {/* Floating rating card */}
-            <div className="absolute top-[36%] -left-2 bg-cream text-ink rounded-2xl p-3 shadow-glow w-36 sm:w-44 z-20">
-              <div className="flex items-center gap-1 text-gold">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-3 h-3 fill-gold" />))}
-              </div>
-              <p className="mt-1.5 text-[11px] sm:text-xs leading-snug font-medium">"Freshest cranberries I've ever ordered online."</p>
-              <p className="mt-1 text-[10px] text-muted-foreground">— Riya, Mumbai</p>
-            </div>
           </div>
+
         </div>
 
         {/* Promo strip — bottom of hero */}
@@ -234,26 +222,12 @@ function Home() {
       {/* Ornamental divider */}
       <Ornament />
 
-      {/* "As featured in" logo strip */}
-      <section className="container-x py-10 md:py-12">
-        <div className="flex items-center gap-6 md:gap-10">
-          <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-cream/15" />
-          <p className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-cream/50 whitespace-nowrap">As featured in</p>
-          <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-cream/15" />
-        </div>
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-8 gap-y-4 items-center justify-items-center opacity-70">
-          {["VOGUE", "GQ", "Forbes", "Condé Nast", "Elle", "Mint"].map((n) => (
-            <span key={n} className="font-display italic text-lg md:text-xl text-cream/60 hover:text-gold transition">{n}</span>
-          ))}
-        </div>
-      </section>
-
       {/* Bestsellers */}
       <section className="container-x py-8">
         <div className="flex items-end justify-between gap-6 mb-10">
           <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-gold">Loved by many</p>
-            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">The Bestsellers</h2>
+            <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.bestsellers.eyebrow")}</p>
+            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.bestsellers.title")}</h2>
           </div>
           <Link to="/shop" className="hidden md:inline-flex items-center gap-2 text-sm font-semibold hover:text-terracotta transition">
             View all <ArrowRight className="w-4 h-4" />
@@ -268,13 +242,8 @@ function Home() {
       <section className="container-x py-10 md:py-14">
         <div className="relative rounded-2xl border border-white/[0.08] overflow-hidden" style={{ background: "linear-gradient(90deg, #101012 0%, #17141a 50%, #101012 100%)" }}>
           <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "radial-gradient(rgba(212,162,76,0.9) 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
-          <div className="relative grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
-            {[
-              { n: "12+", l: "Global origins" },
-              { n: "47k", l: "Happy snackers" },
-              { n: "98%", l: "Reorder rate" },
-              { n: "24h", l: "From roast to pack" },
-            ].map((s) => (
+          <div className="relative grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
+            {stats.map((s) => (
               <div key={s.l} className="p-6 md:p-8 text-center">
                 <p className="font-display text-4xl md:text-5xl text-gold">{s.n}</p>
                 <p className="mt-1 text-[11px] tracking-[0.3em] uppercase text-cream/60">{s.l}</p>
@@ -285,71 +254,77 @@ function Home() {
       </section>
 
 
-      {/* Featured huge banner */}
-      <section className="container-x px-4 py-12 md:px-0 md:py-20">
-        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
-          <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent" />
-          {/* decorative pattern + glows */}
-          <div className="absolute inset-0 opacity-[0.12] mix-blend-screen" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
-          <div className="absolute -top-24 -left-16 w-[360px] h-[360px] rounded-full bg-gold/25 blur-[110px]" />
-          <div className="absolute -bottom-32 right-1/4 w-[420px] h-[420px] rounded-full bg-terracotta/20 blur-[130px]" />
-          <svg className="absolute bottom-6 left-6 w-32 h-32 text-gold/30 hidden md:block" viewBox="0 0 100 100" fill="none">
-            <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 3" />
-            <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.5" />
-          </svg>
-          <div className="relative flex flex-row gap-4 sm:gap-8 md:gap-12 items-center p-5 sm:p-10 md:p-16 md:min-h-[520px]">
-            <div className="flex-1 min-w-0 text-left">
-              <p className="text-[9px] sm:text-[11px] md:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-gold">Product of the month</p>
-              <h3 className="font-display text-3xl sm:text-5xl md:text-7xl mt-2 md:mt-3 leading-[1.05] md:leading-none">
-                Walnut<br />
-                <span className="italic text-gold">Whole.</span>
-              </h3>
-              <p className="mt-3 md:mt-5 max-w-md text-xs sm:text-sm md:text-base text-cream/80 leading-relaxed">
-                California-grown, hand-graded and shipped within 14 days of harvest.
-              </p>
-              <div className="mt-4 md:mt-8 flex flex-wrap items-center gap-3 md:gap-6">
-                <div>
-                  <p className="font-display text-2xl sm:text-3xl md:text-4xl text-gold">₹{featured.price}</p>
-                  {featured.compareAt && <p className="text-xs sm:text-sm text-cream/50 line-through">₹{featured.compareAt}</p>}
+      {/* Product of the month — Nuts · Seeds · Dry fruits */}
+      <section className="container-x px-4 py-12 md:px-0 md:py-20 space-y-8 md:space-y-12">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
+          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">
+            Three picks. <span className="italic">One month.</span>
+          </h2>
+        </div>
+
+        {monthPicks.map((pick, i) => {
+          const prod = shown.find((p) => p.slug === pick.slug) ?? shown[0];
+          if (!prod) return null;
+          return (
+            <div key={pick.key} className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
+              <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
+              <div className={`absolute inset-0 bg-gradient-to-b ${i % 2 ? "md:bg-gradient-to-l" : "md:bg-gradient-to-r"} from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent`} />
+              <div className="absolute inset-0 opacity-[0.12] mix-blend-screen" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
+              <div className="absolute -top-24 -left-16 w-[360px] h-[360px] rounded-full bg-gold/25 blur-[110px]" />
+              <div className="absolute -bottom-32 right-1/4 w-[420px] h-[420px] rounded-full bg-terracotta/20 blur-[130px]" />
+              <div className={`relative flex flex-row gap-4 sm:gap-8 md:gap-12 items-center p-5 sm:p-10 md:p-14 md:min-h-[420px] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-[9px] sm:text-[11px] md:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-gold">{pick.eyebrow}</p>
+                  <h3 className="font-display text-3xl sm:text-5xl md:text-6xl mt-2 md:mt-3 leading-[1.05] md:leading-none">
+                    {pick.title}<br />
+                    <span className="italic text-gold">{pick.italic}</span>
+                  </h3>
+                  <p className="mt-3 md:mt-5 max-w-md text-xs sm:text-sm md:text-base text-cream/80 leading-relaxed">{pick.desc}</p>
+                  <div className="mt-4 md:mt-8 flex flex-wrap items-center gap-3 md:gap-6">
+                    <div>
+                      <p className="font-display text-2xl sm:text-3xl md:text-4xl text-gold">₹{prod.price}</p>
+                      {prod.compareAt && <p className="text-xs sm:text-sm text-cream/50 line-through">₹{prod.compareAt}</p>}
+                    </div>
+                    <Link to="/product/$slug" params={{ slug: prod.slug }} className="rounded-full bg-gold text-forest-deep px-4 sm:px-6 md:px-7 py-2.5 sm:py-3.5 md:py-4 text-xs sm:text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                      Shop <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </Link>
+                  </div>
                 </div>
-                <Link to="/product/$slug" params={{ slug: featured.slug }} className="rounded-full bg-gold text-forest-deep px-4 sm:px-6 md:px-7 py-2.5 sm:py-3.5 md:py-4 text-xs sm:text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
-                  Shop <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                </Link>
+                <div className="relative flex-1 flex justify-center shrink-0">
+                  <img src={prod.image} alt={prod.name} className="w-full max-w-[220px] sm:max-w-[260px] md:max-w-sm drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] md:drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+                </div>
               </div>
             </div>
-            <div className="relative flex-1 flex justify-center shrink-0">
-              <img src={featured.image} alt={featured.name} className="w-full max-w-[260px] sm:max-w-[280px] md:max-w-md drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] md:drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
-            </div>
-
-          </div>
-        </div>
+          );
+        })}
       </section>
 
 
       {/* Categories */}
       <section className="container-x py-8">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Categories</p>
-          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">Pick your poison<br /><span className="italic">(the healthy kind).</span></h2>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.categories.eyebrow")}</p>
+          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.categories.title")}<br /><span className="italic">{t("home.categories.titleItalic")}</span></h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6 mt-14">
           {[
-            { name: "Nuts", desc: "Crunchy, protein-dense, brain fuel.", img: products[0].image, tint: "bg-forest-deep text-cream" },
-            { name: "Seeds", desc: "Tiny things, giant nutrition.", img: products[5].image, tint: "bg-terracotta text-cream" },
-            { name: "Dried Fruits", desc: "Nature's original candy.", img: products[6].image, tint: "bg-gold text-forest-deep" },
+            { name: "Nuts", desc: "Crunchy, protein-dense, brain fuel.", img: products[0].image, tint: "text-cream", bg: "linear-gradient(150deg, #14301f 0%, #0d1b13 100%)" },
+            { name: "Seeds", desc: "Tiny things, giant nutrition.", img: products[5].image, tint: "text-cream", bg: "linear-gradient(150deg, #2b2036 0%, #14101c 100%)" },
+            { name: "Dried Fruits", desc: "Nature's original candy.", img: products[6].image, tint: "text-cream", bg: "linear-gradient(150deg, #3a2016 0%, #1b0f0a 100%)" },
           ].map((c) => (
             <Link
               key={c.name}
               to="/shop"
               search={{ cat: c.name } as never}
-              className={`group relative rounded-3xl overflow-hidden ${c.tint} min-h-[380px] flex flex-col justify-end p-8 hover:-translate-y-1 transition`}
+              className={`group relative rounded-3xl overflow-hidden border border-white/10 ${c.tint} min-h-[380px] flex flex-col justify-end p-8 hover:-translate-y-1 hover:border-gold/40 transition`}
+              style={{ background: c.bg }}
             >
               <img src={c.img} alt={c.name} className="absolute -top-6 -right-6 w-56 rotate-6 group-hover:scale-110 group-hover:rotate-3 transition duration-500 drop-shadow-2xl" />
               <div className="relative">
                 <h3 className="font-display text-4xl">{c.name}</h3>
                 <p className="mt-2 opacity-80 max-w-[220px]">{c.desc}</p>
-                <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold">
+                <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gold">
                   Explore <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
                 </div>
               </div>
@@ -358,12 +333,14 @@ function Home() {
         </div>
       </section>
 
+
       {/* New arrivals */}
       <section className="container-x py-20">
         <div className="flex items-end justify-between gap-6 mb-10">
           <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-gold">Fresh off the shelf</p>
-            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">New Arrivals</h2>
+            <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.new.eyebrow")}</p>
+            <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.new.title")}</h2>
+
           </div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -387,10 +364,11 @@ function Home() {
             </div>
           </div>
           <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-gold">The Grams Ritual</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.ritual.eyebrow")}</p>
             <h2 className="font-display text-5xl md:text-6xl text-forest-deep mt-3 leading-[0.95]">
-              A tiny bowl. <br /><span className="italic">A giant reset.</span>
+              {t("home.ritual.title")} <br /><span className="italic">{t("home.ritual.titleItalic")}</span>
             </h2>
+
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
               We built Grams for the in-between moments — the 4pm slumps, the pre-workout
               scrambles, the "I forgot to eat lunch" saves. Snacks that don't cost you your
@@ -414,8 +392,9 @@ function Home() {
       {/* Testimonials */}
       <section className="container-x py-16">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Word on the street</p>
-          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">Snacked & Approved</h2>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("home.testimonials.eyebrow")}</p>
+          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">{t("home.testimonials.title")}</h2>
+
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {[
@@ -440,7 +419,7 @@ function Home() {
         <div className="relative rounded-[2rem] overflow-hidden bg-gold text-forest-deep p-10 md:p-16 text-center">
           <img src={texture1} alt="" className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-30" />
           <div className="relative max-w-2xl mx-auto">
-            <p className="text-xs tracking-[0.3em] uppercase">Join the pantry</p>
+            <p className="text-xs tracking-[0.3em] uppercase">{t("home.newsletter.eyebrow")}</p>
             <h2 className="font-display text-4xl md:text-6xl mt-3 leading-tight">
               Get <span className="italic">10% off</span> your<br /> first bag of goodness.
             </h2>

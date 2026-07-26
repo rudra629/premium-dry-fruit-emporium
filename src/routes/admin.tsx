@@ -1,19 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye, Type,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order, type GiftBox, type GiftCategory } from "@/lib/site-store";
+import { useSite, COPY_FIELDS, type Order, type GiftBox, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo } from "@/lib/site-store";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "content" | "settings";
 
 
 function Admin() {
@@ -46,7 +47,9 @@ function Admin() {
             { id: "gifting", label: "Gifting", icon: Gift },
             { id: "reviews", label: "Reviews", icon: Star },
             { id: "careers", label: "Careers", icon: Briefcase },
+            { id: "content", label: "Content & Copy", icon: Type },
             { id: "settings", label: "Site Settings", icon: Settings2 },
+
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
             <button
               key={t.id}
@@ -66,7 +69,9 @@ function Admin() {
         {section === "gifting" && <GiftingManager />}
         {section === "reviews" && <ReviewsManager />}
         {section === "careers" && <CareersTable />}
+        {section === "content" && <ContentManager />}
         {section === "settings" && <SiteSettings />}
+
       </div>
     </div>
   );
@@ -545,6 +550,106 @@ function CustomersTable() {
     </div>
   );
 }
+
+function ContentManager() {
+  const { copy, setCopy, stats, setStats, monthPicks, setMonthPicks, contact, setContact, allProducts } = useSite();
+  const [c, setC] = useState(copy);
+  const [s, setS] = useState<SiteStat[]>(stats);
+  const [m, setM] = useState<MonthPick[]>(monthPicks);
+  const [ct, setCt] = useState<ContactInfo>(contact);
+
+  useEffect(() => { setC(copy); }, [copy]);
+  useEffect(() => { setS(stats); }, [stats]);
+  useEffect(() => { setM(monthPicks); }, [monthPicks]);
+  useEffect(() => { setCt(contact); }, [contact]);
+
+  const groups = Array.from(new Set(COPY_FIELDS.map((f) => f.group)));
+  const lines = (v: string[]) => v.join("\n");
+  const parse = (v: string) => v.split("\n").map((x) => x.trim()).filter(Boolean);
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      {/* Stats strip */}
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Home stats strip</p>
+        <p className="text-sm text-muted-foreground -mt-3">The big numbers shown in the hero and the dark strip.</p>
+        {s.map((st, i) => (
+          <div key={i} className="grid grid-cols-[110px_1fr_auto] gap-2">
+            <input value={st.n} onChange={(e) => setS(s.map((x, ix) => ix === i ? { ...x, n: e.target.value } : x))} className={inputCls} placeholder="12+" />
+            <input value={st.l} onChange={(e) => setS(s.map((x, ix) => ix === i ? { ...x, l: e.target.value } : x))} className={inputCls} placeholder="Global origins" />
+            <button onClick={() => setS(s.filter((_, ix) => ix !== i))} className="w-11 h-11 grid place-items-center border border-border rounded-xl hover:text-terracotta"><Trash2 className="w-4 h-4" /></button>
+          </div>
+        ))}
+        <div className="flex gap-2">
+          <button onClick={() => setS([...s, { n: "", l: "" }])} className="rounded-xl bg-muted border border-border px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-1"><Plus className="w-4 h-4" /> Add stat</button>
+          <button onClick={() => { setStats(s.filter((x) => x.n && x.l)); toast.success("Stats updated"); }} className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold">Save stats</button>
+        </div>
+      </div>
+
+      {/* Product of the month */}
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-5">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Product of the month</p>
+        <p className="text-sm text-muted-foreground -mt-3">One feature block each for Nuts, Seeds and Dry fruits.</p>
+        {m.map((p, i) => (
+          <div key={p.key} className="rounded-xl border border-border p-4 space-y-3">
+            <p className="text-[11px] tracking-[0.25em] uppercase text-gold">{p.key}</p>
+            <div className="grid md:grid-cols-2 gap-3">
+              <Field label="Product">
+                <select value={p.slug} onChange={(e) => setM(m.map((x, ix) => ix === i ? { ...x, slug: e.target.value } : x))} className={inputCls}>
+                  {allProducts.map((pr) => <option key={pr.slug} value={pr.slug}>{pr.name}</option>)}
+                </select>
+              </Field>
+              <Field label="Eyebrow"><input value={p.eyebrow} onChange={(e) => setM(m.map((x, ix) => ix === i ? { ...x, eyebrow: e.target.value } : x))} className={inputCls} /></Field>
+              <Field label="Title line"><input value={p.title} onChange={(e) => setM(m.map((x, ix) => ix === i ? { ...x, title: e.target.value } : x))} className={inputCls} /></Field>
+              <Field label="Italic line"><input value={p.italic} onChange={(e) => setM(m.map((x, ix) => ix === i ? { ...x, italic: e.target.value } : x))} className={inputCls} /></Field>
+              <Field label="Description" full><textarea rows={2} value={p.desc} onChange={(e) => setM(m.map((x, ix) => ix === i ? { ...x, desc: e.target.value } : x))} className={inputCls} /></Field>
+            </div>
+          </div>
+        ))}
+        <button onClick={() => { setMonthPicks(m); toast.success("Product of the month updated"); }} className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold">Save picks</button>
+      </div>
+
+      {/* Titles & subtitles */}
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-5">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Titles & subtitles</p>
+        <p className="text-sm text-muted-foreground -mt-3">Section headings across the site, including the chatbot label.</p>
+        {groups.map((g) => (
+          <div key={g} className="space-y-3">
+            <p className="text-[11px] tracking-[0.25em] uppercase text-gold">{g}</p>
+            {COPY_FIELDS.filter((f) => f.group === g).map((f) => (
+              <Field key={f.key} label={f.label} full>
+                <input value={c[f.key] ?? ""} onChange={(e) => setC({ ...c, [f.key]: e.target.value })} className={inputCls} />
+              </Field>
+            ))}
+          </div>
+        ))}
+        <button onClick={() => { setCopy(c); toast.success("Copy updated"); }} className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold">Save copy</button>
+      </div>
+
+      {/* Contact details */}
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Contact details</p>
+        <p className="text-sm text-muted-foreground -mt-3">One line per row — shown on the Contact page.</p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Field label="Emails"><textarea rows={3} value={lines(ct.emails)} onChange={(e) => setCt({ ...ct, emails: e.target.value.split("\n") })} className={inputCls} /></Field>
+          <Field label="Phone / hours"><textarea rows={3} value={lines(ct.phones)} onChange={(e) => setCt({ ...ct, phones: e.target.value.split("\n") })} className={inputCls} /></Field>
+          <Field label="Address"><textarea rows={3} value={lines(ct.address)} onChange={(e) => setCt({ ...ct, address: e.target.value.split("\n") })} className={inputCls} /></Field>
+          <Field label="Response time"><textarea rows={3} value={lines(ct.hours)} onChange={(e) => setCt({ ...ct, hours: e.target.value.split("\n") })} className={inputCls} /></Field>
+        </div>
+        <button
+          onClick={() => {
+            setContact({ emails: parse(ct.emails.join("\n")), phones: parse(ct.phones.join("\n")), address: parse(ct.address.join("\n")), hours: parse(ct.hours.join("\n")) });
+            toast.success("Contact details updated");
+          }}
+          className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold"
+        >
+          Save contact
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
 function SiteSettings() {
   const { bannerWords, setBannerWords } = useSite();

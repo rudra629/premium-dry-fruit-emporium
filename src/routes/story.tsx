@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Leaf, Users, Award, Sprout } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
@@ -35,23 +35,8 @@ function Story() {
         </div>
       </section>
 
-      {/* Numbers */}
-      <section className="container-x py-16">
-        <div className="grid md:grid-cols-4 gap-6">
-          {[
-            { n: "12+", l: "Farmer partners", i: Users },
-            { n: "47k", l: "Pouches shipped", i: Leaf },
-            { n: "0", l: "Preservatives", i: Sprout },
-            { n: "4.8★", l: "Verified rating", i: Award },
-          ].map((s) => (
-            <div key={s.l} className="rounded-2xl bg-card border border-border p-6">
-              <s.i className="w-6 h-6 text-gold" />
-              <p className="mt-4 font-display text-5xl text-forest-deep">{s.n}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{s.l}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+
+
 
       {/* Chapters */}
       <section className="container-x py-16 space-y-24">

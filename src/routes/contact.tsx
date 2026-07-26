@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, Phone, Instagram, MessageCircle, Send, Clock } from "lucide-react";
 import { useState } from "react";
+import { useSite } from "@/lib/site-store";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -16,22 +18,24 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const { contact, t } = useSite();
   return (
     <div>
       <section className="bg-forest-deep text-cream py-16 md:py-24">
         <div className="container-x">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Say hi</p>
-          <h1 className="mt-3 font-display text-5xl md:text-7xl">Let's <span className="italic">talk snacks.</span></h1>
-          <p className="mt-4 max-w-xl text-cream/70">Questions, bulk orders, collabs, complaints (rare, but valid) — hit us up. We reply within 24 hours, usually much sooner.</p>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">{t("contact.eyebrow")}</p>
+          <h1 className="mt-3 font-display text-5xl md:text-7xl">{t("contact.title")} <span className="italic">{t("contact.titleItalic")}</span></h1>
+          <p className="mt-4 max-w-xl text-cream/70">{t("contact.subtitle")}</p>
         </div>
       </section>
 
       <section className="container-x py-16 grid lg:grid-cols-[1fr_1.2fr] gap-10">
         <div className="space-y-4">
-          <Card icon={<Mail />} title="Email" lines={["care@grams.snack", "wholesale@grams.snack"]} />
-          <Card icon={<Phone />} title="Phone" lines={["+91 98765 43210", "Mon–Sat · 10am–7pm IST"]} />
-          <Card icon={<MapPin />} title="HQ" lines={["Grams Foods Pvt. Ltd.", "42 Farm Lane, Bengaluru 560001"]} />
-          <Card icon={<Clock />} title="Response Time" lines={["Under 24 hours", "Usually same day"]} />
+          <Card icon={<Mail />} title="Email" lines={contact.emails} />
+          <Card icon={<Phone />} title="Phone" lines={contact.phones} />
+          <Card icon={<MapPin />} title="HQ" lines={contact.address} />
+          <Card icon={<Clock />} title="Response Time" lines={contact.hours} />
+
           <div className="rounded-2xl bg-forest-deep text-cream p-6">
             <p className="font-display text-2xl">Follow along</p>
             <div className="mt-4 flex gap-2">

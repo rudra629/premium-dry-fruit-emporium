@@ -44,12 +44,17 @@ export function ProductCard({ product }: { product: Product }) {
   }, []);
 
   return (
-    <div className="group relative flex flex-col">
+    <div
+      className="group relative flex flex-col rounded-3xl border border-white/10 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:border-gold/40 hover:shadow-[0_22px_50px_rgba(0,0,0,0.5)] hover:-translate-y-1 transition duration-500"
+      style={{ background: "linear-gradient(160deg, #17151a 0%, #101013 100%)" }}
+    >
       <Link
         to="/product/$slug"
         params={{ slug: product.slug }}
-        className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-transparent border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_18px_45px_rgb(0,0,0,0.08)] transition-shadow duration-500"
+        className="relative block aspect-[4/5] overflow-hidden border-b border-white/10"
+        style={{ background: "radial-gradient(circle at 50% 35%, rgba(212,162,76,0.12) 0%, transparent 60%)" }}
       >
+
         <div
           className="absolute inset-0 flex items-center justify-center p-6 cursor-zoom-in overflow-hidden"
           onMouseMove={handleMove}
@@ -90,10 +95,10 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
 
-      <div className="pt-4 px-1">
+      <div className="p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground truncate">{product.category}</p>
-          <div className="flex items-center gap-1 text-xs shrink-0">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-cream/50 truncate">{product.category}</p>
+          <div className="flex items-center gap-1 text-xs shrink-0 text-cream/80">
             <Star className="w-3 h-3 fill-gold text-gold" />
             <span className="font-semibold">{product.rating}</span>
           </div>
@@ -101,11 +106,12 @@ export function ProductCard({ product }: { product: Product }) {
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
-          className="mt-1 block font-display italic text-lg sm:text-xl text-forest-deep leading-tight hover:text-terracotta transition line-clamp-1"
+          className="mt-1 block font-display italic text-lg sm:text-xl text-cream leading-tight hover:text-gold transition line-clamp-1"
         >
           {product.name}
         </Link>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">{product.tagline}</p>
+        <p className="text-xs sm:text-sm text-cream/55 mt-1 line-clamp-1">{product.tagline}</p>
+
         <div className="mt-3 flex items-end justify-between gap-2">
           <Price price={product.price} compareAt={product.compareAt} size="lg" hideDiscountPct className="min-w-0" />
           <button
@@ -122,7 +128,7 @@ export function ProductCard({ product }: { product: Product }) {
               });
               flyToCart(imgRef.current, product.image);
             }}
-            className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-forest-deep text-forest-deep text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
+            className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-gold text-gold text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
           >
             <span className="add-btn-fill" />
             <span className="add-btn-label relative z-10">Add</span>
