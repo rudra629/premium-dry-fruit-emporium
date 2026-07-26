@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { products as baseProducts, type Product } from "./products";
+import giftCorporateNight from "@/assets/gift-corporate-night.jpg";
+import giftBirthdayBox from "@/assets/gift-birthday-box.jpg";
+import giftFestiveBlack from "@/assets/gift-festive-black.jpg";
+import giftPackingLine from "@/assets/gift-packing-line.jpg";
 
 export type Address = {
   id: string;
@@ -341,7 +345,7 @@ const DEFAULT_GIFT_ARTICLES: GiftArticle[] = [
     category: "Corporate",
     author: "Team Grams",
     date: "Jul 2, 2026",
-    images: [baseProducts[0].image, baseProducts[3].image],
+    images: [giftCorporateNight, giftPackingLine],
   },
   {
     id: "ga2",
@@ -351,7 +355,7 @@ const DEFAULT_GIFT_ARTICLES: GiftArticle[] = [
     category: "Birthday",
     author: "Aanya S.",
     date: "Jun 18, 2026",
-    images: [baseProducts[6].image],
+    images: [giftBirthdayBox, giftFestiveBlack],
   },
   {
     id: "ga3",
@@ -361,7 +365,7 @@ const DEFAULT_GIFT_ARTICLES: GiftArticle[] = [
     category: "Festive",
     author: "Studio Notes",
     date: "May 30, 2026",
-    images: [baseProducts[1].image, baseProducts[5].image],
+    images: [giftFestiveBlack, giftCorporateNight],
   },
   {
     id: "ga4",
@@ -371,7 +375,7 @@ const DEFAULT_GIFT_ARTICLES: GiftArticle[] = [
     category: "Corporate",
     author: "Ops Desk",
     date: "May 12, 2026",
-    images: [baseProducts[4].image, baseProducts[2].image, baseProducts[7].image],
+    images: [giftPackingLine, giftBirthdayBox, giftCorporateNight],
   },
 ];
 
@@ -406,7 +410,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setBannerWordsState(load("grams:banner", DEFAULT_BANNER));
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
-    setGiftArticles(load("grams:gift-articles", DEFAULT_GIFT_ARTICLES));
+    setGiftArticles(load("grams:gift-articles-v2", DEFAULT_GIFT_ARTICLES));
     setReviews(load("grams:reviews", [] as Review[]));
     setCoupons(load("grams:coupons", DEFAULT_COUPONS));
     setStatsState(load("grams:stats", DEFAULT_STATS));
@@ -422,7 +426,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:banner", JSON.stringify(bannerWords)); }, [bannerWords, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
-  useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-articles", JSON.stringify(giftArticles)); }, [giftArticles, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-articles-v2", JSON.stringify(giftArticles)); }, [giftArticles, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:coupons", JSON.stringify(coupons)); }, [coupons, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
