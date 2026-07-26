@@ -44,7 +44,7 @@ function Admin() {
             { id: "add", label: "Add Product", icon: Plus },
             { id: "orders", label: "Orders", icon: ShoppingCart },
             { id: "customers", label: "Customers", icon: Users },
-            { id: "gifting", label: "Gifting", icon: Gift },
+            { id: "gifting", label: "Gifting Stories", icon: Gift },
             { id: "reviews", label: "Reviews", icon: Star },
             { id: "coupons", label: "Coupons", icon: TicketPercent },
             { id: "careers", label: "Careers", icon: Briefcase },
