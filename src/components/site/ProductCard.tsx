@@ -95,10 +95,10 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
 
-      <div className="pt-4 px-1">
+      <div className="p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground truncate">{product.category}</p>
-          <div className="flex items-center gap-1 text-xs shrink-0">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-cream/50 truncate">{product.category}</p>
+          <div className="flex items-center gap-1 text-xs shrink-0 text-cream/80">
             <Star className="w-3 h-3 fill-gold text-gold" />
             <span className="font-semibold">{product.rating}</span>
           </div>
@@ -106,11 +106,12 @@ export function ProductCard({ product }: { product: Product }) {
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
-          className="mt-1 block font-display italic text-lg sm:text-xl text-forest-deep leading-tight hover:text-terracotta transition line-clamp-1"
+          className="mt-1 block font-display italic text-lg sm:text-xl text-cream leading-tight hover:text-gold transition line-clamp-1"
         >
           {product.name}
         </Link>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">{product.tagline}</p>
+        <p className="text-xs sm:text-sm text-cream/55 mt-1 line-clamp-1">{product.tagline}</p>
+
         <div className="mt-3 flex items-end justify-between gap-2">
           <Price price={product.price} compareAt={product.compareAt} size="lg" hideDiscountPct className="min-w-0" />
           <button
