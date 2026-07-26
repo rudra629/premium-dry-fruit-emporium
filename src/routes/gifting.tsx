@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Gift, Sparkles, ArrowRight, Package, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSite, type GiftCategory, type GiftArticle } from "@/lib/site-store";
+import { getLenis } from "@/lib/smooth-scroll";
 
 export const Route = createFileRoute("/gifting")({
   head: () => ({
