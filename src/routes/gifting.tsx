@@ -80,9 +80,9 @@ function Gifting() {
                 className="group relative cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0f0f11] to-black hover:border-gold/50 transition"
               >
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: "radial-gradient(500px 240px at 50% 0%, rgba(212,162,76,0.15), transparent 60%)" }} />
-                <div className="relative aspect-[16/10] bg-black grid place-items-center p-8 border-b border-white/10 overflow-hidden">
+                <div className="relative aspect-[16/10] bg-black grid place-items-center border-b border-white/10 overflow-hidden">
                   {a.images[0] ? (
-                    <img src={a.images[0]} alt={a.title} loading="lazy" className="max-h-full max-w-full object-contain drop-shadow-[0_20px_40px_rgba(212,162,76,0.25)] group-hover:scale-105 transition-transform duration-500" />
+                    <img src={a.images[0]} alt={a.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <Gift className="w-16 h-16 text-gold/30" />
                   )}
