@@ -157,6 +157,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
     // Smooth-scroll libs swallow wheel events globally — drive the panel manually.
     const onWheel = (e: WheelEvent) => {
       const el = bodyRef.current;
+      console.log('wheelhit', !!el, el ? e.composedPath().includes(el) : null);
       if (!el || !e.composedPath().includes(el)) return;
       e.preventDefault();
       e.stopPropagation();
