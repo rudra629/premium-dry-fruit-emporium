@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye, Type,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye, Type, TicketPercent, Power,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, COPY_FIELDS, type Order, type GiftBox, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo } from "@/lib/site-store";
+import { useSite, COPY_FIELDS, type Order, type GiftBox, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo, type Coupon } from "@/lib/site-store";
 
 
 export const Route = createFileRoute("/admin")({
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "content" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "coupons" | "content" | "settings";
 
 
 function Admin() {
@@ -46,6 +46,7 @@ function Admin() {
             { id: "customers", label: "Customers", icon: Users },
             { id: "gifting", label: "Gifting", icon: Gift },
             { id: "reviews", label: "Reviews", icon: Star },
+            { id: "coupons", label: "Coupons", icon: TicketPercent },
             { id: "careers", label: "Careers", icon: Briefcase },
             { id: "content", label: "Content & Copy", icon: Type },
             { id: "settings", label: "Site Settings", icon: Settings2 },
@@ -68,6 +69,7 @@ function Admin() {
         {section === "customers" && <CustomersTable />}
         {section === "gifting" && <GiftingManager />}
         {section === "reviews" && <ReviewsManager />}
+        {section === "coupons" && <CouponsManager />}
         {section === "careers" && <CareersTable />}
         {section === "content" && <ContentManager />}
         {section === "settings" && <SiteSettings />}
@@ -911,3 +913,148 @@ function ReviewsManager() {
   );
 }
 
+
+function CouponsManager() {
+  const { coupons, addCoupon, updateCoupon, removeCoupon } = useSite();
+  const empty = { code: "", type: "percent" as Coupon["type"], value: 10, minOrder: 0, maxDiscount: "", expiry: "", usageLimit: "", description: "", active: true };
+  const [f, setF] = useState(empty);
+  const [editing, setEditing] = useState<string | null>(null);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!f.code.trim()) return toast.error("Coupon code is required");
+    if (!f.value || f.value <= 0) return toast.error("Discount value must be greater than 0");
+    if (f.type === "percent" && f.value > 100) return toast.error("Percentage cannot exceed 100");
+    const payload = {
+      code: f.code.toUpperCase().trim(),
+      type: f.type,
+      value: Number(f.value),
+      minOrder: Number(f.minOrder) || 0,
+      maxDiscount: f.maxDiscount ? Number(f.maxDiscount) : undefined,
+      expiry: f.expiry || undefined,
+      usageLimit: f.usageLimit ? Number(f.usageLimit) : undefined,
+      description: f.description.trim() || undefined,
+      active: f.active,
+    };
+    if (editing) { updateCoupon(editing, payload); toast.success(`${payload.code} updated`); }
+    else { addCoupon(payload); toast.success(`${payload.code} created`); }
+    setF(empty); setEditing(null);
+  };
+
+  const edit = (c: Coupon) => {
+    setEditing(c.id);
+    setF({
+      code: c.code, type: c.type, value: c.value, minOrder: c.minOrder,
+      maxDiscount: c.maxDiscount ? String(c.maxDiscount) : "",
+      expiry: c.expiry ?? "", usageLimit: c.usageLimit ? String(c.usageLimit) : "",
+      description: c.description ?? "", active: c.active,
+    });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <div className="grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-6 items-start">
+      <form onSubmit={submit} className="rounded-2xl bg-card border border-border p-5 md:p-7 space-y-5">
+        <div className="flex items-center gap-2">
+          <TicketPercent className="w-5 h-5 text-forest-deep" />
+          <p className="font-display text-2xl text-forest-deep">{editing ? "Edit coupon" : "Create coupon"}</p>
+        </div>
+
+        <Field label="Coupon code" full>
+          <input value={f.code} onChange={(e) => setF({ ...f, code: e.target.value.toUpperCase() })} placeholder="CRUNCH20" className={`${inputCls} font-mono tracking-widest uppercase`} />
+        </Field>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Type">
+            <select value={f.type} onChange={(e) => setF({ ...f, type: e.target.value as Coupon["type"] })} className={inputCls}>
+              <option value="percent">Percentage %</option>
+              <option value="flat">Flat ₹ off</option>
+            </select>
+          </Field>
+          <Field label={f.type === "percent" ? "Discount %" : "Discount ₹"}>
+            <input type="number" min={1} value={f.value} onChange={(e) => setF({ ...f, value: Number(e.target.value) })} className={inputCls} />
+          </Field>
+          <Field label="Min order ₹">
+            <input type="number" min={0} value={f.minOrder} onChange={(e) => setF({ ...f, minOrder: Number(e.target.value) })} className={inputCls} />
+          </Field>
+          <Field label="Max discount ₹">
+            <input type="number" min={0} value={f.maxDiscount} onChange={(e) => setF({ ...f, maxDiscount: e.target.value })} placeholder="optional" className={inputCls} />
+          </Field>
+          <Field label="Expiry date">
+            <input type="date" value={f.expiry} onChange={(e) => setF({ ...f, expiry: e.target.value })} className={inputCls} />
+          </Field>
+          <Field label="Usage limit">
+            <input type="number" min={0} value={f.usageLimit} onChange={(e) => setF({ ...f, usageLimit: e.target.value })} placeholder="unlimited" className={inputCls} />
+          </Field>
+        </div>
+
+        <Field label="Description" full>
+          <input value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} placeholder="20% off orders above ₹999" className={inputCls} />
+        </Field>
+
+        <label className="flex items-center gap-3 text-sm">
+          <input type="checkbox" checked={f.active} onChange={(e) => setF({ ...f, active: e.target.checked })} className="w-4 h-4 accent-current" />
+          Active (usable at checkout)
+        </label>
+
+        <div className="flex gap-2">
+          <button type="submit" className="rounded-full bg-forest-deep text-cream px-7 py-3.5 text-sm font-semibold hover:bg-forest transition">
+            {editing ? "Save changes" : "Create coupon"}
+          </button>
+          {editing && (
+            <button type="button" onClick={() => { setEditing(null); setF(empty); }} className="rounded-full border border-border px-6 py-3.5 text-sm font-semibold hover:bg-muted transition">
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-7">
+        <div className="flex items-center justify-between mb-5">
+          <p className="font-display text-2xl text-forest-deep">All coupons</p>
+          <span className="text-xs font-mono text-muted-foreground">{coupons.length} total</span>
+        </div>
+
+        {coupons.length === 0 ? (
+          <p className="text-sm text-muted-foreground py-10 text-center">No coupons yet. Create your first one.</p>
+        ) : (
+          <div className="space-y-3">
+            {coupons.map((c) => (
+              <div key={c.id} className={`rounded-xl border p-4 transition ${c.active ? "border-border" : "border-border/60 opacity-60"}`}>
+                <div className="flex flex-wrap items-center gap-3 justify-between">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-base tracking-widest text-forest-deep">{c.code}</span>
+                      <span className="text-[10px] uppercase tracking-widest rounded-full bg-gold/20 text-gold px-2 py-0.5">
+                        {c.type === "percent" ? `${c.value}% off` : `₹${c.value} off`}
+                      </span>
+                      <span className={`text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 ${c.active ? "bg-forest-deep/10 text-forest-deep" : "bg-muted text-muted-foreground"}`}>
+                        {c.active ? "Active" : "Paused"}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1.5">
+                      {c.description ? `${c.description} · ` : ""}
+                      Min ₹{c.minOrder}
+                      {c.maxDiscount ? ` · Cap ₹${c.maxDiscount}` : ""}
+                      {c.expiry ? ` · Expires ${c.expiry}` : ""}
+                      {c.usageLimit ? ` · ${c.used}/${c.usageLimit} used` : ` · ${c.used} used`}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button onClick={() => updateCoupon(c.id, { active: !c.active })} title={c.active ? "Pause" : "Activate"} className="w-10 h-10 grid place-items-center rounded-xl border border-border hover:bg-muted transition">
+                      <Power className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => edit(c)} className="rounded-xl border border-border px-4 h-10 text-xs font-semibold hover:bg-muted transition">Edit</button>
+                    <button onClick={() => { removeCoupon(c.id); toast.success("Coupon deleted"); }} className="w-10 h-10 grid place-items-center rounded-xl border border-border hover:text-terracotta transition">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
