@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Gift, Sparkles, ArrowRight, Package, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSite, type GiftCategory, type GiftArticle } from "@/lib/site-store";
 import { getLenis } from "@/lib/smooth-scroll";
@@ -207,7 +207,7 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
           </div>
         )}
 
-        <div data-lenis-prevent className={`min-h-0 h-full flex-1 overflow-y-auto overscroll-contain no-scrollbar p-6 md:p-10 ${imgs.length ? "" : "md:col-span-2"}`}>
+        <div ref={bodyRef} data-lenis-prevent className={`min-h-0 h-full flex-1 overflow-y-auto overscroll-contain no-scrollbar p-6 md:p-10 ${imgs.length ? "" : "md:col-span-2"}`}>
           <p className="text-[10px] tracking-[0.3em] uppercase text-gold">{article.category} · {article.date}</p>
           <h2 className="mt-3 font-display italic text-2xl md:text-4xl leading-[1.05]">{article.title}</h2>
           {article.author && <p className="mt-3 text-xs font-mono text-cream/50">By {article.author}</p>}
