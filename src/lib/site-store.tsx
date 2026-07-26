@@ -312,6 +312,10 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [giftBoxes, setGiftBoxes] = useState<GiftBox[]>(DEFAULT_GIFT_BOXES);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [stats, setStatsState] = useState<SiteStat[]>(DEFAULT_STATS);
+  const [monthPicks, setMonthPicksState] = useState<MonthPick[]>(DEFAULT_MONTH_PICKS);
+  const [contact, setContactState] = useState<ContactInfo>(DEFAULT_CONTACT);
+  const [copy, setCopyState] = useState<CopyMap>(DEFAULT_COPY);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -322,6 +326,10 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setApplications(load("grams:applications", [] as Application[]));
     setGiftBoxes(load("grams:gift-boxes", DEFAULT_GIFT_BOXES));
     setReviews(load("grams:reviews", [] as Review[]));
+    setStatsState(load("grams:stats", DEFAULT_STATS));
+    setMonthPicksState(load("grams:month-picks", DEFAULT_MONTH_PICKS));
+    setContactState(load("grams:contact", DEFAULT_CONTACT));
+    setCopyState({ ...DEFAULT_COPY, ...load("grams:copy", {} as CopyMap) });
     setHydrated(true);
   }, []);
 
@@ -332,6 +340,11 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:applications", JSON.stringify(applications)); }, [applications, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:gift-boxes", JSON.stringify(giftBoxes)); }, [giftBoxes, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:month-picks", JSON.stringify(monthPicks)); }, [monthPicks, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:contact", JSON.stringify(contact)); }, [contact, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:copy", JSON.stringify(copy)); }, [copy, hydrated]);
+
 
   const allProducts = useMemo(() => [...extraProducts, ...baseProducts], [extraProducts]);
 
