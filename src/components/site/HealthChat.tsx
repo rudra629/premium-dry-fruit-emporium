@@ -68,14 +68,14 @@ export function HealthChat() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Open Grams health assistant"
-        className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-40 group inline-flex items-center gap-2 rounded-full px-4 py-3 md:px-5 md:py-3.5 text-xs md:text-sm font-semibold bg-cream text-forest-deep shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_40px_rgba(212,162,76,0.4)] transition-all hover:-translate-y-0.5"
+        className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-40 group inline-flex items-center gap-0 md:gap-2 rounded-full p-3 md:px-5 md:py-3.5 text-xs md:text-sm font-semibold bg-cream text-forest-deep shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_40px_rgba(212,162,76,0.4)] transition-all hover:-translate-y-0.5"
         style={{ display: open ? "none" : undefined }}
       >
         <span className="relative grid place-items-center w-6 h-6 rounded-full bg-forest-deep text-gold">
           <Sparkles className="w-3.5 h-3.5" />
           <span className="absolute inset-0 rounded-full ring-2 ring-gold/50 animate-ping" />
         </span>
-        <span>{t("chat.trigger")}</span>
+        <span className="hidden md:inline">{t("chat.trigger")}</span>
       </button>
 
       {/* Panel */}
