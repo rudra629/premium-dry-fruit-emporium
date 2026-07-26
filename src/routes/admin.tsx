@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
   ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye, Type,
