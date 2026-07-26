@@ -149,7 +149,7 @@ const DEFAULT_MONTH_PICKS: MonthPick[] = [
   },
   {
     key: "Dried Fruits",
-    slug: "dried-mango",
+    slug: "dried-mango-slice",
     eyebrow: "Dry fruit of the month",
     title: "Dried",
     italic: "Mango.",
