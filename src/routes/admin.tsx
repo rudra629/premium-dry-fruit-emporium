@@ -2,18 +2,19 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Package, IndianRupee, TrendingUp, Users, Search, Plus, MoreHorizontal,
-  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye,
+  ArrowUpRight, ArrowDownRight, Boxes, ShoppingCart, BarChart3, Trash2, Settings2, Megaphone, X, Briefcase, FileText, Download, Gift, Star, EyeOff, Eye, Type,
 } from "lucide-react";
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
-import { useSite, type Order, type GiftBox, type GiftCategory } from "@/lib/site-store";
+import { useSite, COPY_FIELDS, type Order, type GiftBox, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo } from "@/lib/site-store";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 
-type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "settings";
+type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "content" | "settings";
 
 
 function Admin() {
@@ -46,7 +47,9 @@ function Admin() {
             { id: "gifting", label: "Gifting", icon: Gift },
             { id: "reviews", label: "Reviews", icon: Star },
             { id: "careers", label: "Careers", icon: Briefcase },
+            { id: "content", label: "Content & Copy", icon: Type },
             { id: "settings", label: "Site Settings", icon: Settings2 },
+
           ] as { id: Section; label: string; icon: React.ComponentType<{ className?: string }> }[]).map((t) => (
             <button
               key={t.id}
@@ -66,7 +69,9 @@ function Admin() {
         {section === "gifting" && <GiftingManager />}
         {section === "reviews" && <ReviewsManager />}
         {section === "careers" && <CareersTable />}
+        {section === "content" && <ContentManager />}
         {section === "settings" && <SiteSettings />}
+
       </div>
     </div>
   );
