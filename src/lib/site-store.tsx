@@ -58,6 +58,26 @@ export type Review = {
   hidden?: boolean;
 };
 
+export type SiteStat = { n: string; l: string };
+
+export type MonthPick = {
+  key: "Nuts" | "Seeds" | "Dried Fruits";
+  slug: string;
+  eyebrow: string;
+  title: string;
+  italic: string;
+  desc: string;
+};
+
+export type ContactInfo = {
+  emails: string[];
+  phones: string[];
+  address: string[];
+  hours: string[];
+};
+
+export type CopyMap = Record<string, string>;
+
 type SiteCtx = {
   extraProducts: Product[];
   addProduct: (p: Product) => void;
@@ -82,6 +102,15 @@ type SiteCtx = {
   addReview: (r: Omit<Review, "id" | "date">) => void;
   toggleReviewHidden: (id: string) => void;
   removeReview: (id: string) => void;
+  stats: SiteStat[];
+  setStats: (s: SiteStat[]) => void;
+  monthPicks: MonthPick[];
+  setMonthPicks: (m: MonthPick[]) => void;
+  contact: ContactInfo;
+  setContact: (c: ContactInfo) => void;
+  copy: CopyMap;
+  setCopy: (c: CopyMap) => void;
+  t: (key: string) => string;
 };
 
 const Ctx = createContext<SiteCtx | null>(null);
@@ -94,6 +123,99 @@ const DEFAULT_BANNER = [
   "Vacuum Sealed",
   "Traceable Origins",
 ];
+
+const DEFAULT_STATS: SiteStat[] = [
+  { n: "12+", l: "Global origins" },
+  { n: "47k", l: "Happy snackers" },
+  { n: "98%", l: "Reorder rate" },
+];
+
+const DEFAULT_MONTH_PICKS: MonthPick[] = [
+  {
+    key: "Nuts",
+    slug: "walnut-whole-california",
+    eyebrow: "Nut of the month",
+    title: "Walnut",
+    italic: "Whole.",
+    desc: "California-grown, hand-graded and shipped within 14 days of harvest.",
+  },
+  {
+    key: "Seeds",
+    slug: "pumpkin-seeds",
+    eyebrow: "Seed of the month",
+    title: "Pumpkin",
+    italic: "Seeds.",
+    desc: "Cold-dried, magnesium-dense and impossibly crunchy. Your 4pm fix.",
+  },
+  {
+    key: "Dried Fruits",
+    slug: "dried-mango",
+    eyebrow: "Dry fruit of the month",
+    title: "Dried",
+    italic: "Mango.",
+    desc: "Sun-ripened Alphonso slices with zero added sugar. Nature's candy.",
+  },
+];
+
+const DEFAULT_CONTACT: ContactInfo = {
+  emails: ["care@grams.snack", "wholesale@grams.snack"],
+  phones: ["+91 98765 43210", "Mon–Sat · 10am–7pm IST"],
+  address: ["Grams Foods Pvt. Ltd.", "42 Farm Lane, Bengaluru 560001"],
+  hours: ["Under 24 hours", "Usually same day"],
+};
+
+export const COPY_FIELDS: { key: string; label: string; group: string }[] = [
+  { key: "home.bestsellers.eyebrow", label: "Bestsellers — eyebrow", group: "Home" },
+  { key: "home.bestsellers.title", label: "Bestsellers — title", group: "Home" },
+  { key: "home.categories.eyebrow", label: "Categories — eyebrow", group: "Home" },
+  { key: "home.categories.title", label: "Categories — title", group: "Home" },
+  { key: "home.categories.titleItalic", label: "Categories — italic line", group: "Home" },
+  { key: "home.new.eyebrow", label: "New arrivals — eyebrow", group: "Home" },
+  { key: "home.new.title", label: "New arrivals — title", group: "Home" },
+  { key: "home.ritual.eyebrow", label: "Ritual — eyebrow", group: "Home" },
+  { key: "home.ritual.title", label: "Ritual — title", group: "Home" },
+  { key: "home.ritual.titleItalic", label: "Ritual — italic line", group: "Home" },
+  { key: "home.testimonials.eyebrow", label: "Testimonials — eyebrow", group: "Home" },
+  { key: "home.testimonials.title", label: "Testimonials — title", group: "Home" },
+  { key: "home.newsletter.eyebrow", label: "Newsletter — eyebrow", group: "Home" },
+  { key: "shop.eyebrow", label: "Shop — eyebrow", group: "Shop" },
+  { key: "shop.title", label: "Shop — title", group: "Shop" },
+  { key: "shop.subtitle", label: "Shop — subtitle", group: "Shop" },
+  { key: "contact.eyebrow", label: "Contact — eyebrow", group: "Contact" },
+  { key: "contact.title", label: "Contact — title", group: "Contact" },
+  { key: "contact.titleItalic", label: "Contact — italic line", group: "Contact" },
+  { key: "contact.subtitle", label: "Contact — subtitle", group: "Contact" },
+  { key: "chat.trigger", label: "Chatbot — button label", group: "Chatbot" },
+  { key: "chat.name", label: "Chatbot — name", group: "Chatbot" },
+  { key: "chat.greeting", label: "Chatbot — greeting", group: "Chatbot" },
+];
+
+const DEFAULT_COPY: CopyMap = {
+  "home.bestsellers.eyebrow": "Loved by many",
+  "home.bestsellers.title": "The Bestsellers",
+  "home.categories.eyebrow": "Categories",
+  "home.categories.title": "Pick your poison",
+  "home.categories.titleItalic": "(the healthy kind).",
+  "home.new.eyebrow": "Fresh off the shelf",
+  "home.new.title": "New Arrivals",
+  "home.ritual.eyebrow": "The Grams Ritual",
+  "home.ritual.title": "A tiny bowl.",
+  "home.ritual.titleItalic": "A giant reset.",
+  "home.testimonials.eyebrow": "Word on the street",
+  "home.testimonials.title": "Snacked & Approved",
+  "home.newsletter.eyebrow": "Join the pantry",
+  "shop.eyebrow": "The Collection",
+  "shop.title": "Invest In Your health.",
+  "shop.subtitle": "Ten obsessively-sourced snacks. Sort, filter, and add the good stuff to your pantry.",
+  "contact.eyebrow": "Say hi",
+  "contact.title": "Let's",
+  "contact.titleItalic": "talk snacks.",
+  "contact.subtitle": "Questions, bulk orders, collabs, complaints (rare, but valid) — hit us up. We reply within 24 hours, usually much sooner.",
+  "chat.trigger": "Ask the wellness guide",
+  "chat.name": "Wellness Guide",
+  "chat.greeting": "Hey — I'm your Grams wellness guide. What health or daily issue are you facing?",
+};
+
 
 const DEFAULT_ORDERS: Order[] = [
   { id: "GRM-10428", customer: "Aanya Sharma", email: "aanya@grams.snack", total: 1249, status: "Delivered", date: "Jul 2" },
