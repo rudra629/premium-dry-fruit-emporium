@@ -30,7 +30,7 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
 function RotatingHeroProduct({ className }: { className?: string }) {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1000);
+    const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1500);
     return () => clearInterval(t);
   }, []);
   const p = heroRotation[idx];
@@ -254,51 +254,62 @@ function Home() {
       </section>
 
 
-      {/* Product of the month — Nuts · Seeds · Dry fruits */}
-      <section className="container-x px-4 py-12 md:px-0 md:py-20 space-y-8 md:space-y-12">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
-          <h2 className="font-display text-4xl md:text-6xl text-forest-deep mt-2">
-            Three picks. <span className="italic">One month.</span>
-          </h2>
-        </div>
+      {/* Product of the month — Nuts · Seeds · Dry fruits (one frame) */}
+      <section className="container-x px-4 py-12 md:px-0 md:py-20">
+        <div className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
+          <div className="absolute inset-0 bg-cover bg-center opacity-[0.28]" style={{ backgroundImage: `url(${story1})` }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/95 via-forest-deep/90 to-forest-deep/95" />
+          <div className="absolute inset-0 opacity-[0.12] mix-blend-screen" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
+          <div className="absolute -top-24 -left-16 w-[360px] h-[360px] rounded-full bg-gold/25 blur-[110px]" />
+          <div className="absolute -bottom-32 right-1/4 w-[420px] h-[420px] rounded-full bg-terracotta/20 blur-[130px]" />
 
-        {monthPicks.map((pick, i) => {
-          const prod = shown.find((p) => p.slug === pick.slug) ?? shown[0];
-          if (!prod) return null;
-          return (
-            <div key={pick.key} className="relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-forest-deep text-cream grain grain-after">
-              <div className="absolute inset-0 bg-cover bg-center opacity-40" style={{ backgroundImage: `url(${story1})` }} />
-              <div className={`absolute inset-0 bg-gradient-to-b ${i % 2 ? "md:bg-gradient-to-l" : "md:bg-gradient-to-r"} from-forest-deep via-forest-deep/85 to-forest-deep/40 md:to-transparent`} />
-              <div className="absolute inset-0 opacity-[0.12] mix-blend-screen" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
-              <div className="absolute -top-24 -left-16 w-[360px] h-[360px] rounded-full bg-gold/25 blur-[110px]" />
-              <div className="absolute -bottom-32 right-1/4 w-[420px] h-[420px] rounded-full bg-terracotta/20 blur-[130px]" />
-              <div className={`relative flex flex-row gap-4 sm:gap-8 md:gap-12 items-center p-5 sm:p-10 md:p-14 md:min-h-[420px] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
-                <div className="flex-1 min-w-0 text-left">
-                  <p className="text-[9px] sm:text-[11px] md:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-gold">{pick.eyebrow}</p>
-                  <h3 className="font-display text-3xl sm:text-5xl md:text-6xl mt-2 md:mt-3 leading-[1.05] md:leading-none">
-                    {pick.title}<br />
-                    <span className="italic text-gold">{pick.italic}</span>
-                  </h3>
-                  <p className="mt-3 md:mt-5 max-w-md text-xs sm:text-sm md:text-base text-cream/80 leading-relaxed">{pick.desc}</p>
-                  <div className="mt-4 md:mt-8 flex flex-wrap items-center gap-3 md:gap-6">
-                    <div>
-                      <p className="font-display text-2xl sm:text-3xl md:text-4xl text-gold">₹{prod.price}</p>
-                      {prod.compareAt && <p className="text-xs sm:text-sm text-cream/50 line-through">₹{prod.compareAt}</p>}
-                    </div>
-                    <Link to="/product/$slug" params={{ slug: prod.slug }} className="rounded-full bg-gold text-forest-deep px-4 sm:px-6 md:px-7 py-2.5 sm:py-3.5 md:py-4 text-xs sm:text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
-                      Shop <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </Link>
-                  </div>
-                </div>
-                <div className="relative flex-1 flex justify-center shrink-0">
-                  <img src={prod.image} alt={prod.name} className="w-full max-w-[220px] sm:max-w-[260px] md:max-w-sm drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] md:drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
-                </div>
-              </div>
+          <div className="relative p-6 sm:p-10 md:p-14">
+            <div className="text-center max-w-2xl mx-auto">
+              <p className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-gold">Product of the month</p>
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl mt-2">
+                Three picks. <span className="italic text-gold">One month.</span>
+              </h2>
             </div>
-          );
-        })}
+
+            <div className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.08]">
+              {monthPicks.map((pick) => {
+                const prod = shown.find((p) => p.slug === pick.slug) ?? shown[0];
+                if (!prod) return null;
+                return (
+                  <div key={pick.key} className="flex flex-row md:flex-col items-center gap-4 md:gap-5 py-6 md:py-0 md:px-6 text-left md:text-center">
+                    <div className="relative shrink-0 md:shrink w-[38%] md:w-full flex justify-center">
+                      <img
+                        src={prod.image}
+                        alt={prod.name}
+                        className="w-full max-w-[130px] md:max-w-[220px] drop-shadow-[0_24px_44px_rgba(0,0,0,0.55)] hover:-translate-y-1.5 transition duration-500"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1 md:flex-none">
+                      <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-gold">{pick.eyebrow}</p>
+                      <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mt-1.5 leading-[1.05]">
+                        {pick.title} <span className="italic text-gold">{pick.italic}</span>
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-sm text-cream/70 leading-relaxed md:max-w-[260px] md:mx-auto line-clamp-3">{pick.desc}</p>
+                      <div className="mt-3 md:mt-5 flex items-center md:justify-center gap-3">
+                        <p className="font-mono text-lg sm:text-xl text-gold">₹{prod.price}</p>
+                        {prod.compareAt && <p className="font-mono text-xs sm:text-sm text-cream/45 line-through">₹{prod.compareAt}</p>}
+                      </div>
+                      <Link
+                        to="/product/$slug"
+                        params={{ slug: prod.slug }}
+                        className="mt-3 md:mt-4 rounded-full bg-gold text-forest-deep px-5 py-2.5 text-xs sm:text-sm font-semibold hover:bg-cream transition inline-flex items-center gap-2 whitespace-nowrap"
+                      >
+                        Shop <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </section>
+
 
 
       {/* Categories */}
