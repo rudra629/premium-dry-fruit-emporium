@@ -145,6 +145,7 @@ function Gifting() {
 function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: () => void }) {
   const [i, setI] = useState(0);
   const imgs = article.images.length ? article.images : [];
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -152,12 +153,25 @@ function ArticleReader({ article, onClose }: { article: GiftArticle; onClose: ()
     document.body.style.overflow = "hidden";
     const lenis = getLenis();
     lenis?.stop();
+
+    // Smooth-scroll libs swallow wheel events globally — drive the panel manually.
+    const onWheel = (e: WheelEvent) => {
+      const el = bodyRef.current;
+      if (!el || !e.composedPath().includes(el)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      el.scrollTop += e.deltaY;
+    };
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+
     return () => {
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("wheel", onWheel, { capture: true } as EventListenerOptions);
       document.body.style.overflow = "";
       lenis?.start();
     };
   }, [onClose]);
+
 
 
   return (
