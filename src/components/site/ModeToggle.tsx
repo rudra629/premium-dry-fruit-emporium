@@ -44,7 +44,7 @@ export function ModeToggle() {
   return (
     <>
       <div
-        className="group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+        className={`group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full transition-all duration-300 ease-out group-hover:scale-[1.02] ${chatOpen ? "opacity-0 translate-y-6 pointer-events-none" : "opacity-100 translate-y-0"}`}
       >
         {/* Blurred glow layer — static, subtle at rest, brighter on hover */}
         <div
