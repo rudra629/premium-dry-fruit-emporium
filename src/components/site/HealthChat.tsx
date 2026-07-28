@@ -104,7 +104,7 @@ export function HealthChat() {
               <p className="text-[10px] tracking-[0.25em] uppercase text-gold/80 mt-1">Grams · Health & Nutrition Guide</p>
 
             </div>
-            <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-full hover:bg-white/10 grid place-items-center text-cream/70">
+            <button onClick={closeChat} className="w-8 h-8 rounded-full hover:bg-white/10 grid place-items-center text-cream/70 transition-transform hover:rotate-90">
               <X className="w-4 h-4" />
             </button>
           </div>
