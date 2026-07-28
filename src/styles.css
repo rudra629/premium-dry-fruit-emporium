@@ -588,6 +588,16 @@ html.crunch-mode header a:hover { color: #ffb26b; }
 .bg-gold\/90.text-forest-deep,
 .hover\:bg-gold:hover.text-forest-deep { color: #14100a; }
 
+/* Gold CTAs used `hover:bg-cream`, which the dark remap turned near-black on
+   near-black text (button looked like it vanished). Hover to a lighter gold. */
+.bg-gold.hover\:bg-cream:hover,
+.bg-gold\/90.hover\:bg-cream:hover {
+  background-color: var(--gold-soft);
+  color: #14100a;
+}
+.bg-gold.hover\:bg-cream:hover * { color: #14100a; }
+
+
 /* ============ Restore original palette inside Crunch / Coming Soon =============
    The crunch page and any crunch-scoped surface should keep its native look. */
 html.crunch-mode,
