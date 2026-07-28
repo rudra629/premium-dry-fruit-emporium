@@ -22,11 +22,21 @@ export function HealthChat() {
   ]);
   const { add } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [closing, setClosing] = useState(false);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("grams:chat-toggle", { detail: { open } }));
+  }, [open]);
+
+  const closeChat = () => {
+    setClosing(true);
+    window.setTimeout(() => { setClosing(false); setOpen(false); }, 220);
+  };
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, open]);
+
 
   const findProducts = (slugs: string[]): Product[] =>
     slugs.map((s) => allProducts.find((p) => p.slug === s)).filter(Boolean) as Product[];
