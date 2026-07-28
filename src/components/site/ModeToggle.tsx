@@ -7,11 +7,19 @@ export function ModeToggle() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isCrunch = pathname.startsWith("/crunch");
   const [phase, setPhase] = useState<"idle" | "playing">("idle");
+  const [chatOpen, setChatOpen] = useState(false);
+
+  useEffect(() => {
+    const onChat = (e: Event) => setChatOpen(Boolean((e as CustomEvent).detail?.open));
+    window.addEventListener("grams:chat-toggle", onChat as EventListener);
+    return () => window.removeEventListener("grams:chat-toggle", onChat as EventListener);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("crunch-mode", isCrunch);
     return () => document.documentElement.classList.remove("crunch-mode");
   }, [isCrunch]);
+
 
   const handleClick = async () => {
     if (phase === "playing") return;
