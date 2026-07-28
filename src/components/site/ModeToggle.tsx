@@ -7,11 +7,19 @@ export function ModeToggle() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isCrunch = pathname.startsWith("/crunch");
   const [phase, setPhase] = useState<"idle" | "playing">("idle");
+  const [chatOpen, setChatOpen] = useState(false);
+
+  useEffect(() => {
+    const onChat = (e: Event) => setChatOpen(Boolean((e as CustomEvent).detail?.open));
+    window.addEventListener("grams:chat-toggle", onChat as EventListener);
+    return () => window.removeEventListener("grams:chat-toggle", onChat as EventListener);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("crunch-mode", isCrunch);
     return () => document.documentElement.classList.remove("crunch-mode");
   }, [isCrunch]);
+
 
   const handleClick = async () => {
     if (phase === "playing") return;
@@ -36,7 +44,7 @@ export function ModeToggle() {
   return (
     <>
       <div
-        className="group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+        className={`group fixed z-[60] right-[clamp(14px,3vw,28px)] bottom-[clamp(14px,3vw,28px)] inline-flex rounded-full transition-all duration-300 ease-out group-hover:scale-[1.02] ${chatOpen ? "opacity-0 translate-y-6 pointer-events-none" : "opacity-100 translate-y-0"}`}
       >
         {/* Blurred glow layer — static, subtle at rest, brighter on hover */}
         <div

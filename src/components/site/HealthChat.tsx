@@ -22,11 +22,21 @@ export function HealthChat() {
   ]);
   const { add } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [closing, setClosing] = useState(false);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("grams:chat-toggle", { detail: { open } }));
+  }, [open]);
+
+  const closeChat = () => {
+    setClosing(true);
+    window.setTimeout(() => { setClosing(false); setOpen(false); }, 220);
+  };
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, open]);
+
 
   const findProducts = (slugs: string[]): Product[] =>
     slugs.map((s) => allProducts.find((p) => p.slug === s)).filter(Boolean) as Product[];
@@ -80,7 +90,10 @@ export function HealthChat() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-0 left-0 right-0 md:bottom-6 md:left-6 md:right-auto z-50 w-full md:w-[380px] max-h-[85vh] md:max-h-[640px] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden border border-white/10 bg-[#0d0d0f]/95 backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
+        <div
+          style={{ transformOrigin: "bottom left" }}
+          className={`fixed bottom-0 left-0 right-0 md:bottom-6 md:left-6 md:right-auto z-50 w-full md:w-[380px] max-h-[85vh] md:max-h-[640px] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden border border-white/10 bg-[#0d0d0f]/95 backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-all duration-200 ease-out ${closing ? "opacity-0 translate-y-3 scale-[0.96]" : "animate-[chat-in_260ms_cubic-bezier(0.22,1,0.36,1)]"}`}
+        >
           {/* Header */}
           <div className="flex items-center gap-3 p-4 border-b border-white/10 bg-gradient-to-r from-forest-deep to-[#141216]">
             <div className="w-10 h-10 rounded-full bg-gold text-forest-deep grid place-items-center shrink-0">
@@ -91,7 +104,7 @@ export function HealthChat() {
               <p className="text-[10px] tracking-[0.25em] uppercase text-gold/80 mt-1">Grams · Health & Nutrition Guide</p>
 
             </div>
-            <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-full hover:bg-white/10 grid place-items-center text-cream/70">
+            <button onClick={closeChat} className="w-8 h-8 rounded-full hover:bg-white/10 grid place-items-center text-cream/70 transition-transform hover:rotate-90">
               <X className="w-4 h-4" />
             </button>
           </div>

@@ -88,34 +88,36 @@ export function Header() {
                 </span>
               )}
             </Link>
-            <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
-              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <button className="md:hidden p-2 relative w-9 h-9 grid place-items-center" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
+              <Menu className={`w-5 h-5 absolute transition-all duration-300 ${open ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`} />
+              <X className={`w-5 h-5 absolute transition-all duration-300 ${open ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75"}`} />
             </button>
           </div>
         </div>
 
-        {open && (
-          <div className="md:hidden border-t border-border/60 bg-cream">
+        <div
+          className={`md:hidden overflow-hidden grid transition-[grid-template-rows,opacity] duration-300 ease-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+        >
+          <div className="min-h-0 overflow-hidden border-t border-border/60 bg-cream">
             <div className="container-x py-4 flex flex-col gap-1">
-              {nav.map((n) => (
+              {nav.map((n, idx) => (
                 <Link
                   key={n.to}
                   to={n.to}
                   onClick={() => setOpen(false)}
-                  className="py-3 border-b border-border/40 text-base font-medium"
+                  style={{ transitionDelay: open ? `${80 + idx * 40}ms` : "0ms" }}
+                  className={`py-3 border-b border-border/40 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}
                 >
                   {n.label}
                 </Link>
               ))}
-              <Link to="/profile" onClick={() => setOpen(false)} className="py-3 text-base font-medium">
+              <Link to="/profile" onClick={() => setOpen(false)} className={`py-3 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`} style={{ transitionDelay: open ? `${80 + nav.length * 40}ms` : "0ms" }}>
                 My Account
-              </Link>
-              <Link to="/admin" onClick={() => setOpen(false)} className="py-3 text-base font-medium text-gold">
-                Admin
               </Link>
             </div>
           </div>
-        )}
+        </div>
+
       </header>
     </>
   );
