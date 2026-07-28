@@ -904,6 +904,56 @@ function GiftingManager() {
   );
 }
 
+function ManualReviewComposer() {
+  const { addReview, allProducts } = useSite();
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const [slug, setSlug] = useState("");
+  const [done, setDone] = useState(false);
+
+  const submit = () => {
+    if (!name.trim() || !text.trim()) return;
+    addReview({
+      productSlug: slug || allProducts[0]?.slug || "",
+      orderId: "MANUAL",
+      user: name.trim(),
+      rating,
+      text: text.trim(),
+    });
+    setName(""); setText(""); setRating(5);
+    setDone(true);
+    setTimeout(() => setDone(false), 2000);
+  };
+
+  return (
+    <div className="mb-6 rounded-2xl border border-dashed border-border bg-muted/40 p-5 opacity-70 hover:opacity-100 transition">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-[10px] uppercase tracking-[0.25em] rounded-full border border-border px-2 py-0.5 text-muted-foreground">Temporary</span>
+        <p className="font-display text-xl text-forest-deep">Add a review manually</p>
+      </div>
+      <div className="grid gap-3 md:grid-cols-4">
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Customer name" className={inputCls} />
+        <select value={slug} onChange={(e) => setSlug(e.target.value)} className={inputCls}>
+          <option value="">Select product</option>
+          {allProducts.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+        </select>
+        <div className="flex items-center gap-1.5 rounded-xl border border-border bg-cream px-4 py-3">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button key={n} type="button" onClick={() => setRating(n)} aria-label={`${n} star`}>
+              <Star className={`w-5 h-5 text-gold ${n <= rating ? "fill-gold" : ""}`} />
+            </button>
+          ))}
+        </div>
+        <button onClick={submit} className="rounded-xl bg-gold text-forest-deep px-5 py-3 text-sm font-bold hover:bg-cream transition">
+          {done ? "Added" : "Add review"}
+        </button>
+      </div>
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder="Comment" className={`${inputCls} mt-3`} />
+    </div>
+  );
+}
+
 function ReviewsManager() {
   const { reviews, allProducts, toggleReviewHidden, removeReview } = useSite();
   const nameOf = (slug: string) => allProducts.find((p) => p.slug === slug)?.name ?? slug;
@@ -916,6 +966,8 @@ function ReviewsManager() {
           <p className="text-sm text-muted-foreground">{reviews.length} submitted from customers post-delivery.</p>
         </div>
       </div>
+      <ManualReviewComposer />
+
       {reviews.length === 0 ? (
         <div className="rounded-xl bg-muted/50 border border-dashed border-border p-10 text-center">
           <Star className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
