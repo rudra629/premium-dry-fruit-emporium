@@ -268,7 +268,19 @@ function Addresses() {
 }
 
 function Wishlist() {
-  const items = [products[3], products[6], products[8]];
+  const { slugs, remove } = useWishlist();
+  const items = slugs.map((s) => products.find((p) => p.slug === s)).filter(Boolean) as typeof products;
+
+  if (items.length === 0)
+    return (
+      <div className="rounded-2xl border border-dashed border-border p-12 text-center">
+        <Heart className="w-8 h-8 mx-auto text-muted-foreground" />
+        <p className="mt-3 font-display text-2xl text-forest-deep">Your wishlist is empty</p>
+        <p className="mt-1 text-sm text-muted-foreground">Tap the heart on any product to save it here.</p>
+        <Link to="/shop" className="mt-6 inline-block rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold">Browse the shelf</Link>
+      </div>
+    );
+
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((p) => (
@@ -279,7 +291,7 @@ function Wishlist() {
             <p className="text-sm text-muted-foreground">₹{p.price}</p>
             <div className="mt-4 flex gap-2">
               <Link to="/product/$slug" params={{ slug: p.slug }} className="rounded-full bg-forest-deep text-cream px-4 py-2 text-xs font-semibold">View</Link>
-              <button className="rounded-full border border-border px-4 py-2 text-xs font-semibold">Remove</button>
+              <button onClick={() => remove(p.slug)} className="rounded-full border border-border px-4 py-2 text-xs font-semibold">Remove</button>
             </div>
           </div>
         </div>
@@ -287,6 +299,7 @@ function Wishlist() {
     </div>
   );
 }
+
 
 function SettingsPanel() {
   return (
