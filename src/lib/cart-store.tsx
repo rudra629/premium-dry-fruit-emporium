@@ -48,8 +48,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [items]);
 
-  const add: CartCtx["add"] = (i) =>
+  const add: CartCtx["add"] = (i) => {
+    if (!user) {
+      setPendingAction({ type: "cart", item: i });
+      toast("Sign in to add items to your cart");
+      navigate({ to: "/auth", search: { redirect: href } });
+      return false;
+    }
     setItems((prev) => {
+
       const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
       if (idx > -1) {
         const current = prev[idx].qty;
