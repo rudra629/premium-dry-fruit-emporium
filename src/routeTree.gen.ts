@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as GiftingRouteImport } from './routes/gifting'
@@ -32,6 +33,11 @@ const StoryRoute = StoryRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/gifting'
     | '/order-success'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
     | '/product/$slug'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/gifting'
     | '/order-success'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
     | '/product/$slug'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/gifting'
     | '/order-success'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
     | '/product/$slug'
@@ -207,6 +219,7 @@ export interface RootRouteChildren {
   GiftingRoute: typeof GiftingRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ProfileRoute: typeof ProfileRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   ShopRoute: typeof ShopRoute
   StoryRoute: typeof StoryRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   GiftingRoute: GiftingRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ProfileRoute: ProfileRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   ShopRoute: ShopRoute,
   StoryRoute: StoryRoute,
   ProductSlugRoute: ProductSlugRoute,
