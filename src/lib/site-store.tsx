@@ -507,6 +507,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     },
     stats,
     setStats: setStatsState,
+    valueProps,
+    setValueProps: setValuePropsState,
     monthPicks,
     setMonthPicks: setMonthPicksState,
     contact,
