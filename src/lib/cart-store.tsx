@@ -75,6 +75,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (i.qty > MAX_PER_ITEM) toast.error(`Capped at ${MAX_PER_ITEM} per product`);
       return [...prev, { ...i, qty: startQty }];
     });
+    return true;
+  };
+
 
   const remove: CartCtx["remove"] = (slug, weight) =>
     setItems((prev) => prev.filter((p) => !(p.slug === slug && p.weight === weight)));
