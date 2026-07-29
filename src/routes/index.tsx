@@ -122,7 +122,9 @@ function Home() {
               <span className="italic text-cream/95 block">Crunch</span>
               <span className="italic block">
                 {"chill".split("").map((ch, i) => (
-                  <span key={i} className="animate-hue-cycle inline-block" style={{ animationDelay: `${i * -0.55}s` }}>{ch}</span>
+                  <span key={i} className="inline-block animate-letter-wave" style={{ animationDelay: `${i * 0.14}s` }}>
+                    <span className="animate-hue-cycle inline-block" style={{ animationDelay: `${i * -0.55}s` }}>{ch}</span>
+                  </span>
                 ))}
               </span>
               <span className="italic text-cream/95 block">repeat.</span>
