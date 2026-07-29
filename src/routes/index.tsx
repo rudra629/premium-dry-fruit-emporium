@@ -64,7 +64,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { allProducts, bannerWords, stats, monthPicks, t } = useSite();
+  const { allProducts, bannerWords, stats, monthPicks, valueProps, t } = useSite();
   const shown = allProducts;
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
   const newArrivals = shown.filter((p) => p.newArrival);
