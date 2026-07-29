@@ -445,6 +445,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:coupons", JSON.stringify(coupons)); }, [coupons, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:value-props", JSON.stringify(valueProps)); }, [valueProps, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:month-picks", JSON.stringify(monthPicks)); }, [monthPicks, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:contact", JSON.stringify(contact)); }, [contact, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:copy", JSON.stringify(copy)); }, [copy, hydrated]);
