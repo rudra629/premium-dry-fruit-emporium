@@ -171,6 +171,13 @@ const DEFAULT_COUPONS: Coupon[] = [
   { id: "c2", code: "FIRSTBITE", type: "flat", value: 150, minOrder: 599, used: 0, active: true, description: "₹150 off your first pantry haul" },
 ];
 
+const DEFAULT_VALUE_PROPS: ValueProp[] = [
+  { icon: "leaf", title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
+  { icon: "shield", title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
+  { icon: "truck", title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
+  { icon: "sparkles", title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
+];
+
 const DEFAULT_STATS: SiteStat[] = [
   { n: "12+", l: "Global origins" },
   { n: "47k", l: "Happy snackers" },
