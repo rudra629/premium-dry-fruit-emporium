@@ -1,9 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { User, Package, MapPin, Settings, Heart, LogOut, Edit3, Plus, Check, Clock, Truck, X, Star } from "lucide-react";
 import { toast } from "sonner";
 import { products } from "@/lib/products";
 import { useSite } from "@/lib/site-store";
+import { useAuth } from "@/lib/auth-store";
+import { useWishlist } from "@/lib/wishlist-store";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Account — Grams" }, { name: "description", content: "Manage your Grams account, orders, addresses and preferences." }] }),
