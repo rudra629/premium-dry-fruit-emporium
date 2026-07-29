@@ -18,6 +18,13 @@ type Tab = "overview" | "orders" | "addresses" | "wishlist" | "settings";
 
 function Profile() {
   const [tab, setTab] = useState<Tab>("overview");
+  const { user, ready, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (ready && !user) navigate({ to: "/auth", search: { redirect: "/profile" }, replace: true });
+  }, [ready, user, navigate]);
+
   const tabs: { id: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: "overview", label: "Overview", icon: User },
     { id: "orders", label: "My Orders", icon: Package },
@@ -26,18 +33,24 @@ function Profile() {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
+  if (!user) return <div className="container-x py-24 text-center text-muted-foreground">Redirecting to sign in…</div>;
+
   return (
     <div className="container-x py-12">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <p className="text-xs tracking-[0.3em] uppercase text-gold">My Account</p>
-          <h1 className="mt-2 font-display text-5xl md:text-6xl text-forest-deep">Hey, Aanya 👋</h1>
-          <p className="mt-2 text-muted-foreground">Member since March 2024 · Silver Snacker</p>
+          <h1 className="mt-2 font-display text-5xl md:text-6xl text-forest-deep">Hey, {user.name.split(" ")[0]} 👋</h1>
+          <p className="mt-2 text-muted-foreground">{user.email} · Silver Snacker</p>
         </div>
-        <button className="rounded-full border-2 border-border px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 hover:border-terracotta hover:text-terracotta transition">
+        <button
+          onClick={() => { signOut(); toast("Signed out"); navigate({ to: "/", replace: true }); }}
+          className="rounded-full border-2 border-border px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 hover:border-terracotta hover:text-terracotta transition"
+        >
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       </div>
+
 
       <div className="mt-10 grid lg:grid-cols-[260px_1fr] gap-8">
         <aside className="rounded-2xl bg-card border border-border p-2 h-fit">
