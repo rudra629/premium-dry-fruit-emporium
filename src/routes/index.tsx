@@ -76,7 +76,7 @@ function Home() {
       <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
         <div className="flex flex-col items-center gap-6">
           <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2024 · India</span>
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2025 · India</span>
           <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
         </div>
       </div>
