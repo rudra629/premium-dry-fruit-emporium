@@ -19,11 +19,20 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
     ? "w-[420px] md:w-[520px] -bottom-16 md:-bottom-20 -left-12 md:-left-28"
     : "w-[260px] -bottom-10 -left-6";
   return (
-    <img
-      src={fruitCollage}
-      alt="Assorted dry fruits and nuts"
-      className={`pointer-events-none absolute z-0 drop-shadow-[0_18px_40px_rgba(0,0,0,0.6)] ${cls}`}
-    />
+    <div className={`pointer-events-none absolute z-0 animate-collage-wave ${cls}`}>
+      {/* soft amber halo, like the crunch-mode button glow */}
+      <div
+        aria-hidden
+        className="absolute inset-[12%] rounded-[45%] blur-3xl opacity-60 animate-collage-glow"
+        style={{ background: "radial-gradient(circle at 35% 40%, rgba(255,178,107,0.35), rgba(255,90,60,0.16) 45%, transparent 72%)" }}
+      />
+      <img
+        src={fruitCollage}
+        alt="Assorted dry fruits and nuts"
+        className="relative w-full opacity-[0.38] saturate-[0.65] contrast-[0.95] blur-[0.6px] drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
+        style={{ maskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)" }}
+      />
+    </div>
   );
 }
 
