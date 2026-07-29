@@ -21,7 +21,7 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user, signIn, signUp, signInWithGoogle, signOut } = useAuth();
-  const { add } = useCart();
+  const { addDirect: addCart } = useCart();
   const { addDirect } = useWishlist();
   const navigate = useNavigate();
   const search = Route.useSearch();
@@ -29,7 +29,7 @@ function Auth() {
   const finish = () => {
     const pending = takePendingAction();
     if (pending?.type === "cart") {
-      add(pending.item);
+      addCart(pending.item);
       toast.success(`${pending.item.name} added to your cart`);
     } else if (pending?.type === "wishlist") {
       addDirect(pending.slug);
