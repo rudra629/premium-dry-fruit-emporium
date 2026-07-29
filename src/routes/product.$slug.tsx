@@ -4,6 +4,8 @@ import { Star, Minus, Plus, ShieldCheck, Truck, Leaf, Heart, Share2, Check, Chev
 import { getProduct, products, type Product, type ProductSlide } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, MAX_PER_ITEM } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
+
 import { flyToCart } from "@/lib/fly-to-cart";
 
 export const Route = createFileRoute("/product/$slug")({
@@ -49,6 +51,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const { add } = useCart();
+  const wishlist = useWishlist();
+
   const heroImgRef = useRef<HTMLImageElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
@@ -214,7 +218,8 @@ function ProductPage() {
               </div>
               <button
                 onClick={() => {
-                  add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
+                  const ok = add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
+                  if (!ok) return;
                   setAdded(true);
                   flyToCart(heroImgRef.current, product.image);
                   setTimeout(() => setAdded(false), 1800);
@@ -223,7 +228,14 @@ function ProductPage() {
               >
                 {added ? (<><Check className="w-4 h-4" /> Added to bag</>) : (<>Add to bag · ₹{weight.price * qty}</>)}
               </button>
-              <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-terracotta hover:text-terracotta transition"><Heart className="w-5 h-5" /></button>
+              <button
+                onClick={() => wishlist.toggle(product.slug)}
+                aria-label="Add to wishlist"
+                className={`w-12 h-12 grid place-items-center rounded-full border-2 transition ${wishlist.has(product.slug) ? "border-terracotta text-terracotta" : "border-border hover:border-terracotta hover:text-terracotta"}`}
+              >
+                <Heart className={`w-5 h-5 ${wishlist.has(product.slug) ? "fill-current" : ""}`} />
+              </button>
+
               <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-forest-deep transition"><Share2 className="w-5 h-5" /></button>
             </div>
 

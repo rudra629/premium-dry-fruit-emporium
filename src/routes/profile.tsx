@@ -1,9 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { User, Package, MapPin, Settings, Heart, LogOut, Edit3, Plus, Check, Clock, Truck, X, Star } from "lucide-react";
 import { toast } from "sonner";
 import { products } from "@/lib/products";
 import { useSite } from "@/lib/site-store";
+import { useAuth } from "@/lib/auth-store";
+import { useWishlist } from "@/lib/wishlist-store";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "My Account — Grams" }, { name: "description", content: "Manage your Grams account, orders, addresses and preferences." }] }),
@@ -15,6 +18,13 @@ type Tab = "overview" | "orders" | "addresses" | "wishlist" | "settings";
 
 function Profile() {
   const [tab, setTab] = useState<Tab>("overview");
+  const { user, ready, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (ready && !user) navigate({ to: "/auth", search: { redirect: "/profile" }, replace: true });
+  }, [ready, user, navigate]);
+
   const tabs: { id: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: "overview", label: "Overview", icon: User },
     { id: "orders", label: "My Orders", icon: Package },
@@ -23,18 +33,24 @@ function Profile() {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
+  if (!user) return <div className="container-x py-24 text-center text-muted-foreground">Redirecting to sign in…</div>;
+
   return (
     <div className="container-x py-12">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <p className="text-xs tracking-[0.3em] uppercase text-gold">My Account</p>
-          <h1 className="mt-2 font-display text-5xl md:text-6xl text-forest-deep">Hey, Aanya 👋</h1>
-          <p className="mt-2 text-muted-foreground">Member since March 2024 · Silver Snacker</p>
+          <h1 className="mt-2 font-display text-5xl md:text-6xl text-forest-deep">Hey, {user.name.split(" ")[0]} 👋</h1>
+          <p className="mt-2 text-muted-foreground">{user.email} · Silver Snacker</p>
         </div>
-        <button className="rounded-full border-2 border-border px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 hover:border-terracotta hover:text-terracotta transition">
+        <button
+          onClick={() => { signOut(); toast("Signed out"); navigate({ to: "/", replace: true }); }}
+          className="rounded-full border-2 border-border px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 hover:border-terracotta hover:text-terracotta transition"
+        >
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       </div>
+
 
       <div className="mt-10 grid lg:grid-cols-[260px_1fr] gap-8">
         <aside className="rounded-2xl bg-card border border-border p-2 h-fit">
@@ -252,7 +268,19 @@ function Addresses() {
 }
 
 function Wishlist() {
-  const items = [products[3], products[6], products[8]];
+  const { slugs, remove } = useWishlist();
+  const items = slugs.map((s) => products.find((p) => p.slug === s)).filter(Boolean) as typeof products;
+
+  if (items.length === 0)
+    return (
+      <div className="rounded-2xl border border-dashed border-border p-12 text-center">
+        <Heart className="w-8 h-8 mx-auto text-muted-foreground" />
+        <p className="mt-3 font-display text-2xl text-forest-deep">Your wishlist is empty</p>
+        <p className="mt-1 text-sm text-muted-foreground">Tap the heart on any product to save it here.</p>
+        <Link to="/shop" className="mt-6 inline-block rounded-full bg-forest-deep text-cream px-6 py-3 text-sm font-semibold">Browse the shelf</Link>
+      </div>
+    );
+
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((p) => (
@@ -263,7 +291,7 @@ function Wishlist() {
             <p className="text-sm text-muted-foreground">₹{p.price}</p>
             <div className="mt-4 flex gap-2">
               <Link to="/product/$slug" params={{ slug: p.slug }} className="rounded-full bg-forest-deep text-cream px-4 py-2 text-xs font-semibold">View</Link>
-              <button className="rounded-full border border-border px-4 py-2 text-xs font-semibold">Remove</button>
+              <button onClick={() => remove(p.slug)} className="rounded-full border border-border px-4 py-2 text-xs font-semibold">Remove</button>
             </div>
           </div>
         </div>
@@ -271,6 +299,7 @@ function Wishlist() {
     </div>
   );
 }
+
 
 function SettingsPanel() {
   return (

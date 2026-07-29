@@ -15,6 +15,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CartProvider } from "@/lib/cart-store";
+import { AuthProvider } from "@/lib/auth-store";
+import { WishlistProvider } from "@/lib/wishlist-store";
+
 import { SiteProvider } from "@/lib/site-store";
 import { Toaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/site/ModeToggle";
@@ -121,22 +124,26 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SiteProvider>
-        <CartProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">
-              <PageTransition>
-                <Outlet />
-              </PageTransition>
-            </main>
-            <Footer />
-          </div>
-          <ModeToggle />
-          <HealthChat />
-          <Toaster position="top-center" richColors />
-
-        </CartProvider>
+        <AuthProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  <PageTransition>
+                    <Outlet />
+                  </PageTransition>
+                </main>
+                <Footer />
+              </div>
+              <ModeToggle />
+              <HealthChat />
+              <Toaster position="top-center" richColors />
+            </CartProvider>
+          </WishlistProvider>
+        </AuthProvider>
       </SiteProvider>
+
     </QueryClientProvider>
   );
 }

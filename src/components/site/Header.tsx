@@ -2,6 +2,8 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart-store";
+import { useAuth } from "@/lib/auth-store";
+
 import { cn } from "@/lib/utils";
 import gramsLogo from "@/assets/grams-logo.png.asset.json";
 
@@ -28,6 +30,8 @@ export function AnnouncementBar() {
 export function Header() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { user } = useAuth();
+
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const cartRef = useRef<HTMLAnchorElement>(null);
 
@@ -77,9 +81,10 @@ export function Header() {
             <Link to="/shop" className="p-2 rounded-full hover:bg-muted transition" aria-label="Search">
               <Search className="w-5 h-5" />
             </Link>
-            <Link to="/profile" className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label="Profile">
+            <Link to={user ? "/profile" : "/auth"} className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label={user ? "Profile" : "Sign in"}>
               <User className="w-5 h-5" />
             </Link>
+
             <Link ref={cartRef} to="/cart" data-cart-icon className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
@@ -111,9 +116,10 @@ export function Header() {
                   {n.label}
                 </Link>
               ))}
-              <Link to="/profile" onClick={() => setOpen(false)} className={`py-3 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`} style={{ transitionDelay: open ? `${80 + nav.length * 40}ms` : "0ms" }}>
-                My Account
+              <Link to={user ? "/profile" : "/auth"} onClick={() => setOpen(false)} className={`py-3 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`} style={{ transitionDelay: open ? `${80 + nav.length * 40}ms` : "0ms" }}>
+                {user ? "My Account" : "Sign in"}
               </Link>
+
             </div>
           </div>
         </div>

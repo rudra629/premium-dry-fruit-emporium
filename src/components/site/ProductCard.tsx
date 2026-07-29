@@ -1,15 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import { useRef, useCallback } from "react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
 import { flyToCart } from "@/lib/fly-to-cart";
 import { Price } from "@/components/site/Price";
 
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const wishlist = useWishlist();
+  const wished = wishlist.has(product.slug);
   const imgRef = useRef<HTMLImageElement>(null);
+
   const zoomRef = useRef<HTMLImageElement>(null);
   const rafRef = useRef<number | null>(null);
   const discount = product.compareAt
@@ -77,6 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
 
 
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+
           {product.bestseller && (
             <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-forest-deep text-gold px-2.5 py-1 rounded-full">
               Bestseller
@@ -93,7 +98,17 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
+
+        <button
+          type="button"
+          aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); wishlist.toggle(product.slug); }}
+          className={`absolute top-3 right-3 z-20 grid place-items-center w-9 h-9 rounded-full border transition duration-300 hover:scale-110 ${wished ? "bg-terracotta/90 border-terracotta text-cream" : "bg-black/40 border-white/15 text-cream/70 hover:text-terracotta hover:border-terracotta/60"}`}
+        >
+          <Heart className={`w-4 h-4 ${wished ? "fill-current" : ""}`} />
+        </button>
       </Link>
+
 
       <div className="p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
@@ -118,7 +133,7 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              add({
+              const ok = add({
                 slug: product.slug,
                 name: product.name,
                 image: product.image,
@@ -126,7 +141,8 @@ export function ProductCard({ product }: { product: Product }) {
                 price: product.weights[0].price,
                 qty: 1,
               });
-              flyToCart(imgRef.current, product.image);
+              if (ok) flyToCart(imgRef.current, product.image);
+
             }}
             className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-gold text-gold text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
           >

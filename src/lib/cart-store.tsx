@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { useAuth, setPendingAction } from "@/lib/auth-store";
+
 
 export const MAX_PER_ITEM = 30;
 
@@ -15,7 +18,9 @@ export type CartItem = {
 
 type CartCtx = {
   items: CartItem[];
-  add: (i: CartItem) => void;
+  add: (i: CartItem) => boolean;
+  addDirect: (i: CartItem) => void;
+
   remove: (slug: string, weight: string) => void;
   setQty: (slug: string, weight: string, qty: number) => void;
   clear: () => void;
@@ -27,6 +32,10 @@ const Ctx = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const href = useRouterState({ select: (s) => s.location.href });
+
 
   useEffect(() => {
     try {
@@ -41,7 +50,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [items]);
 
-  const add: CartCtx["add"] = (i) =>
+  const addDirect: CartCtx["addDirect"] = (i) => {
+
     setItems((prev) => {
       const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
       if (idx > -1) {
@@ -61,6 +71,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (i.qty > MAX_PER_ITEM) toast.error(`Capped at ${MAX_PER_ITEM} per product`);
       return [...prev, { ...i, qty: startQty }];
     });
+  };
+
+  const add: CartCtx["add"] = (i) => {
+    if (!user) {
+      setPendingAction({ type: "cart", item: i });
+      toast("Sign in to add items to your cart");
+      navigate({ to: "/auth", search: { redirect: href } });
+      return false;
+    }
+    addDirect(i);
+    return true;
+  };
+
+
 
   const remove: CartCtx["remove"] = (slug, weight) =>
     setItems((prev) => prev.filter((p) => !(p.slug === slug && p.weight === weight)));
@@ -79,7 +103,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const count = items.reduce((n, i) => n + i.qty, 0);
   const total = items.reduce((n, i) => n + i.qty * i.price, 0);
 
-  return <Ctx.Provider value={{ items, add, remove, setQty, clear, count, total }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ items, add, addDirect, remove, setQty, clear, count, total }}>{children}</Ctx.Provider>;
 }
 
 export function useCart() {
