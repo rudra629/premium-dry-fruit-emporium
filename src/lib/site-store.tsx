@@ -89,6 +89,10 @@ export type Coupon = {
 
 export type SiteStat = { n: string; l: string };
 
+export const VALUE_PROP_ICONS = ["leaf", "shield", "truck", "sparkles", "award", "heart"] as const;
+export type ValuePropIcon = (typeof VALUE_PROP_ICONS)[number];
+export type ValueProp = { icon: ValuePropIcon; title: string; desc: string };
+
 export type MonthPick = {
   key: "Nuts" | "Seeds" | "Dried Fruits";
   slug: string;
