@@ -21,6 +21,12 @@ export const Route = createFileRoute("/refund-policy")({
       updated="July 2026"
       sections={[
         {
+          h: "Policy summary",
+          body: [
+            "At Grams, due to the perishable nature of our dry fruits, all sales are strictly non-refundable and non-returnable once dispatched. Orders cannot be cancelled or refunded for change of mind. We only offer replacements if an item arrives severely damaged or incorrect, provided you notify us within 24–48 hours of delivery with an unboxing video and clear photos. Unopened original packaging is required.",
+          ],
+        },
+        {
           h: "Freshness guarantee",
           body: [
             "Every Grams pouch is nitrogen-flushed and packed in small batches. If your product arrives stale, rancid, damaged or past its best-before date, we will replace it or refund you in full — no shipping the product back required.",

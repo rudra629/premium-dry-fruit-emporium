@@ -21,6 +21,12 @@ export const Route = createFileRoute("/privacy")({
       updated="July 2026"
       sections={[
         {
+          h: "Policy summary",
+          body: [
+            "Grams respects your privacy and collects only necessary information—such as your name, delivery address, phone number, email, and payment details—strictly to process orders, fulfill shipments, and provide customer support. We do not sell your data, and share it only with trusted logistics partners required to deliver your packages.",
+          ],
+        },
+        {
           h: "What we collect",
           body: [
             "Account details you give us: name, email, phone number and delivery addresses.",
