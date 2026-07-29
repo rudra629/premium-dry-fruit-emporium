@@ -81,6 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
 
 
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+
           {product.bestseller && (
             <span className="text-[10px] tracking-[0.18em] uppercase font-semibold bg-forest-deep text-gold px-2.5 py-1 rounded-full">
               Bestseller
