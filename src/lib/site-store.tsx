@@ -411,6 +411,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>(DEFAULT_COUPONS);
   const [stats, setStatsState] = useState<SiteStat[]>(DEFAULT_STATS);
+  const [valueProps, setValuePropsState] = useState<ValueProp[]>(DEFAULT_VALUE_PROPS);
   const [monthPicks, setMonthPicksState] = useState<MonthPick[]>(DEFAULT_MONTH_PICKS);
   const [contact, setContactState] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [copy, setCopyState] = useState<CopyMap>(DEFAULT_COPY);
