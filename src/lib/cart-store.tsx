@@ -18,7 +18,7 @@ export type CartItem = {
 
 type CartCtx = {
   items: CartItem[];
-  add: (i: CartItem) => void;
+  add: (i: CartItem) => boolean;
   remove: (slug: string, weight: string) => void;
   setQty: (slug: string, weight: string, qty: number) => void;
   clear: () => void;
