@@ -554,7 +554,9 @@ function CustomersTable() {
 }
 
 function ContentManager() {
-  const { copy, setCopy, stats, setStats, monthPicks, setMonthPicks, contact, setContact, allProducts } = useSite();
+  const { copy, setCopy, stats, setStats, monthPicks, setMonthPicks, contact, setContact, allProducts, valueProps, setValueProps } = useSite();
+  const [vp, setVp] = useState<ValueProp[]>(valueProps);
+  useEffect(() => { setVp(valueProps); }, [valueProps]);
   const [c, setC] = useState(copy);
   const [s, setS] = useState<SiteStat[]>(stats);
   const [m, setM] = useState<MonthPick[]>(monthPicks);
