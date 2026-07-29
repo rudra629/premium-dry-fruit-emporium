@@ -1,14 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
+import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote, Award, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
-import { useSite } from "@/lib/site-store";
+import { useSite, type ValuePropIcon } from "@/lib/site-store";
 import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
 import fruitCollage from "@/assets/hero-fruit-collage.png";
+
+const VALUE_PROP_ICON_MAP: Record<ValuePropIcon, typeof Leaf> = {
+  leaf: Leaf,
+  shield: ShieldCheck,
+  truck: Truck,
+  sparkles: Sparkles,
+  award: Award,
+  heart: Heart,
+};
 
 const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
   .filter((i) => i < products.length)
