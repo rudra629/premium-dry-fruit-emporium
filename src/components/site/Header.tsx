@@ -116,9 +116,10 @@ export function Header() {
                   {n.label}
                 </Link>
               ))}
-              <Link to="/profile" onClick={() => setOpen(false)} className={`py-3 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`} style={{ transitionDelay: open ? `${80 + nav.length * 40}ms` : "0ms" }}>
-                My Account
+              <Link to={user ? "/profile" : "/auth"} onClick={() => setOpen(false)} className={`py-3 text-base font-medium transition-all duration-300 ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`} style={{ transitionDelay: open ? `${80 + nav.length * 40}ms` : "0ms" }}>
+                {user ? "My Account" : "Sign in"}
               </Link>
+
             </div>
           </div>
         </div>
