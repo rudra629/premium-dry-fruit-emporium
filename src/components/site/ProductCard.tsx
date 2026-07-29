@@ -98,7 +98,17 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
+
+        <button
+          type="button"
+          aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); wishlist.toggle(product.slug); }}
+          className={`absolute top-3 right-3 z-20 grid place-items-center w-9 h-9 rounded-full border transition duration-300 hover:scale-110 ${wished ? "bg-terracotta/90 border-terracotta text-cream" : "bg-black/40 border-white/15 text-cream/70 hover:text-terracotta hover:border-terracotta/60"}`}
+        >
+          <Heart className={`w-4 h-4 ${wished ? "fill-current" : ""}`} />
+        </button>
       </Link>
+
 
       <div className="p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
