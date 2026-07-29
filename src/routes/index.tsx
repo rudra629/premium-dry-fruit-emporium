@@ -38,8 +38,8 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
       <img
         src={fruitCollage}
         alt="Assorted dry fruits and nuts"
-        className="relative w-full opacity-[0.38] saturate-[0.65] contrast-[0.95] blur-[0.6px] drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
-        style={{ maskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)" }}
+        className="relative w-full opacity-[0.85] saturate-[1.05] contrast-[1.02] brightness-110 drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
+        style={{ maskImage: "radial-gradient(ellipse at 45% 55%, #000 55%, rgba(0,0,0,0.7) 78%, transparent 96%)", WebkitMaskImage: "radial-gradient(ellipse at 45% 55%, #000 55%, rgba(0,0,0,0.7) 78%, transparent 96%)" }}
       />
     </div>
   );
