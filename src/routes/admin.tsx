@@ -573,6 +573,34 @@ function ContentManager() {
 
   return (
     <div className="space-y-6 max-w-4xl">
+      {/* Quality / value prop cards */}
+      <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
+        <p className="font-display text-2xl md:text-3xl text-forest-deep">Home quality cards</p>
+        <p className="text-sm text-muted-foreground -mt-3">The four feature cards under the hero (Farm to pouch, Small-batch craft, etc).</p>
+        {vp.map((v, i) => (
+          <div key={i} className="rounded-xl border border-border p-4 space-y-3">
+            <div className="grid md:grid-cols-[150px_1fr_auto] gap-3">
+              <Field label="Icon">
+                <select value={v.icon} onChange={(e) => setVp(vp.map((x, ix) => ix === i ? { ...x, icon: e.target.value as ValuePropIcon } : x))} className={inputCls}>
+                  {VALUE_PROP_ICONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
+                </select>
+              </Field>
+              <Field label="Title"><input value={v.title} onChange={(e) => setVp(vp.map((x, ix) => ix === i ? { ...x, title: e.target.value } : x))} className={inputCls} placeholder="Farm to pouch" /></Field>
+              <div className="flex items-end">
+                <button onClick={() => setVp(vp.filter((_, ix) => ix !== i))} className="w-11 h-11 grid place-items-center border border-border rounded-xl hover:text-terracotta"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            </div>
+            <Field label="Description" full>
+              <textarea rows={2} value={v.desc} onChange={(e) => setVp(vp.map((x, ix) => ix === i ? { ...x, desc: e.target.value } : x))} className={inputCls} />
+            </Field>
+          </div>
+        ))}
+        <div className="flex gap-2">
+          <button onClick={() => setVp([...vp, { icon: "leaf", title: "", desc: "" }])} className="rounded-xl bg-muted border border-border px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-1"><Plus className="w-4 h-4" /> Add card</button>
+          <button onClick={() => { setValueProps(vp.filter((x) => x.title && x.desc)); toast.success("Quality cards updated"); }} className="rounded-full bg-forest-deep text-cream px-6 py-2.5 text-sm font-semibold">Save cards</button>
+        </div>
+      </div>
+
       {/* Stats strip */}
       <div className="rounded-2xl bg-card border border-border p-5 md:p-8 space-y-4">
         <p className="font-display text-2xl md:text-3xl text-forest-deep">Home stats strip</p>
