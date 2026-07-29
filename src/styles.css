@@ -645,3 +645,23 @@ header .bg-forest-deep,
   from { opacity: 0; transform: translateY(16px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* Hero collage — wavy drift + glow pulse */
+@keyframes collage-wave {
+  0%   { transform: translate3d(0,0,0) rotate(-1.2deg) scale(1); }
+  25%  { transform: translate3d(10px,-14px,0) rotate(0.6deg) scale(1.02); }
+  50%  { transform: translate3d(-6px,-22px,0) rotate(1.4deg) scale(1.035); }
+  75%  { transform: translate3d(-12px,-9px,0) rotate(0.2deg) scale(1.015); }
+  100% { transform: translate3d(0,0,0) rotate(-1.2deg) scale(1); }
+}
+@utility animate-collage-wave { animation: collage-wave 14s cubic-bezier(.45,.05,.55,.95) infinite; will-change: transform; }
+
+@keyframes collage-glow {
+  0%,100% { opacity: .35; transform: scale(1); }
+  50%     { opacity: .75; transform: scale(1.12); }
+}
+@utility animate-collage-glow { animation: collage-glow 7s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-collage-wave, .animate-collage-glow { animation: none; }
+}
