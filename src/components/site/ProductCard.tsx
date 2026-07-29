@@ -133,7 +133,7 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              add({
+              const ok = add({
                 slug: product.slug,
                 name: product.name,
                 image: product.image,
@@ -141,7 +141,8 @@ export function ProductCard({ product }: { product: Product }) {
                 price: product.weights[0].price,
                 qty: 1,
               });
-              flyToCart(imgRef.current, product.image);
+              if (ok) flyToCart(imgRef.current, product.image);
+
             }}
             className="add-btn shrink-0 relative overflow-hidden rounded-full border-2 border-gold text-gold text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 animate-bouncy hover:animate-none"
           >
