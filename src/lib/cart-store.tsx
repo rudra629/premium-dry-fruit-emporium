@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { useAuth, setPendingAction } from "@/lib/auth-store";
+
 
 export const MAX_PER_ITEM = 30;
 
