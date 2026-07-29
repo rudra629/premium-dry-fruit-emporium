@@ -21,6 +21,12 @@ export const Route = createFileRoute("/terms")({
       updated="July 2026"
       sections={[
         {
+          h: "Policy summary",
+          body: [
+            "Welcome to Grams. By using our website and purchasing our dry fruit products, you agree to these terms. Because our products are natural agricultural goods, minor batch-to-batch variations in size, color, or taste may occur. All prices include applicable taxes where required and are subject to change without notice. Grams is not liable for delivery delays caused by third-party courier partners or improper customer storage post-delivery.",
+          ],
+        },
+        {
           h: "Using this store",
           body: [
             "You must be at least 18 years old, or shopping with the consent of a parent or guardian, to place an order.",
