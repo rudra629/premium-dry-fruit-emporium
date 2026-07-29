@@ -30,6 +30,10 @@ const Ctx = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const href = useRouterState({ select: (s) => s.location.href });
+
 
   useEffect(() => {
     try {
