@@ -7,12 +7,17 @@ import {
 import { toast } from "sonner";
 import { products as baseProducts, type Product } from "@/lib/products";
 import { useSite, COPY_FIELDS, VALUE_PROP_ICONS, type Order, type GiftCategory, type SiteStat, type MonthPick, type ContactInfo, type Coupon, type ValueProp, type ValuePropIcon } from "@/lib/site-store";
-
+import { AdminAuthGate } from "@/components/site/AdminAuthGate";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Grams" }, { name: "robots", content: "noindex" }] }),
-  component: Admin,
+  component: () => (
+    <AdminAuthGate>
+      <Admin />
+    </AdminAuthGate>
+  ),
 });
+
 
 type Section = "dashboard" | "products" | "add" | "orders" | "customers" | "careers" | "gifting" | "reviews" | "coupons" | "content" | "settings";
 
