@@ -77,9 +77,10 @@ export function Header() {
             <Link to="/shop" className="p-2 rounded-full hover:bg-muted transition" aria-label="Search">
               <Search className="w-5 h-5" />
             </Link>
-            <Link to="/profile" className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label="Profile">
+            <Link to={user ? "/profile" : "/auth"} className="p-2 rounded-full hover:bg-muted transition hidden sm:grid" aria-label={user ? "Profile" : "Sign in"}>
               <User className="w-5 h-5" />
             </Link>
+
             <Link ref={cartRef} to="/cart" data-cart-icon className="relative p-2 rounded-full hover:bg-muted transition" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
