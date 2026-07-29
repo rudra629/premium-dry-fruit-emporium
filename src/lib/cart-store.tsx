@@ -51,13 +51,42 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const add: CartCtx["add"] = (i) => {
+  const addDirect: CartCtx["addDirect"] = (i) => {
+    setItems((prev) => {
+      const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
+      if (idx > -1) {
+        const current = prev[idx].qty;
+        if (current >= MAX_PER_ITEM) {
+          toast.error(`Max ${MAX_PER_ITEM} per product`);
+          return prev;
+        }
+        const nextQty = Math.min(MAX_PER_ITEM, current + i.qty);
+        if (nextQty === current) return prev;
+        if (current + i.qty > MAX_PER_ITEM) toast.error(`Capped at ${MAX_PER_ITEM} per product`);
+        const copy = [...prev];
+        copy[idx] = { ...copy[idx], qty: nextQty };
+        return copy;
+      }
+      const startQty = Math.min(MAX_PER_ITEM, i.qty);
+      if (i.qty > MAX_PER_ITEM) toast.error(`Capped at ${MAX_PER_ITEM} per product`);
+      return [...prev, { ...i, qty: startQty }];
+    });
+  };
+
+  const add: CartCtx["add"] = (i) => {
     if (!user) {
       setPendingAction({ type: "cart", item: i });
       toast("Sign in to add items to your cart");
       navigate({ to: "/auth", search: { redirect: href } });
       return false;
     }
+    addDirect(i);
+    return true;
+  };
+
+  const legacyUnused = () => {
     setItems((prev) => {
+
 
       const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
       if (idx > -1) {
