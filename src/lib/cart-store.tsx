@@ -50,8 +50,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [items]);
 
-  const add: CartCtx["add"] = (i) => {
   const addDirect: CartCtx["addDirect"] = (i) => {
+
     setItems((prev) => {
       const idx = prev.findIndex((p) => p.slug === i.slug && p.weight === i.weight);
       if (idx > -1) {
