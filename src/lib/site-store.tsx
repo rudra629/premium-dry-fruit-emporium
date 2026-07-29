@@ -146,6 +146,8 @@ type SiteCtx = {
   validateCoupon: (code: string, subtotal: number) => { ok: true; coupon: Coupon; discount: number } | { ok: false; reason: string };
   stats: SiteStat[];
   setStats: (s: SiteStat[]) => void;
+  valueProps: ValueProp[];
+  setValueProps: (v: ValueProp[]) => void;
   monthPicks: MonthPick[];
   setMonthPicks: (m: MonthPick[]) => void;
   contact: ContactInfo;
