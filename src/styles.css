@@ -240,15 +240,24 @@
 @utility animate-fade-up { animation: fade-up .5s ease-out both; }
 
 @keyframes hue-cycle {
-  0%   { color: #ff5a5a; }
-  16%  { color: #ffa64d; }
-  33%  { color: #ffe14d; }
-  50%  { color: #6bff8a; }
-  66%  { color: #5ad3ff; }
-  83%  { color: #a476ff; }
-  100% { color: #ff5a5a; }
+  0%   { color: #ff6b6b; text-shadow: 0 0 22px rgba(255,107,107,.55), 0 0 60px rgba(255,107,107,.28), 0 10px 34px rgba(0,0,0,.5); }
+  16%  { color: #ffb04d; text-shadow: 0 0 22px rgba(255,176,77,.55), 0 0 60px rgba(255,176,77,.28), 0 10px 34px rgba(0,0,0,.5); }
+  33%  { color: #ffe14d; text-shadow: 0 0 22px rgba(255,225,77,.55), 0 0 60px rgba(255,225,77,.28), 0 10px 34px rgba(0,0,0,.5); }
+  50%  { color: #6bff8a; text-shadow: 0 0 22px rgba(107,255,138,.55), 0 0 60px rgba(107,255,138,.28), 0 10px 34px rgba(0,0,0,.5); }
+  66%  { color: #5ad3ff; text-shadow: 0 0 22px rgba(90,211,255,.55), 0 0 60px rgba(90,211,255,.28), 0 10px 34px rgba(0,0,0,.5); }
+  83%  { color: #b58cff; text-shadow: 0 0 22px rgba(181,140,255,.55), 0 0 60px rgba(181,140,255,.28), 0 10px 34px rgba(0,0,0,.5); }
+  100% { color: #ff6b6b; text-shadow: 0 0 22px rgba(255,107,107,.55), 0 0 60px rgba(255,107,107,.28), 0 10px 34px rgba(0,0,0,.5); }
 }
 @utility animate-hue-cycle { animation: hue-cycle 8s linear infinite; }
+
+@keyframes letter-wave {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-10%) rotate(-2deg); }
+  50%      { transform: translateY(4%) rotate(1.5deg); }
+  75%      { transform: translateY(-6%) rotate(-1deg); }
+}
+@utility animate-letter-wave { animation: letter-wave 3.6s ease-in-out infinite; will-change: transform; }
+
 
 @keyframes hero-swap {
   0%   { opacity: 0; transform: scale(0.94); }
