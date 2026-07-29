@@ -1,15 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import { useRef, useCallback } from "react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
 import { flyToCart } from "@/lib/fly-to-cart";
 import { Price } from "@/components/site/Price";
 
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const wishlist = useWishlist();
+  const wished = wishlist.has(product.slug);
   const imgRef = useRef<HTMLImageElement>(null);
+
   const zoomRef = useRef<HTMLImageElement>(null);
   const rafRef = useRef<number | null>(null);
   const discount = product.compareAt
