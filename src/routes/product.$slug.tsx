@@ -214,7 +214,8 @@ function ProductPage() {
               </div>
               <button
                 onClick={() => {
-                  add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
+                  const ok = add({ slug: product.slug, name: product.name, image: product.image, weight: weight.label, price: weight.price, qty });
+                  if (!ok) return;
                   setAdded(true);
                   flyToCart(heroImgRef.current, product.image);
                   setTimeout(() => setAdded(false), 1800);
@@ -223,7 +224,14 @@ function ProductPage() {
               >
                 {added ? (<><Check className="w-4 h-4" /> Added to bag</>) : (<>Add to bag · ₹{weight.price * qty}</>)}
               </button>
-              <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-terracotta hover:text-terracotta transition"><Heart className="w-5 h-5" /></button>
+              <button
+                onClick={() => wishlist.toggle(product.slug)}
+                aria-label="Add to wishlist"
+                className={`w-12 h-12 grid place-items-center rounded-full border-2 transition ${wishlist.has(product.slug) ? "border-terracotta text-terracotta" : "border-border hover:border-terracotta hover:text-terracotta"}`}
+              >
+                <Heart className={`w-5 h-5 ${wishlist.has(product.slug) ? "fill-current" : ""}`} />
+              </button>
+
               <button className="w-12 h-12 grid place-items-center rounded-full border-2 border-border hover:border-forest-deep transition"><Share2 className="w-5 h-5" /></button>
             </div>
 
