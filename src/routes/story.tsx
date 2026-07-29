@@ -8,10 +8,10 @@ import { products } from "@/lib/products";
 export const Route = createFileRoute("/story")({
   head: () => ({
     meta: [
-      { title: "Our Story — Grams" },
-      { name: "description", content: "How Grams went from one farmer's walnut orchard to your pantry. Small-batch, honest, obsessive." },
+      { title: "Our Story — Beyond Snacks, It's a Lifestyle | Grams" },
+      { name: "description", content: "Grams was built on one belief: premium nutrition should be accessible to everyone. Every gram of nutrition matters." },
       { property: "og:title", content: "Our Story — Grams" },
-      { property: "og:description", content: "Farm-to-pouch, no middlemen, no BS." },
+      { property: "og:description", content: "Because health isn't an expense. It's the best investment you'll ever make." },
       { property: "og:image", content: story1 },
     ],
   }),
