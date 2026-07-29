@@ -103,7 +103,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const count = items.reduce((n, i) => n + i.qty, 0);
   const total = items.reduce((n, i) => n + i.qty * i.price, 0);
 
-  return <Ctx.Provider value={{ items, add, remove, setQty, clear, count, total }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ items, add, addDirect, remove, setQty, clear, count, total }}>{children}</Ctx.Provider>;
 }
 
 export function useCart() {
