@@ -30,6 +30,8 @@ export function AnnouncementBar() {
 export function Header() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { user } = useAuth();
+
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const cartRef = useRef<HTMLAnchorElement>(null);
 
