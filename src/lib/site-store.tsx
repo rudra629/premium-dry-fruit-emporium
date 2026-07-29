@@ -428,6 +428,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setReviews(load("grams:reviews", [] as Review[]));
     setCoupons(load("grams:coupons", DEFAULT_COUPONS));
     setStatsState(load("grams:stats", DEFAULT_STATS));
+    setValuePropsState(load("grams:value-props", DEFAULT_VALUE_PROPS));
     setMonthPicksState(load("grams:month-picks", DEFAULT_MONTH_PICKS));
     setContactState(load("grams:contact", DEFAULT_CONTACT));
     setCopyState({ ...DEFAULT_COPY, ...load("grams:copy", {} as CopyMap) });
