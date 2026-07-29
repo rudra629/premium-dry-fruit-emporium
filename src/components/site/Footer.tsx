@@ -51,7 +51,7 @@ export function Footer() {
           <FooterCol title="Support" links={[
             { to: "/contact", label: "Help Center" },
             { to: "/contact", label: "Shipping" },
-            { to: "/contact", label: "Returns" },
+            { to: "/refund-policy", label: "Refund Policy" },
             { to: "/contact", label: "FAQ" },
           ]} />
         </div>
@@ -63,10 +63,15 @@ export function Footer() {
             <a href="#" className="hover:text-gold transition"><Twitter className="w-4 h-4" /></a>
             <a href="#" className="hover:text-gold transition"><Youtube className="w-4 h-4" /></a>
           </div>
-          <div className="flex gap-4">
-            <a href="#" className="hover:text-cream">Privacy</a>
-            <a href="#" className="hover:text-cream">Terms</a>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/privacy" className="hover:text-gold transition">Privacy</Link>
+            <Link to="/terms" className="hover:text-gold transition">Terms</Link>
+            <Link to="/refund-policy" className="hover:text-gold transition">Refund Policy</Link>
           </div>
+        </div>
+
+        <div className="mt-6 pt-5 border-t border-cream/10 text-center text-[11px] tracking-[0.2em] uppercase text-cream/45">
+          Designed and developed by <span className="text-gold">Kelvora Infotech</span>
         </div>
       </div>
     </footer>

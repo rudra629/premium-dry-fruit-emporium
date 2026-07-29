@@ -89,6 +89,10 @@ export type Coupon = {
 
 export type SiteStat = { n: string; l: string };
 
+export const VALUE_PROP_ICONS = ["leaf", "shield", "truck", "sparkles", "award", "heart"] as const;
+export type ValuePropIcon = (typeof VALUE_PROP_ICONS)[number];
+export type ValueProp = { icon: ValuePropIcon; title: string; desc: string };
+
 export type MonthPick = {
   key: "Nuts" | "Seeds" | "Dried Fruits";
   slug: string;
@@ -142,6 +146,8 @@ type SiteCtx = {
   validateCoupon: (code: string, subtotal: number) => { ok: true; coupon: Coupon; discount: number } | { ok: false; reason: string };
   stats: SiteStat[];
   setStats: (s: SiteStat[]) => void;
+  valueProps: ValueProp[];
+  setValueProps: (v: ValueProp[]) => void;
   monthPicks: MonthPick[];
   setMonthPicks: (m: MonthPick[]) => void;
   contact: ContactInfo;
@@ -165,6 +171,13 @@ const DEFAULT_BANNER = [
 const DEFAULT_COUPONS: Coupon[] = [
   { id: "c1", code: "CRUNCH20", type: "percent", value: 20, minOrder: 999, maxDiscount: 500, used: 0, active: true, description: "20% off orders above ₹999" },
   { id: "c2", code: "FIRSTBITE", type: "flat", value: 150, minOrder: 599, used: 0, active: true, description: "₹150 off your first pantry haul" },
+];
+
+const DEFAULT_VALUE_PROPS: ValueProp[] = [
+  { icon: "leaf", title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
+  { icon: "shield", title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
+  { icon: "truck", title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
+  { icon: "sparkles", title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
 ];
 
 const DEFAULT_STATS: SiteStat[] = [
@@ -398,6 +411,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>(DEFAULT_COUPONS);
   const [stats, setStatsState] = useState<SiteStat[]>(DEFAULT_STATS);
+  const [valueProps, setValuePropsState] = useState<ValueProp[]>(DEFAULT_VALUE_PROPS);
   const [monthPicks, setMonthPicksState] = useState<MonthPick[]>(DEFAULT_MONTH_PICKS);
   const [contact, setContactState] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [copy, setCopyState] = useState<CopyMap>(DEFAULT_COPY);
@@ -414,6 +428,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setReviews(load("grams:reviews", [] as Review[]));
     setCoupons(load("grams:coupons", DEFAULT_COUPONS));
     setStatsState(load("grams:stats", DEFAULT_STATS));
+    setValuePropsState(load("grams:value-props", DEFAULT_VALUE_PROPS));
     setMonthPicksState(load("grams:month-picks", DEFAULT_MONTH_PICKS));
     setContactState(load("grams:contact", DEFAULT_CONTACT));
     setCopyState({ ...DEFAULT_COPY, ...load("grams:copy", {} as CopyMap) });
@@ -430,6 +445,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (hydrated) localStorage.setItem("grams:reviews", JSON.stringify(reviews)); }, [reviews, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:coupons", JSON.stringify(coupons)); }, [coupons, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:stats", JSON.stringify(stats)); }, [stats, hydrated]);
+  useEffect(() => { if (hydrated) localStorage.setItem("grams:value-props", JSON.stringify(valueProps)); }, [valueProps, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:month-picks", JSON.stringify(monthPicks)); }, [monthPicks, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:contact", JSON.stringify(contact)); }, [contact, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem("grams:copy", JSON.stringify(copy)); }, [copy, hydrated]);
@@ -491,6 +507,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     },
     stats,
     setStats: setStatsState,
+    valueProps,
+    setValueProps: setValuePropsState,
     monthPicks,
     setMonthPicks: setMonthPicksState,
     contact,

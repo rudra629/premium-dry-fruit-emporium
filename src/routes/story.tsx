@@ -8,10 +8,10 @@ import { products } from "@/lib/products";
 export const Route = createFileRoute("/story")({
   head: () => ({
     meta: [
-      { title: "Our Story — Grams" },
-      { name: "description", content: "How Grams went from one farmer's walnut orchard to your pantry. Small-batch, honest, obsessive." },
+      { title: "Our Story — Beyond Snacks, It's a Lifestyle | Grams" },
+      { name: "description", content: "Grams was built on one belief: premium nutrition should be accessible to everyone. Every gram of nutrition matters." },
       { property: "og:title", content: "Our Story — Grams" },
-      { property: "og:description", content: "Farm-to-pouch, no middlemen, no BS." },
+      { property: "og:description", content: "Because health isn't an expense. It's the best investment you'll ever make." },
       { property: "og:image", content: story1 },
     ],
   }),
@@ -25,12 +25,37 @@ function Story() {
         <img src={story1} alt="" className="absolute inset-0 w-full h-full object-cover opacity-45" />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/60 to-transparent" />
         <div className="container-x relative py-20">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold">Since 2021</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,9vw,8rem)] leading-[0.85] max-w-4xl">
-            One orchard,<br /><span className="italic text-gold">a thousand pouches.</span>
+          <p className="text-xs tracking-[0.3em] uppercase text-gold">Our Story</p>
+          <h1 className="mt-4 font-display text-[clamp(2.6rem,7.5vw,6.5rem)] leading-[0.9] max-w-4xl">
+            Beyond Snacks.<br /><span className="italic text-gold">It's a Lifestyle.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-cream/80">
-            Grams started in a shed in Ratnagiri with 12 kilos of walnuts, a vacuum sealer, and a stubborn belief that snacks shouldn't taste like the plastic they came in.
+          <p className="mt-6 max-w-2xl text-lg text-cream/80">
+            Every day, we invest in things that make life look better — a new phone, a better car, premium fashion, or the latest gadgets. Yet, the one investment that powers every moment of our lives — our health — is often overlooked.
+          </p>
+        </div>
+      </section>
+
+      {/* Narrative */}
+      <section className="container-x py-16 md:py-20">
+        <div className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed text-muted-foreground">
+          <p className="font-display text-3xl md:text-4xl text-forest-deep leading-tight">That's where Grams began.</p>
+          <p>
+            Grams was founded by a team with years of experience in the dry fruits and nuts industry, driven by a simple belief: premium nutrition should be accessible to everyone. We envisioned a brand that would inspire healthier choices without compromising on quality, freshness, or taste.
+          </p>
+          <p>
+            The name <span className="text-gold font-semibold">Grams</span> reflects our philosophy that every gram of nutrition matters. Small, mindful choices made every day create a healthier tomorrow.
+          </p>
+          <p>
+            From carefully selected farms to thoughtfully packed products, every step of our journey is guided by uncompromising quality, freshness, and transparency. We believe that healthy eating should never feel complicated — it should become a natural part of everyday life.
+          </p>
+          <p>
+            At Grams, we don't just sell dry fruits, nuts, and superfoods. We help people build healthier habits, fuel their ambitions, and invest in the one asset that stays with them forever — their body.
+          </p>
+          <p>
+            As we continue to grow, our vision remains clear: to become India's most trusted healthy snacking brand, empowering millions to make smarter food choices, one handful at a time.
+          </p>
+          <p className="font-display text-2xl md:text-3xl italic text-forest-deep">
+            Because health isn't an expense. It's the best investment you'll ever make.
           </p>
         </div>
       </section>

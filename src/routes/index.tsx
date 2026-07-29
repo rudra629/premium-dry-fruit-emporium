@@ -1,14 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote } from "lucide-react";
+import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote, Award, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
-import { useSite } from "@/lib/site-store";
+import { useSite, type ValuePropIcon } from "@/lib/site-store";
 import heroBg from "@/assets/hero-bg.jpg";
 import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
 import fruitCollage from "@/assets/hero-fruit-collage.png";
+
+const VALUE_PROP_ICON_MAP: Record<ValuePropIcon, typeof Leaf> = {
+  leaf: Leaf,
+  shield: ShieldCheck,
+  truck: Truck,
+  sparkles: Sparkles,
+  award: Award,
+  heart: Heart,
+};
 
 const heroRotation = [0, 3, 6, 5, 1, 2, 4, 7]
   .filter((i) => i < products.length)
@@ -19,11 +28,20 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
     ? "w-[420px] md:w-[520px] -bottom-16 md:-bottom-20 -left-12 md:-left-28"
     : "w-[260px] -bottom-10 -left-6";
   return (
-    <img
-      src={fruitCollage}
-      alt="Assorted dry fruits and nuts"
-      className={`pointer-events-none absolute z-0 drop-shadow-[0_18px_40px_rgba(0,0,0,0.6)] ${cls}`}
-    />
+    <div className={`pointer-events-none absolute z-0 animate-collage-wave ${cls}`}>
+      {/* soft amber halo, like the crunch-mode button glow */}
+      <div
+        aria-hidden
+        className="absolute inset-[12%] rounded-[45%] blur-3xl opacity-60 animate-collage-glow"
+        style={{ background: "radial-gradient(circle at 35% 40%, rgba(255,178,107,0.35), rgba(255,90,60,0.16) 45%, transparent 72%)" }}
+      />
+      <img
+        src={fruitCollage}
+        alt="Assorted dry fruits and nuts"
+        className="relative w-full opacity-[0.38] saturate-[0.65] contrast-[0.95] blur-[0.6px] drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
+        style={{ maskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse at 45% 55%, #000 35%, rgba(0,0,0,0.55) 65%, transparent 92%)" }}
+      />
+    </div>
   );
 }
 
@@ -55,7 +73,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { allProducts, bannerWords, stats, monthPicks, t } = useSite();
+  const { allProducts, bannerWords, stats, monthPicks, valueProps, t } = useSite();
   const shown = allProducts;
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
   const newArrivals = shown.filter((p) => p.newArrival);
@@ -67,7 +85,7 @@ function Home() {
       <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
         <div className="flex flex-col items-center gap-6">
           <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2024 · India</span>
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2025 · India</span>
           <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
         </div>
       </div>
@@ -100,10 +118,7 @@ function Home() {
 
         <div className="container-x relative px-4 pt-6 pb-4 md:px-12 md:pt-10 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 md:gap-10 items-start md:items-center">
           <div className="relative z-10 w-full">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream/5 backdrop-blur px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-gold">
-              <Sparkles className="w-3.5 h-3.5 shrink-0" /> Batch of July · Freshly Packed
-            </div>
-            <h1 className="mt-5 font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
+            <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[1.05] md:leading-[1.02] font-normal tracking-tight w-full break-words [text-wrap:balance]">
               <span className="italic text-cream/95 block">Crunch</span>
               <span className="italic block">
                 {"chill".split("").map((ch, i) => (
@@ -199,21 +214,19 @@ function Home() {
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
         <div className="container-x">
           <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { icon: Leaf, title: "Farm to pouch", desc: "Direct sourcing, zero middlemen, honest pricing." },
-              { icon: ShieldCheck, title: "Small-batch craft", desc: "Roasted & packed in tiny lots for peak flavor." },
-              { icon: Truck, title: "Fast delivery", desc: "Free 2-day shipping on orders over ₹899." },
-              { icon: Sparkles, title: "Vacuum sealed", desc: "Nitrogen-flushed pouches lock in crunch." },
-            ].map((v) => (
+            {valueProps.map((v) => {
+              const Icon = VALUE_PROP_ICON_MAP[v.icon] ?? Leaf;
+              return (
               <div key={v.title} className="group relative rounded-2xl border border-white/[0.08] p-6 hover:-translate-y-1 hover:border-gold/40 transition overflow-hidden" style={{ background: "linear-gradient(145deg, #1a1719 0%, #131114 100%)" }}>
                 <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-gold/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-gold/25 to-gold/5 border border-gold/30 text-gold grid place-items-center">
-                  <v.icon className="w-5 h-5" />
+                  <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="relative mt-4 font-display text-xl text-cream">{v.title}</h3>
                 <p className="relative mt-1 text-sm text-cream/60 leading-relaxed">{v.desc}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

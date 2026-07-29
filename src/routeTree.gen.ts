@@ -9,9 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as GiftingRouteImport } from './routes/gifting'
 import { Route as CrunchRouteImport } from './routes/crunch'
@@ -24,6 +27,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoryRoute = StoryRouteImport.update({
   id: '/story',
   path: '/story',
@@ -34,9 +42,19 @@ const ShopRoute = ShopRouteImport.update({
   path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
@@ -106,9 +124,12 @@ export interface FileRoutesByFullPath {
   '/crunch': typeof CrunchRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
+  '/terms': typeof TermsRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesByTo {
@@ -122,9 +143,12 @@ export interface FileRoutesByTo {
   '/crunch': typeof CrunchRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
+  '/terms': typeof TermsRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesById {
@@ -139,9 +163,12 @@ export interface FileRoutesById {
   '/crunch': typeof CrunchRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
+  '/terms': typeof TermsRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRouteTypes {
@@ -157,9 +184,12 @@ export interface FileRouteTypes {
     | '/crunch'
     | '/gifting'
     | '/order-success'
+    | '/privacy'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
+    | '/terms'
     | '/product/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -173,9 +203,12 @@ export interface FileRouteTypes {
     | '/crunch'
     | '/gifting'
     | '/order-success'
+    | '/privacy'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
+    | '/terms'
     | '/product/$slug'
   id:
     | '__root__'
@@ -189,9 +222,12 @@ export interface FileRouteTypes {
     | '/crunch'
     | '/gifting'
     | '/order-success'
+    | '/privacy'
     | '/profile'
+    | '/refund-policy'
     | '/shop'
     | '/story'
+    | '/terms'
     | '/product/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -206,14 +242,24 @@ export interface RootRouteChildren {
   CrunchRoute: typeof CrunchRoute
   GiftingRoute: typeof GiftingRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   ShopRoute: typeof ShopRoute
   StoryRoute: typeof StoryRoute
+  TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/story': {
       id: '/story'
       path: '/story'
@@ -228,11 +274,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order-success': {
@@ -326,9 +386,12 @@ const rootRouteChildren: RootRouteChildren = {
   CrunchRoute: CrunchRoute,
   GiftingRoute: GiftingRoute,
   OrderSuccessRoute: OrderSuccessRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   ShopRoute: ShopRoute,
   StoryRoute: StoryRoute,
+  TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
