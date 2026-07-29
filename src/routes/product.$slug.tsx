@@ -4,6 +4,8 @@ import { Star, Minus, Plus, ShieldCheck, Truck, Leaf, Heart, Share2, Check, Chev
 import { getProduct, products, type Product, type ProductSlide } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, MAX_PER_ITEM } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
+
 import { flyToCart } from "@/lib/fly-to-cart";
 
 export const Route = createFileRoute("/product/$slug")({
