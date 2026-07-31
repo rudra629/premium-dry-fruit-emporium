@@ -235,7 +235,7 @@ export function IntroSequence() {
   );
 
   return (
-    <div ref={ref} className="relative bg-transparent">
+    <div ref={ref} className="relative bg-transparent" style={{ marginTop: -chromePull }}>
       <GramsHero />
 
       <GramsSlider />
