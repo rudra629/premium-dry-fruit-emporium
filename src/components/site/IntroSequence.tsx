@@ -94,7 +94,9 @@ export function IntroSequence() {
   // Upward gate: scrolling up inside home parks at the top of the hero. Only a
   // second, deliberate upward gesture unlocks the intro again.
   useEffect(() => {
-    let armed = false; // becomes true once the user is properly inside home
+    // Armed as soon as the viewport is at (or below) the home hero — including
+    // on a fresh landing that skipped straight past the intro.
+    let armed = window.scrollY >= homeStartTop() - 8;
     let released = false;
     let stopped = false;
     let gestures = 0;
@@ -105,6 +107,12 @@ export function IntroSequence() {
       stopped = false;
       getLenis()?.start();
     };
+
+    const arm = () => {
+      if (window.scrollY >= homeStartTop() - 8) armed = true;
+    };
+    arm();
+    window.addEventListener("scroll", arm, { passive: true });
 
     const blockUp = (delta: number) => {
       const top = homeStartTop();
@@ -118,10 +126,12 @@ export function IntroSequence() {
         return false;
       }
       if (delta >= 0) {
+        if (y >= top - 8) armed = true;
         resume();
         return false;
       }
       if (!armed || released) return false;
+
 
       const now = performance.now();
       if (now - lastBlocked > 420) gestures += 1;
