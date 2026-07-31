@@ -99,29 +99,11 @@ export function IntroSequence() {
     };
   }, []);
 
-  // Upward gate: scrolling up inside home parks at the top of the hero. Only a
-  // second, deliberate upward gesture unlocks the intro again.
+  // Upward gate: scrolling up from inside the home page parks once at the top
+  // of the hero. Once parked (or if you are already sitting at the hero), the
+  // next upward gesture goes straight into the intro.
   useEffect(() => {
-    // Armed as soon as the viewport is at (or below) the home hero — including
-    // on a fresh landing that skipped straight past the intro.
-    let armed = window.scrollY >= homeStartTop() - 8;
-    let released = false;
-    let stopped = false;
-    let gestures = 0;
-    let lastBlocked = 0;
-
-    const resume = () => {
-      if (!stopped) return;
-      stopped = false;
-      getLenis()?.start();
-    };
-
-    const arm = () => {
-      if (window.scrollY >= homeStartTop() - 8) armed = true;
-    };
-    arm();
-    window.addEventListener("scroll", arm, { passive: true });
-
+    let parked = window.scrollY <= homeStartTop() + 8;
     let lastSettle = 0;
 
     const blockUp = (delta: number) => {
@@ -129,50 +111,29 @@ export function IntroSequence() {
       const top = homeStartTop();
       const y = window.scrollY;
 
-      if (y > top + 160) {
-        armed = true;
-        released = false;
-        gestures = 0;
-        resume();
+      // Far enough down the page — re-arm the park for the next trip up.
+      if (y > top + 220) {
+        parked = false;
         return false;
       }
-      if (delta >= 0) {
-        if (y >= top - 8) armed = true;
-        resume();
+      if (delta >= 0) return false;
+      // Already at (or above) the hero top: let the intro through.
+      if (y <= top + 8) {
+        parked = true;
         return false;
       }
-      if (!armed || released) return false;
-
+      if (parked) return false;
 
       const now = performance.now();
-      if (now - lastBlocked > 420) gestures += 1;
-      lastBlocked = now;
-      if (gestures >= 2) {
-        released = true;
-        resume();
-        return false;
-      }
-      // Hold the viewport at the hero and ease back — a soft magnet, not a
-      // hard jump. Lenis is paused so the gesture can't fight the tween.
       const lenis = getLenis();
-      if (lenis) {
-        if (!stopped) {
-          lenis.stop();
-          stopped = true;
-        }
-        if (now - lastSettle > 220 && Math.abs(y - top) > 2) {
-          lastSettle = now;
-          lenis.scrollTo(top, { duration: 0.45, force: true });
-        }
-      } else if (Math.abs(y - top) > 2) {
-        window.scrollTo({ top, behavior: "smooth" });
+      if (now - lastSettle > 260) {
+        lastSettle = now;
+        if (lenis) lenis.scrollTo(top, { duration: 0.6, force: true });
+        else window.scrollTo({ top, behavior: "smooth" });
       }
+      parked = true;
       return true;
     };
-
-
-
-
 
     const onWheel = (e: WheelEvent) => {
       if (blockUp(e.deltaY)) {
@@ -198,7 +159,6 @@ export function IntroSequence() {
     window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
     return () => {
-      window.removeEventListener("scroll", arm);
       window.removeEventListener("wheel", onWheel, true);
       window.removeEventListener("touchstart", onTouchStart, true);
       window.removeEventListener("touchmove", onTouchMove, true);
@@ -207,6 +167,20 @@ export function IntroSequence() {
       if (window.scrollY > 40) markIntroSeen();
     };
   }, []);
+
+  // While the intro owns the viewport, damp touch scrolling so a single swipe
+  // can't fling the visitor past the whole sequence on mobile.
+  useEffect(() => {
+    const lenis = getLenis();
+    if (!lenis) return;
+    const base = lenis.options?.touchMultiplier ?? 1.4;
+    lenis.options.touchMultiplier = showSkip ? 0.6 : base;
+    return () => {
+      const l = getLenis();
+      if (l) l.options.touchMultiplier = 1.4;
+    };
+  }, [showSkip]);
+
 
 
   const skipButton = (
