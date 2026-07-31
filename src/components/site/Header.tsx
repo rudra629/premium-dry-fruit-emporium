@@ -53,13 +53,13 @@ export function Header() {
 
   return (
     <>
-      <div className={cn("transition-all duration-500 ease-out", introActive && "pointer-events-none -translate-y-full opacity-0")}>
+      <div className={cn("site-chrome transition-all duration-500 ease-out", introActive && "is-hidden")}>
         <AnnouncementBar />
       </div>
       <header
         className={cn(
-          "sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60 transition-all duration-500 ease-out",
-          introActive && "pointer-events-none -translate-y-[130%] opacity-0",
+          "site-chrome sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60 transition-all duration-500 ease-out",
+          introActive && "is-hidden",
         )}
       >
 
