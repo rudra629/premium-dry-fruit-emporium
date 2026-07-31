@@ -687,6 +687,11 @@ html.intro-active .site-chrome {
    intro owns the viewport so the handoff reads as one continuous surface. */
 html.intro-active body {
   background-image: none;
-  background-color: #0a1310;
+  background-color: #12241c;
 }
+html.intro-active body::before,
+html.intro-active body::after {
+  display: none;
+}
+
 
