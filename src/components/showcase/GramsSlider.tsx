@@ -148,12 +148,25 @@ export function GramsSlider() {
     if (!el) return;
 
     const last = SLIDES.length - 1;
+    let lenisStopped = false;
+
+    const resumeScroll = () => {
+      if (!lenisStopped) return;
+      lenisStopped = false;
+      getLenis()?.start();
+    };
 
     const pin = () => {
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      if (Math.abs(window.scrollY - top) < 1) return;
-      window.scrollTo({ top, behavior: "auto" });
+      const top = Math.round(el.getBoundingClientRect().top + window.scrollY);
+      const lenis = getLenis();
+      if (lenis && !lenisStopped) {
+        lenis.stop();
+        lenisStopped = true;
+      }
+      lenis?.scrollTo(top, { immediate: true, force: true });
+      if (Math.abs(window.scrollY - top) >= 1) window.scrollTo({ top, behavior: "auto" });
     };
+
 
     const advance = (dir: number) => {
       if (lockRef.current) return;
