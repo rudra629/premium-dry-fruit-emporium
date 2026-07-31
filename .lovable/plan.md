@@ -1,44 +1,46 @@
 ## Goal
 
-Make the opening sequence (hero → "scroll to explore" products → home) feel like one continuous, buttery scroll: no brown band, no bouncing back up to the products after "Skip down", no snappy jerks.
+Make the opening sequence feel finished on both desktop and mobile: scroll up from home enters the animation on the first gesture, no bare band at the top, no floating buttons over the intro, mobile takes a real multi-swipe journey, and the product transitions scrub smoothly instead of jump-cutting.
 
-## What's wrong today
+## 1. Scroll-up entry works on the first gesture
 
-The product showcase does not scroll — it fakes scrolling. `GramsSlider` listens to `wheel`/`touchmove` in capture phase, calls `preventDefault()`, stops Lenis, force-jumps the page back to the section top on every event, and swaps slides with a hard 850ms cooldown. That is exactly what "choppy / cheap" feels like: every gesture is either swallowed or teleported, and the slide change is a discrete jump instead of a scrub.
+Today the upward gate in `IntroSequence.tsx` counts two upward gestures before it lets you back into the intro, and the counter only starts once the page has been "armed" by scrolling. Landing exactly at the hero, a first upward flick gets eaten and nothing happens — which is why it only works after scrolling down and back up.
 
-The same mechanism causes the snap-back: after "Skip down" moves you to the home hero, a downward wheel event can still be read as "section visible", and `pin()` yanks the page back to the products.
+Change: when the viewport is already parked at the hero top (within a few px) and the user scrolls up, release immediately and let the scroll through. The "park" behaviour is kept only for the case where the user is scrolling up *from further down the page* — they stop once at the hero, then the next upward gesture enters the intro. Reset state cleanly on release so it never gets stuck in a half-armed state.
 
-The brown band above the home hero is a seam colour mismatch between the intro stage (dark green mesh + warm blob) and the home hero background. Exact source will be confirmed in the browser before it's changed (the intro wrapper, the hero mesh gradient's warm radial, and the home hero's own top gradient are the three candidates).
+## 2. The band at the top of the intro
 
-## The fix
+The hidden header/announcement bar still occupies layout space above the intro, so a flat strip of page background shows. Rather than fight it, remove the space: while the intro is active, the chrome collapses out of flow (absolutely positioned instead of just translated) so the intro stage starts at pixel 0 of the viewport. If any sliver remains, it gets filled by extending the intro stage's own background upward so it reads as one surface — no separate colour to mismatch.
 
-**1. Replace scroll-jacking with a real pinned track (the core change)**
+## 3. Hide the floating buttons during the intro
 
-Rewrite the scroll mechanics of `src/components/showcase/GramsSlider.tsx` to use the same technique `GramsHero` already uses successfully:
+`ModeToggle` and `HealthChat` render in `__root.tsx` and float over the intro. Both get gated on the existing `useIntroActive()` store — faded/translated out while the intro owns the viewport, restored (with a short transition) once the user reaches the home hero. Same treatment for the intro's own "Skip down" pill so only one control is visible at a time.
 
-- The section becomes a tall track (`height: (N+1) × 100vh`, N = 5 products) containing a `sticky top-0 h-screen` stage.
-- `useScroll({ target, offset: ["start start", "end end"] })` gives `scrollYProgress`; a light `useSpring` smooths it.
-- Active slide = `progress × N`, so the browser's own (Lenis-smoothed) scroll drives the sequence. Scroll speed, direction, momentum, trackpad, touch and keyboard all just work.
-- Transitions become crossfades/scrubs tied to the fractional part of progress rather than `AnimatePresence` jump-cuts on a discrete index, so a slow scroll shows a slow, continuous blend.
-- Delete every `preventDefault`, `lenis.stop()`, `pin()`, `advance()` cooldown and the touch handlers. No event is ever swallowed.
+## 4. Mobile scroll length
 
-Consequences: the user can never get stuck, can never be teleported, and "the lock" becomes the natural result of the sticky stage — you must scroll the full track to pass the last product, which is the requested behaviour, achieved smoothly.
+On mobile the whole 5-product track collapses into roughly one swipe because the track is sized in `vh` (which mobile browsers shrink with the URL bar) and Lenis runs a 1.4× touch multiplier. Fixes:
+- Size the track from the measured viewport height per slide with a larger per-slide travel on touch devices, so each product needs a deliberate swipe.
+- Reduce the touch multiplier while the intro is active, restoring it afterwards.
+- Same treatment for the hero track so the hero doesn't get skipped either.
 
-**2. Skip down / scroll-back correctness**
+## 5. Smooth, finished slide transitions
 
-- With the pin gone, `scrollToHomeStart()` is a plain Lenis scroll to the `#home-start` anchor; nothing can pull it back.
-- `src/components/site/IntroSequence.tsx`: keep the "park at the hero on the first upward gesture" gate, but soften it — instead of `lenis.stop()` + hard `scrollTo(immediate)`, clamp with a short eased `scrollTo`, and drop the gate entirely while a programmatic scroll (skip-down) is in flight, so the two systems can't fight.
+The slide currently swaps on a discrete index via `AnimatePresence`, animating `filter: blur()` on several layers at once — that is the choppy, laggy, unfinished feel, especially on mobile.
 
-**3. Brown seam**
+- Drive the product image, headline block, background tint and giant word from the continuous scroll progress: each slide is a layer whose opacity/scale/offset is a `useTransform` over its own progress window, so slow scrolling shows a slow blend and reversing is symmetric.
+- Drop animated `blur()` filters (keep at most one static blur) and animate only `opacity` / `transform`, which stay on the GPU.
+- On mobile, disable the particle burst, floaters and the front ingredient halo, and cut the giant-word layer, so each frame is cheap.
+- Keep the existing visual design, colours, copy and progress ticks unchanged; the ticks keep scrolling the track to the matching slide.
 
-- Verify in the browser which layer paints the band, then remove it: align the intro stage's exit colour, the `IntroSequence` seam gradient, and the home hero's top colour to one shared value so the handoff is a single continuous surface (likely tightening the warm `rgba(120,90,55,…)` radial in the hero mesh and extending the seam fade).
+## 6. Verification
 
-**4. Verification**
-
-Playwright pass at desktop and mobile widths: scroll through the whole intro capturing frames (confirm no brown band, continuous slide blending), press "Skip down" then scroll down (confirm the page continues into home and never returns to the products), and scroll up twice from the home hero (confirm park-then-enter still works).
+Playwright at desktop (1280) and mobile (390) widths:
+- Step through the whole intro capturing frames — confirm continuous blending and no bare band at the top.
+- Confirm the intro track needs multiple swipes on mobile before reaching home.
+- Confirm the floating buttons are absent during the intro and back after it.
+- From the home hero, one upward gesture enters the intro; from further down, the park-then-enter behaviour still holds.
+- Check the console for errors on each pass.
 
 ## Technical notes
 
-- Files touched: `src/components/showcase/GramsSlider.tsx` (scroll mechanics rewrite, visuals kept), `src/components/site/IntroSequence.tsx` (gate softening, seam), `src/components/showcase/GramsHero.tsx` and/or `src/styles.css` (seam colour only).
-- No changes to routing, product data, admin, cart, or any other page.
-- Lenis stays as the global smooth-scroll driver; the sequence stops fighting it instead of stopping it.
+Files touched: `src/components/showcase/GramsSlider.tsx` (progress-driven transitions, mobile cost cuts), `src/components/site/IntroSequence.tsx` (gate rework, skip pill visibility), `src/routes/__root.tsx` (gate the two floating widgets), `src/lib/smooth-scroll.ts` (touch multiplier during intro), `src/styles.css` (chrome out of flow), possibly `src/components/showcase/GramsHero.tsx` (track sizing only). No changes to routing, products, cart, admin or any other page.

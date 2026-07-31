@@ -69,7 +69,28 @@ export function IntroSequence() {
   const ref = useRef<HTMLDivElement>(null);
   const [showSkip, setShowSkip] = useState(true);
   const [mounted, setMounted] = useState(false);
+  // The site chrome (announcement bar + header) sits in flow above the intro;
+  // while it's hidden its space would show as a flat band. Pulling the intro
+  // up by exactly that height removes the band without any layout jump later.
+  const [chromePull, setChromePull] = useState(0);
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    const measure = () => {
+      const bars = Array.from(
+        document.querySelectorAll(".site-chrome"),
+      ) as HTMLElement[];
+      const total = bars
+        .filter((el) => getComputedStyle(el).position !== "fixed")
+        .reduce((sum, el) => sum + el.offsetHeight, 0);
+      setChromePull(total);
+
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
 
   // Track whether the intro fills the viewport (hides the site chrome), and
   // remember it as "seen" once the user has scrolled past it.
@@ -99,29 +120,11 @@ export function IntroSequence() {
     };
   }, []);
 
-  // Upward gate: scrolling up inside home parks at the top of the hero. Only a
-  // second, deliberate upward gesture unlocks the intro again.
+  // Upward gate: scrolling up from inside the home page parks once at the top
+  // of the hero. Once parked (or if you are already sitting at the hero), the
+  // next upward gesture goes straight into the intro.
   useEffect(() => {
-    // Armed as soon as the viewport is at (or below) the home hero — including
-    // on a fresh landing that skipped straight past the intro.
-    let armed = window.scrollY >= homeStartTop() - 8;
-    let released = false;
-    let stopped = false;
-    let gestures = 0;
-    let lastBlocked = 0;
-
-    const resume = () => {
-      if (!stopped) return;
-      stopped = false;
-      getLenis()?.start();
-    };
-
-    const arm = () => {
-      if (window.scrollY >= homeStartTop() - 8) armed = true;
-    };
-    arm();
-    window.addEventListener("scroll", arm, { passive: true });
-
+    let parked = window.scrollY <= homeStartTop() + 8;
     let lastSettle = 0;
 
     const blockUp = (delta: number) => {
@@ -129,50 +132,29 @@ export function IntroSequence() {
       const top = homeStartTop();
       const y = window.scrollY;
 
-      if (y > top + 160) {
-        armed = true;
-        released = false;
-        gestures = 0;
-        resume();
+      // Far enough down the page — re-arm the park for the next trip up.
+      if (y > top + 220) {
+        parked = false;
         return false;
       }
-      if (delta >= 0) {
-        if (y >= top - 8) armed = true;
-        resume();
+      if (delta >= 0) return false;
+      // Already at (or above) the hero top: let the intro through.
+      if (y <= top + 8) {
+        parked = true;
         return false;
       }
-      if (!armed || released) return false;
-
+      if (parked) return false;
 
       const now = performance.now();
-      if (now - lastBlocked > 420) gestures += 1;
-      lastBlocked = now;
-      if (gestures >= 2) {
-        released = true;
-        resume();
-        return false;
-      }
-      // Hold the viewport at the hero and ease back — a soft magnet, not a
-      // hard jump. Lenis is paused so the gesture can't fight the tween.
       const lenis = getLenis();
-      if (lenis) {
-        if (!stopped) {
-          lenis.stop();
-          stopped = true;
-        }
-        if (now - lastSettle > 220 && Math.abs(y - top) > 2) {
-          lastSettle = now;
-          lenis.scrollTo(top, { duration: 0.45, force: true });
-        }
-      } else if (Math.abs(y - top) > 2) {
-        window.scrollTo({ top, behavior: "smooth" });
+      if (now - lastSettle > 260) {
+        lastSettle = now;
+        if (lenis) lenis.scrollTo(top, { duration: 0.6, force: true });
+        else window.scrollTo({ top, behavior: "smooth" });
       }
+      parked = true;
       return true;
     };
-
-
-
-
 
     const onWheel = (e: WheelEvent) => {
       if (blockUp(e.deltaY)) {
@@ -198,7 +180,6 @@ export function IntroSequence() {
     window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
     return () => {
-      window.removeEventListener("scroll", arm);
       window.removeEventListener("wheel", onWheel, true);
       window.removeEventListener("touchstart", onTouchStart, true);
       window.removeEventListener("touchmove", onTouchMove, true);
@@ -207,6 +188,20 @@ export function IntroSequence() {
       if (window.scrollY > 40) markIntroSeen();
     };
   }, []);
+
+  // While the intro owns the viewport, damp touch scrolling so a single swipe
+  // can't fling the visitor past the whole sequence on mobile.
+  useEffect(() => {
+    const lenis = getLenis();
+    if (!lenis) return;
+    const base = lenis.options?.touchMultiplier ?? 1.4;
+    lenis.options.touchMultiplier = showSkip ? 0.6 : base;
+    return () => {
+      const l = getLenis();
+      if (l) l.options.touchMultiplier = 1.4;
+    };
+  }, [showSkip]);
+
 
 
   const skipButton = (
@@ -226,21 +221,39 @@ export function IntroSequence() {
     </button>
   );
 
+  // A fixed backdrop painted with the hero's own mesh colours. The collapsed
+  // site-chrome strip above the intro sits over this instead of over the warm
+  // page background, so the top of the sequence reads as one surface.
+  const backdrop = (
+    <div
+      aria-hidden
+      className={`pointer-events-none fixed inset-0 transition-opacity duration-500 ${
+        showSkip ? "opacity-100" : "opacity-0"
+      }`}
+      style={{
+        zIndex: -1,
+        background:
+          "radial-gradient(120% 90% at 50% 60%, #1f3d2d 0%, #0f2119 48%, #050b08 100%)",
+      }}
+
+    />
+  );
+
   return (
-    <div ref={ref} className="relative bg-[#0a0a0c]">
-      {/* The collapsed site-chrome strip at the very top exposes the page
-          backdrop; `html.intro-active` (see styles.css) darkens it so no warm
-          "brown band" shows above the intro. */}
+    <div ref={ref} className="relative bg-transparent" style={{ marginTop: -chromePull }}>
       <GramsHero />
 
       <GramsSlider />
+
       {/* seam: fade the intro into the home hero's base colour */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
         style={{ background: "linear-gradient(180deg, transparent 0%, #0a0a0c 100%)" }}
       />
+      {mounted ? createPortal(backdrop, document.body) : null}
       {mounted ? createPortal(skipButton, document.body) : null}
+
     </div>
 
 
