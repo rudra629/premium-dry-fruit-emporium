@@ -33,10 +33,10 @@ const SLIDES: Slide[] = [
   {
     image: brazilAsset.url,
     ingredient: "brazil",
-    eyebrow: "Wild-harvested · Amazonia",
-    title: "Premium Brazil Nuts",
+    eyebrow: "Hand-picked · Turkish groves",
+    title: "Roasted Hazelnuts",
     description:
-      "Wild-harvested, selenium-rich nuts packed with essential nutrients for a healthy lifestyle.",
+      "Deeply roasted, buttery and vitamin-E rich — the crunch that starts every Grams ritual.",
     bg: "#2a1b3d",
     accent: "#e9d8b4",
     ink: "#f6ecd8",
@@ -46,9 +46,9 @@ const SLIDES: Slide[] = [
     image: chiaAsset.url,
     ingredient: "chia",
     eyebrow: "Cold-pressed superfood",
-    title: "Organic Chia Seeds",
+    title: "Pumpkin Seeds",
     description:
-      "The ultimate superfood. Rich in Omega-3s, fiber, and protein to fuel your day.",
+      "Magnesium, zinc and clean plant protein. Small green engines for a long working day.",
     bg: "#3d2817",
     accent: "#f0d9a8",
     ink: "#f7ead0",
@@ -69,10 +69,10 @@ const SLIDES: Slide[] = [
   {
     image: prunesAsset.url,
     ingredient: "prune",
-    eyebrow: "Orchard-sourced · California",
-    title: "Pitted Prunes",
+    eyebrow: "Orchard-sourced · Ratnagiri",
+    title: "Dried Mango Strips",
     description:
-      "Naturally sweet and undeniably rich. Sourced from the finest orchards for your daily vitality.",
+      "Slow sun-dried at peak ripeness. Naturally sweet, undeniably rich, nothing added.",
     bg: "#4a1d3e",
     accent: "#f2c8dc",
     ink: "#f8dfea",
@@ -81,16 +81,17 @@ const SLIDES: Slide[] = [
   {
     image: raisinsAsset.url,
     ingredient: "raisin",
-    eyebrow: "Sun-dried · Antioxidant-rich",
-    title: "Black Raisins",
+    eyebrow: "Antioxidant-rich · Small batch",
+    title: "Dried Cranberries",
     description:
-      "Sun-dried to perfection. A naturally sweet antioxidant powerhouse for your daily crunch.",
+      "Tart, jewel-bright and packed with antioxidants — the finish to your daily handful.",
     bg: "#1a1b3d",
     accent: "#d8cff0",
     ink: "#ece7f8",
     soft: "#6a5fa8",
   },
 ];
+
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
