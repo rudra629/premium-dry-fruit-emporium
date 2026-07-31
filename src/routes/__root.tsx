@@ -138,8 +138,8 @@ function RootComponent() {
                 </main>
                 <Footer />
               </div>
-              <ModeToggle />
-              <HealthChat />
+              <FloatingChrome />
+
               <Toaster position="top-center" richColors />
             </CartProvider>
           </WishlistProvider>
