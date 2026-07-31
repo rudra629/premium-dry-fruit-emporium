@@ -65,6 +65,7 @@ export function IntroSequence() {
       const past = window.scrollY > top - 8;
       setShowSkip(!past);
       setIntroActive(!past);
+      document.documentElement.classList.toggle("intro-active", !past);
       if (past) markIntroSeen();
     };
     const onScroll = () => {
@@ -78,6 +79,7 @@ export function IntroSequence() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
       setIntroActive(false);
+      document.documentElement.classList.remove("intro-active");
     };
   }, []);
 
