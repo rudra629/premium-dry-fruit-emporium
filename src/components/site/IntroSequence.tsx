@@ -38,6 +38,12 @@ function homeStartTop() {
   return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - chromeOffset()));
 }
 
+/** Set while a programmatic scroll is in flight, so gates stay out of the way. */
+let programmaticUntil = 0;
+function isProgrammatic() {
+  return performance.now() < programmaticUntil;
+}
+
 /** Smoothly (or instantly) move the viewport to the start of the real home page. */
 export function scrollToHomeStart(immediate = false) {
   const el = document.getElementById(HOME_START_ID);
@@ -48,12 +54,14 @@ export function scrollToHomeStart(immediate = false) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const jump = immediate || reduced;
   const top = homeStartTop();
+  programmaticUntil = performance.now() + (jump ? 300 : 1800);
   if (lenis) {
     lenis.scrollTo(top, jump ? { immediate: true, force: true } : { duration: 1.4, force: true });
   } else {
     window.scrollTo({ top, behavior: jump ? "auto" : "smooth" });
   }
 }
+
 
 
 
