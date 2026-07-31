@@ -206,13 +206,15 @@ export function IntroSequence() {
   const backdrop = (
     <div
       aria-hidden
-      className={`pointer-events-none fixed inset-0 z-0 transition-opacity duration-500 ${
+      className={`pointer-events-none fixed inset-0 transition-opacity duration-500 ${
         showSkip ? "opacity-100" : "opacity-0"
       }`}
       style={{
+        zIndex: -1,
         background:
           "radial-gradient(120% 90% at 50% 60%, #1f3d2d 0%, #0f2119 48%, #050b08 100%)",
       }}
+
     />
   );
 
