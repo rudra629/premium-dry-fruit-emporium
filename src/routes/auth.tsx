@@ -6,6 +6,9 @@ import lifestyle from "@/assets/lifestyle-1.jpg";
 import { useAuth, takePendingAction } from "@/lib/auth-store";
 import { useCart } from "@/lib/cart-store";
 import { useWishlist } from "@/lib/wishlist-store";
+import { isPasswordValid } from "@/lib/password";
+import { PasswordChecklist } from "@/components/site/PasswordChecklist";
+
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -43,13 +46,16 @@ function Auth() {
     e.preventDefault();
     const mail = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return toast.error("Enter a valid email address");
-    if (password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (mode === "signup" && !isPasswordValid(password))
+      return toast.error("Password needs 6+ characters, a number and a special character");
+    if (mode === "signin" && password.length < 6) return toast.error("Password must be at least 6 characters");
     if (mode === "signup" && name.trim().length < 2) return toast.error("Enter your full name");
     if (mode === "signup") signUp(name, mail, password);
     else signIn(mail, password);
     toast.success(mode === "signin" ? "Welcome back!" : "Account created");
     setTimeout(finish, 0);
   };
+
 
   const handleGoogle = () => {
     signInWithGoogle();
@@ -128,9 +134,18 @@ function Auth() {
               )}
               <IconField icon={Mail} placeholder="Email address" type="email" value={email} maxLength={120} onChange={(e) => setEmail(e.target.value)} />
               <IconField icon={Lock} placeholder="Password" type="password" value={password} maxLength={64} onChange={(e) => setPassword(e.target.value)} />
+              {mode === "signup" && <PasswordChecklist value={password} />}
+              {mode === "signin" && (
+                <div className="flex justify-end">
+                  <Link to="/forgot-password" className="text-xs text-cream/60 hover:text-gold transition">
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
               <button type="submit" className="w-full rounded-full bg-gold text-forest-deep py-3.5 text-sm font-semibold hover:bg-gold-soft transition">
                 {mode === "signin" ? "Sign in" : "Register"}
               </button>
+
             </form>
 
             <p className="mt-6 text-center text-xs text-cream/50">

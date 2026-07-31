@@ -251,12 +251,10 @@
 @utility animate-hue-cycle { animation: hue-cycle 8s linear infinite; }
 
 @keyframes letter-wave {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25%      { transform: translateY(-10%) rotate(-2deg); }
-  50%      { transform: translateY(4%) rotate(1.5deg); }
-  75%      { transform: translateY(-6%) rotate(-1deg); }
+  0%, 100% { transform: none; }
 }
-@utility animate-letter-wave { animation: letter-wave 3.6s ease-in-out infinite; will-change: transform; }
+@utility animate-letter-wave { animation: none; }
+
 
 
 @keyframes hero-swap {
