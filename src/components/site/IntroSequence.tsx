@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { GramsHero } from "@/components/showcase/GramsHero";
 import { GramsSlider } from "@/components/showcase/GramsSlider";
 import { getLenis } from "@/lib/smooth-scroll";
+import { setIntroActive } from "@/lib/intro-visibility";
 
 export const INTRO_SEEN_KEY = "grams_intro_seen";
 export const HOME_START_ID = "home-start";
@@ -22,6 +23,12 @@ export function hasSeenIntro() {
   } catch {
     return false;
   }
+}
+
+function homeStartTop() {
+  const el = document.getElementById(HOME_START_ID);
+  if (!el) return 0;
+  return Math.round(el.getBoundingClientRect().top + window.scrollY);
 }
 
 /** Smoothly (or instantly) move the viewport to the start of the real home page. */
@@ -48,19 +55,112 @@ export function IntroSequence() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Mark the intro as seen once the user has scrolled past it, and hide the
-  // skip affordance while they are below it.
+  // Track whether the intro fills the viewport (hides the site chrome), and
+  // remember it as "seen" once the user has scrolled past it.
   useEffect(() => {
-    const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const past = window.scrollY > el.offsetHeight * 0.75;
+    let raf = 0;
+    const evaluate = () => {
+      raf = 0;
+      const top = homeStartTop();
+      const past = window.scrollY > top - 8;
       setShowSkip(!past);
+      setIntroActive(!past);
       if (past) markIntroSeen();
     };
-    onScroll();
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(evaluate);
+    };
+    evaluate();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      setIntroActive(false);
+    };
+  }, []);
+
+  // Upward gate: scrolling up inside home parks at the top of the hero. Only a
+  // second, deliberate upward gesture unlocks the intro again.
+  useEffect(() => {
+    let armed = false; // becomes true once the user is properly inside home
+    let released = false;
+    let stopped = false;
+    let gestures = 0;
+    let lastBlocked = 0;
+
+    const resume = () => {
+      if (!stopped) return;
+      stopped = false;
+      getLenis()?.start();
+    };
+
+    const blockUp = (delta: number) => {
+      const top = homeStartTop();
+      const y = window.scrollY;
+
+      if (y > top + 160) {
+        armed = true;
+        released = false;
+        gestures = 0;
+        resume();
+        return false;
+      }
+      if (delta >= 0) {
+        resume();
+        return false;
+      }
+      if (!armed || released) return false;
+
+      const now = performance.now();
+      if (now - lastBlocked > 420) gestures += 1;
+      lastBlocked = now;
+      if (gestures >= 2) {
+        released = true;
+        resume();
+        return false;
+      }
+      const lenis = getLenis();
+      if (lenis) {
+        lenis.stop();
+        stopped = true;
+        lenis.scrollTo(top, { immediate: true, force: true });
+      }
+      window.scrollTo({ top, behavior: "auto" });
+      return true;
+    };
+
+
+
+    const onWheel = (e: WheelEvent) => {
+      if (blockUp(e.deltaY)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    let startY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      startY = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const dy = startY - e.touches[0].clientY;
+      if (Math.abs(dy) < 10) return;
+      if (blockUp(dy)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel, true);
+      window.removeEventListener("touchstart", onTouchStart, true);
+      window.removeEventListener("touchmove", onTouchMove, true);
+    };
   }, []);
 
   const skipButton = (
@@ -88,4 +188,3 @@ export function IntroSequence() {
     </div>
   );
 }
-
