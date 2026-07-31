@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote, Award, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite, type ValuePropIcon } from "@/lib/site-store";
@@ -47,7 +48,33 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
   );
 }
 
+function SideRails() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return createPortal(
+    <>
+      <div aria-hidden className="site-chrome hidden lg:flex fixed left-4 top-0 h-screen z-30 pointer-events-none items-center transition-all duration-500">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50 [writing-mode:vertical-rl] rotate-180">Est · 2025 · India</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+      <div aria-hidden className="site-chrome hidden lg:flex fixed right-4 top-0 h-screen z-30 pointer-events-none items-center transition-all duration-500">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50 [writing-mode:vertical-rl]">Farm · Roast · Pack · Ship</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+    </>,
+    document.body,
+  );
+}
+
 function RotatingHeroProduct({ className }: { className?: string }) {
+
   const [idx, setIdx] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1500);
@@ -80,21 +107,21 @@ function Home() {
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
   const newArrivals = shown.filter((p) => p.newArrival);
 
-  // On repeat visits within the session, land straight on the home content —
+  // On repeat visits within the session, land straight on the home hero —
   // the intro stays above so scrolling up replays it.
   useEffect(() => {
     if (!hasSeenIntro()) return;
-    // Retry across a few frames: layout (and Lenis) settle after mount.
-    const ids: number[] = [];
-    const jump = (n: number) => {
+    let stop = false;
+    const started = performance.now();
+    // Retry until layout (and Lenis) settle: the anchor measures 0 on mount.
+    const jump = () => {
+      if (stop) return;
       scrollToHomeStart(true);
-      if (n > 0) ids.push(requestAnimationFrame(() => jump(n - 1)));
+      if (performance.now() - started < 900) requestAnimationFrame(jump);
     };
-    ids.push(requestAnimationFrame(() => jump(6)));
-    const t = window.setTimeout(() => scrollToHomeStart(true), 120);
+    requestAnimationFrame(jump);
     return () => {
-      ids.forEach(cancelAnimationFrame);
-      window.clearTimeout(t);
+      stop = true;
     };
   }, []);
 
@@ -104,21 +131,10 @@ function Home() {
       <IntroSequence />
       <div id={HOME_START_ID} className="relative" />
 
-      {/* Decorative fixed side rails */}
-      <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
-        <div className="flex flex-col items-center gap-6">
-          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl] rotate-180">Est · 2025 · India</span>
-          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-        </div>
-      </div>
-      <div aria-hidden className="hidden lg:flex fixed right-4 top-0 h-screen z-[1] pointer-events-none items-center">
-        <div className="flex flex-col items-center gap-6">
-          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/40 [writing-mode:vertical-rl]">Farm · Roast · Pack · Ship</span>
-          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-        </div>
-      </div>
+      {/* Decorative fixed side rails (portalled so page transforms don't trap them) */}
+      <SideRails />
+
+
 
       {/* HERO */}
       <section className="relative overflow-visible md:overflow-hidden text-cream flex flex-col justify-start items-start md:justify-center md:items-center" style={{ background: "linear-gradient(180deg, #0a0a0c 0%, #131114 55%, #0c0b0e 100%)" }}>

@@ -1,45 +1,29 @@
 ## Goal
 
-Bring the uploaded `grams-scroll-showcase` animation into the live site as a cinematic **intro sequence that sits above the homepage**. First visit lands on the intro; after scrolling through it you arrive at the normal home page. Returning to `/` from Shop/other pages skips straight to home. Scrolling up from the top of home takes you back into the intro. A "Skip down" control auto-scrolls to home.
+Five fixes around the intro → home transition on the home page.
 
-## What gets added
+## 1. Side rails ("Est · 2025 · India" / "Farm · Roast · Pack · Ship")
 
-The uploaded project contains a sticky 300vh scroll hero (`GramsHero`) plus an ingredient slider (`GramsSlider`), built on `framer-motion`, with supporting parts: `IngredientHalo`, `ParticleBurst`, `MagneticButton`, and 10 image assets (brazil nuts, chia, kiwi, prunes, raisins + ingredient cut-outs).
+The rail markup still exists in `src/routes/index.tsx` (fixed left/right, `z-[1]`), but it is not visible over the home hero. Cause is unconfirmed — first step is to check in the running preview whether the hero's stacking context (`section` with absolute gradient overlays and `z-10` content) paints over `z-[1]`. Fix by lifting the rails above the hero backdrop (raise z-index / move them inside the hero stacking order) and confirming visually on desktop, keeping them hidden below `lg` as today.
 
-Steps:
+## 2. Brown background when scrolling up
 
-1. **Dependency** — install `framer-motion` (the current site uses GSAP/Lenis; both can coexist).
-2. **Assets** — the uploaded asset pointers belong to a different project, so their URLs won't resolve here. Re-register each image into this project's asset store and regenerate the pointer JSONs under `src/assets/showcase/`.
-3. **Components** — copy `GramsHero`, `GramsSlider`, `IngredientHalo`, `ParticleBurst`, `MagneticButton` into `src/components/showcase/`. Drop `MagneticCursor` (the custom `cursor: none` override would fight the rest of the site).
-4. **Styling fit** — the showcase is designed on black; the site's dark theme matches, so only the surrounding wrapper background and font families get aligned (Fraunces / Manrope / Space Mono).
+Investigate the strip visible between the home hero and the intro: likely the `IntroSequence` wrapper (`bg-[#050b08]`) vs the hero's `linear-gradient(#0a0a0c …)` plus the intro hero's warm overlay bleeding at the seam. Fix by matching the seam colours (shared dark base behind both sections) so no brown band appears mid-scroll.
 
-## Intro behaviour
+## 3. Upward hero lock should always be armed
 
-A new `IntroSequence` wrapper renders above the home content inside `src/routes/index.tsx`:
+Today `IntroSequence`'s gate only sets `armed = true` after the user has scrolled well below the hero, so on a fresh land at home the first upward gesture goes straight into the intro. Change the gate so it is armed whenever the page is at/below the home-start anchor (including on mount and after route navigation to `/`), so scrolling up always parks at the hero first and needs a second deliberate gesture to re-enter the intro.
 
-```text
-┌──────────── #intro (300vh sticky hero + slider) ───────────┐
-│  scroll ↓ …  animation scrubs …  [ Skip down ▾ ]           │
-└─────────────────────────────────────────────────────────────┘
-┌──────────── #home-start (existing homepage) ───────────────┐
-```
+## 4. Navbar covering the "Crunch" headline
 
-- **First visit** (no `grams_intro_seen` flag in sessionStorage): page stays at scroll 0, intro plays as you scroll.
-- **Flag set** once the user passes into the home block or hits Skip.
-- **Return to `/` from another route**: on mount, if the flag is set, jump instantly (no animation) to `#home-start` before paint, so there's no flash of the intro.
-- **Scroll up from top of home**: nothing special needed — the intro is the same document above home, so scrolling up naturally re-enters it bottom-to-top.
-- **Skip down button**: fixed, bottom-centre, styled to match the site's frosted-pill aesthetic; smooth-scrolls (via Lenis) to `#home-start` and sets the flag. Hidden once past the intro.
-- **Header / Footer / Crunch toggle / chat button** are hidden or faded out while the intro is on screen, then fade in at the handoff.
-- **Reduced motion**: intro is bypassed entirely (page starts at home) for `prefers-reduced-motion`.
+Keep the header size unchanged. Instead give the home hero top spacing equal to the header height (announcement bar + header, ~ 80/112px via a CSS var), and use that same offset when scrolling to the home-start anchor, so the headline starts below the navbar rather than underneath it.
+
+## 5. Returning to Home should land on the hero, not the top
+
+`index.tsx` only skips the intro when `hasSeenIntro()` is true, and that flag is only written after scrolling past the intro — so a user who skipped or navigated early gets sent to the intro top. Mark the intro as seen as soon as the user navigates away from `/` (or lands on home content at all), and make the home-mount jump land at the hero start with the header offset applied, without breaking browser back/forward.
 
 ## Technical notes
 
-- `PageTransition` in `src/routes/__root.tsx` currently smooth-scrolls to top on every route change; it needs a home-specific branch that targets `#home-start` instead of `0` when the intro has already been seen, and still respects back/forward (`popstate`).
-- Lenis smooth scroll stays active; Framer's `useScroll` reads window scroll, so scrubbing stays in sync in both directions.
-- The intro block only mounts on `/`; no other route is touched.
-- Scroll flag uses `sessionStorage` so a fresh browser session replays the intro once.
+Files involved: `src/routes/index.tsx`, `src/components/site/IntroSequence.tsx`, `src/components/showcase/GramsSlider.tsx` (release path), `src/components/site/Header.tsx` (only to expose header height as a CSS var), `src/styles.css`.
 
-## Files
-
-- new: `src/components/showcase/*` (5 components), `src/components/site/IntroSequence.tsx`, `src/assets/showcase/*.asset.json`
-- edited: `src/routes/index.tsx`, `src/routes/__root.tsx`, `src/styles.css`, `package.json`
+Verification: Playwright run on the live preview at desktop and mobile widths — check rails visible, no brown seam while scrolling up, headline clear of the navbar, upward gesture parking at hero, and shop → home landing on the hero.
