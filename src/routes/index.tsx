@@ -84,9 +84,20 @@ function Home() {
   // the intro stays above so scrolling up replays it.
   useEffect(() => {
     if (!hasSeenIntro()) return;
-    const id = requestAnimationFrame(() => scrollToHomeStart(true));
-    return () => cancelAnimationFrame(id);
+    // Retry across a few frames: layout (and Lenis) settle after mount.
+    const ids: number[] = [];
+    const jump = (n: number) => {
+      scrollToHomeStart(true);
+      if (n > 0) ids.push(requestAnimationFrame(() => jump(n - 1)));
+    };
+    ids.push(requestAnimationFrame(() => jump(6)));
+    const t = window.setTimeout(() => scrollToHomeStart(true), 120);
+    return () => {
+      ids.forEach(cancelAnimationFrame);
+      window.clearTimeout(t);
+    };
   }, []);
+
 
   return (
     <div className="relative">
