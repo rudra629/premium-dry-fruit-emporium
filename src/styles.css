@@ -673,3 +673,11 @@ header .bg-forest-deep,
 @media (prefers-reduced-motion: reduce) {
   .animate-collage-wave, .animate-collage-glow { animation: none; }
 }
+
+/* Site chrome (announcement bar + header) hides during the cinematic intro */
+.site-chrome.is-hidden,
+html.intro-active .site-chrome {
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
+}

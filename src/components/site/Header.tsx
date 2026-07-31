@@ -5,6 +5,8 @@ import { useCart } from "@/lib/cart-store";
 import { useAuth } from "@/lib/auth-store";
 
 import { cn } from "@/lib/utils";
+import { useIntroActive } from "@/lib/intro-visibility";
+
 import gramsLogo from "@/assets/grams-logo.png.asset.json";
 
 const nav = [
@@ -29,8 +31,10 @@ export function AnnouncementBar() {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const introActive = useIntroActive();
   const { count } = useCart();
   const { user } = useAuth();
+
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const cartRef = useRef<HTMLAnchorElement>(null);
@@ -49,8 +53,16 @@ export function Header() {
 
   return (
     <>
-      <AnnouncementBar />
-      <header className="sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60">
+      <div className={cn("site-chrome transition-all duration-500 ease-out", introActive && "is-hidden")}>
+        <AnnouncementBar />
+      </div>
+      <header
+        className={cn(
+          "site-chrome sticky top-0 z-40 backdrop-blur-lg bg-cream/85 border-b border-border/60 transition-all duration-500 ease-out",
+          introActive && "is-hidden",
+        )}
+      >
+
         <div className="container-x flex items-center justify-between h-20 md:h-28">
           <Link to="/" className="flex items-center">
             <img src={gramsLogo.url} alt="Grams" className="h-14 md:h-20 w-auto object-contain" />

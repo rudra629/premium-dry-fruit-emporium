@@ -16,6 +16,7 @@ import prunesAsset from "@/assets/products/Dreid_Mango_F.asset.json";
 import raisinsAsset from "@/assets/products/Dried_Cranberry_F.asset.json";
 import { ParticleBurst } from "./ParticleBurst";
 import { IngredientHalo } from "./IngredientHalo";
+import { getLenis } from "@/lib/smooth-scroll";
 
 type Slide = {
   image: string;
@@ -142,26 +143,74 @@ export function GramsSlider() {
     setIndex((i) => (i + dir + SLIDES.length) % SLIDES.length);
   };
 
-  // Scroll-jacking on desktop
+  // Scroll-jacking: the section stays locked until the last product is reached.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const onWheel = (e: WheelEvent) => {
-      const rect = el.getBoundingClientRect();
-      const inView = rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
-      if (!inView) return;
+    const last = SLIDES.length - 1;
+    let lenisStopped = false;
 
-      const goingDown = e.deltaY > 0;
-      const atEnd = goingDown ? index === SLIDES.length - 1 : index === 0;
-      if (atEnd) return; // release scroll at edges
+    const resumeScroll = () => {
+      if (!lenisStopped) return;
+      lenisStopped = false;
+      getLenis()?.start();
+    };
 
-      e.preventDefault();
+    const pin = () => {
+      const top = Math.round(el.getBoundingClientRect().top + window.scrollY);
+      const lenis = getLenis();
+      if (lenis && !lenisStopped) {
+        lenis.stop();
+        lenisStopped = true;
+      }
+      lenis?.scrollTo(top, { immediate: true, force: true });
+      if (Math.abs(window.scrollY - top) >= 1) window.scrollTo({ top, behavior: "auto" });
+    };
+
+
+    const advance = (dir: number) => {
       if (lockRef.current) return;
-      if (Math.abs(e.deltaY) < 8) return;
       lockRef.current = true;
-      go(goingDown ? 1 : -1);
-      window.setTimeout(() => (lockRef.current = false), 900);
+      go(dir);
+      window.setTimeout(() => (lockRef.current = false), 850);
+    };
+
+    // Returns true when the gesture was consumed (scroll must be blocked).
+    const consume = (delta: number) => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const goingDown = delta > 0;
+      const visible = goingDown
+        ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
+        : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
+      if (!visible) {
+        resumeScroll();
+        return false;
+      }
+
+      // Release downwards only after the final product.
+      if (goingDown && index === last && rect.top <= 2) {
+        resumeScroll();
+        return false;
+      }
+      // Release upwards only once we're back on the first product.
+      if (!goingDown && index === 0 && rect.top >= -2) {
+        resumeScroll();
+        return false;
+      }
+
+      pin();
+      if (Math.abs(delta) < 6) return true;
+      advance(goingDown ? 1 : -1);
+      return true;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (consume(e.deltaY)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     };
 
     const onKey = (e: KeyboardEvent) => {
@@ -169,57 +218,77 @@ export function GramsSlider() {
       if (e.key === "ArrowUp" || e.key === "ArrowLeft") go(-1);
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("keydown", onKey);
-    // Touch-based scroll-jacking on mobile: convert vertical swipes into slide changes
     let touchStartY = 0;
     let touchLockedDir = 0;
-    const onTouchStartNative = (e: TouchEvent) => {
+    const onTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
       touchLockedDir = 0;
     };
-    const onTouchMoveNative = (e: TouchEvent) => {
-      const rect = el.getBoundingClientRect();
-      const inView = rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
-      if (!inView) return;
+    const onTouchMove = (e: TouchEvent) => {
       const dy = touchStartY - e.touches[0].clientY;
-      const goingDown = dy > 0;
-      const atEnd = goingDown ? index === SLIDES.length - 1 : index === 0;
-      if (atEnd) return;
-      if (Math.abs(dy) < 40) return;
+      const dir = dy > 0 ? 1 : -1;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const visible = dir > 0
+        ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
+        : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
+      if (!visible) {
+        resumeScroll();
+        return;
+      }
+      if (dir > 0 && index === last && rect.top <= 2) {
+        resumeScroll();
+        return;
+      }
+      if (dir < 0 && index === 0 && rect.top >= -2) {
+        resumeScroll();
+        return;
+      }
       e.preventDefault();
-      if (lockRef.current) return;
-      const dir = goingDown ? 1 : -1;
+      e.stopPropagation();
+      pin();
+      if (Math.abs(dy) < 45) return;
       if (touchLockedDir === dir) return;
       touchLockedDir = dir;
-      lockRef.current = true;
-      go(dir);
-      window.setTimeout(() => (lockRef.current = false), 900);
+      advance(dir);
     };
-    if (isMobile) {
-      window.addEventListener("touchstart", onTouchStartNative, { passive: true });
-      window.addEventListener("touchmove", onTouchMoveNative, { passive: false });
-    }
+
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
     return () => {
-      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("wheel", onWheel, true);
       window.removeEventListener("keydown", onKey);
-      window.removeEventListener("touchstart", onTouchStartNative);
-      window.removeEventListener("touchmove", onTouchMoveNative);
+      window.removeEventListener("touchstart", onTouchStart, true);
+      window.removeEventListener("touchmove", onTouchMove, true);
+      resumeScroll();
     };
   }, [index, isMobile]);
 
-  // Mouse parallax
+  // Mouse parallax (rAF-throttled, desktop only)
   useEffect(() => {
     if (isMobile) return;
-    const onMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth - 0.5;
-      const y = e.clientY / window.innerHeight - 0.5;
-      mx.set(x);
-      my.set(y);
+    let raf = 0;
+    let nx = 0;
+    let ny = 0;
+    const apply = () => {
+      raf = 0;
+      mx.set(nx);
+      my.set(ny);
     };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    const onMove = (e: MouseEvent) => {
+      nx = e.clientX / window.innerWidth - 0.5;
+      ny = e.clientY / window.innerHeight - 0.5;
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [isMobile, mx, my]);
+
 
   const floaters = useMemo(
     () => [
