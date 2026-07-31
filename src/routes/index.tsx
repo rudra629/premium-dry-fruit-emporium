@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, Leaf, ShieldCheck, Sparkles, Star, Quote, Award, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useSite, type ValuePropIcon } from "@/lib/site-store";
