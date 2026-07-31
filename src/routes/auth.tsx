@@ -6,6 +6,9 @@ import lifestyle from "@/assets/lifestyle-1.jpg";
 import { useAuth, takePendingAction } from "@/lib/auth-store";
 import { useCart } from "@/lib/cart-store";
 import { useWishlist } from "@/lib/wishlist-store";
+import { isPasswordValid } from "@/lib/password";
+import { PasswordChecklist } from "@/components/site/PasswordChecklist";
+
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>) => ({

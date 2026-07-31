@@ -17,6 +17,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as GiftingRouteImport } from './routes/gifting'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as CrunchRouteImport } from './routes/crunch'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -65,6 +66,11 @@ const OrderSuccessRoute = OrderSuccessRouteImport.update({
 const GiftingRoute = GiftingRouteImport.update({
   id: '/gifting',
   path: '/gifting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrunchRoute = CrunchRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/privacy': typeof PrivacyRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/privacy': typeof PrivacyRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/crunch': typeof CrunchRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/gifting': typeof GiftingRoute
   '/order-success': typeof OrderSuccessRoute
   '/privacy': typeof PrivacyRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/forgot-password'
     | '/gifting'
     | '/order-success'
     | '/privacy'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/forgot-password'
     | '/gifting'
     | '/order-success'
     | '/privacy'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/crunch'
+    | '/forgot-password'
     | '/gifting'
     | '/order-success'
     | '/privacy'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   CrunchRoute: typeof CrunchRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   GiftingRoute: typeof GiftingRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -307,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/gifting'
       fullPath: '/gifting'
       preLoaderRoute: typeof GiftingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crunch': {
@@ -384,6 +404,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   CrunchRoute: CrunchRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   GiftingRoute: GiftingRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   PrivacyRoute: PrivacyRoute,
@@ -397,13 +418,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
