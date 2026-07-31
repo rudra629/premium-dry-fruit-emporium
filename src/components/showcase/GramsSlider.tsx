@@ -387,6 +387,16 @@ function useSlideOpacity(t: MotionValue<number>, i: number) {
   return useTransform(t, [i - 0.55, i + 0.12, i + 0.88, i + 1.55], [0, 1, 1, 0]);
 }
 
+/** Tight window for legible content (headlines, giant word): the outgoing slide
+ *  is fully gone before the incoming one starts, so text never overlaps. */
+function useCrispOpacity(t: MotionValue<number>, i: number) {
+  return useTransform(
+    t,
+    [i - 0.22, i - 0.02, i + 0.9, i + 1.1],
+    [0, 1, 1, 0],
+  );
+}
+
 function BgLayer({ s, i, t }: { s: Slide; i: number; t: MotionValue<number> }) {
   const opacity = useSlideOpacity(t, i);
   return (
@@ -416,7 +426,7 @@ function SpotLayer({ s, i, t }: { s: Slide; i: number; t: MotionValue<number> })
 }
 
 function WordLayer({ s, i, t }: { s: Slide; i: number; t: MotionValue<number> }) {
-  const base = useSlideOpacity(t, i);
+  const base = useCrispOpacity(t, i);
   const opacity = useTransform(base, (v) => v * 0.08);
   const x = useTransform(t, [i - 0.6, i + 1.6], [80, -80]);
   return (
