@@ -206,10 +206,17 @@ export function IntroSequence() {
   );
 
   return (
-    <div ref={ref} className="relative bg-[#050b08]">
+    <div ref={ref} className="relative bg-[#0a0a0c]">
       <GramsHero />
       <GramsSlider />
+      {/* seam: fade the intro into the home hero's base colour */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
+        style={{ background: "linear-gradient(180deg, transparent 0%, #0a0a0c 100%)" }}
+      />
       {mounted ? createPortal(skipButton, document.body) : null}
     </div>
+
   );
 }
