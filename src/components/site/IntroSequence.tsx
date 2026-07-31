@@ -152,16 +152,24 @@ export function IntroSequence() {
         resume();
         return false;
       }
-      // Ease back to the hero instead of hard-jumping — the gate should feel
-      // like a soft magnet, not a wall.
-      if (now - lastSettle > 260 && Math.abs(y - top) > 2) {
-        lastSettle = now;
-        const lenis = getLenis();
-        if (lenis) lenis.scrollTo(top, { duration: 0.55, force: true });
-        else window.scrollTo({ top, behavior: "smooth" });
+      // Hold the viewport at the hero and ease back — a soft magnet, not a
+      // hard jump. Lenis is paused so the gesture can't fight the tween.
+      const lenis = getLenis();
+      if (lenis) {
+        if (!stopped) {
+          lenis.stop();
+          stopped = true;
+        }
+        if (now - lastSettle > 220 && Math.abs(y - top) > 2) {
+          lastSettle = now;
+          lenis.scrollTo(top, { duration: 0.45, force: true });
+        }
+      } else if (Math.abs(y - top) > 2) {
+        window.scrollTo({ top, behavior: "smooth" });
       }
       return true;
     };
+
 
 
 
