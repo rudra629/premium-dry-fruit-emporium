@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 import { GramsHero } from "@/components/showcase/GramsHero";
 import { GramsSlider } from "@/components/showcase/GramsSlider";
@@ -42,6 +43,8 @@ export function scrollToHomeStart(immediate = false) {
 export function IntroSequence() {
   const ref = useRef<HTMLDivElement>(null);
   const [showSkip, setShowSkip] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Mark the intro as seen once the user has scrolled past it, and hide the
   // skip affordance while they are below it.
