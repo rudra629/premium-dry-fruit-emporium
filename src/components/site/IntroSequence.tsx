@@ -200,14 +200,28 @@ export function IntroSequence() {
     </button>
   );
 
+  // A fixed backdrop painted with the hero's own mesh colours. The collapsed
+  // site-chrome strip above the intro sits over this instead of over the warm
+  // page background, so the top of the sequence reads as one surface.
+  const backdrop = (
+    <div
+      aria-hidden
+      className={`pointer-events-none fixed inset-0 z-0 transition-opacity duration-500 ${
+        showSkip ? "opacity-100" : "opacity-0"
+      }`}
+      style={{
+        background:
+          "radial-gradient(120% 90% at 50% 60%, #1f3d2d 0%, #0f2119 48%, #050b08 100%)",
+      }}
+    />
+  );
+
   return (
-    <div ref={ref} className="relative bg-[#0a0a0c]">
-      {/* The collapsed site-chrome strip at the very top exposes the page
-          backdrop; `html.intro-active` (see styles.css) darkens it so no warm
-          "brown band" shows above the intro. */}
+    <div ref={ref} className="relative bg-transparent">
       <GramsHero />
 
       <GramsSlider />
+
       {/* seam: fade the intro into the home hero's base colour */}
       <div
         aria-hidden
