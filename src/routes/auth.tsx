@@ -43,13 +43,16 @@ function Auth() {
     e.preventDefault();
     const mail = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return toast.error("Enter a valid email address");
-    if (password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (mode === "signup" && !isPasswordValid(password))
+      return toast.error("Password needs 6+ characters, a number and a special character");
+    if (mode === "signin" && password.length < 6) return toast.error("Password must be at least 6 characters");
     if (mode === "signup" && name.trim().length < 2) return toast.error("Enter your full name");
     if (mode === "signup") signUp(name, mail, password);
     else signIn(mail, password);
     toast.success(mode === "signin" ? "Welcome back!" : "Account created");
     setTimeout(finish, 0);
   };
+
 
   const handleGoogle = () => {
     signInWithGoogle();
