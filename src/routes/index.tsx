@@ -47,7 +47,33 @@ function HeroSlices({ size = "md" }: { size?: "sm" | "md" }) {
   );
 }
 
+function SideRails() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return createPortal(
+    <>
+      <div aria-hidden className="site-chrome hidden lg:flex fixed left-4 top-0 h-screen z-30 pointer-events-none items-center transition-all duration-500">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50 [writing-mode:vertical-rl] rotate-180">Est · 2025 · India</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+      <div aria-hidden className="site-chrome hidden lg:flex fixed right-4 top-0 h-screen z-30 pointer-events-none items-center transition-all duration-500">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-cream/50 [writing-mode:vertical-rl]">Farm · Roast · Pack · Ship</span>
+          <div className="w-px h-24 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        </div>
+      </div>
+    </>,
+    document.body,
+  );
+}
+
 function RotatingHeroProduct({ className }: { className?: string }) {
+
   const [idx, setIdx] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setIdx((i) => (i + 1) % heroRotation.length), 1500);
