@@ -24,6 +24,8 @@ import { ModeToggle } from "@/components/site/ModeToggle";
 import { HealthChat } from "@/components/site/HealthChat";
 import { useReveal } from "@/lib/use-reveal";
 import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
+import { hasSeenIntro, scrollToHomeStart } from "@/components/site/IntroSequence";
+
 
 
 function NotFoundComponent() {
