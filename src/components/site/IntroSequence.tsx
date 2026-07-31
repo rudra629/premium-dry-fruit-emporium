@@ -177,11 +177,16 @@ export function IntroSequence() {
     window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
     return () => {
+      window.removeEventListener("scroll", arm);
       window.removeEventListener("wheel", onWheel, true);
       window.removeEventListener("touchstart", onTouchStart, true);
       window.removeEventListener("touchmove", onTouchMove, true);
+      // Leaving home (nav to /shop etc.) counts as having seen the intro, so
+      // coming back lands on the hero instead of replaying the sequence.
+      if (window.scrollY > 40) markIntroSeen();
     };
   }, []);
+
 
   const skipButton = (
     <button
