@@ -58,25 +58,29 @@ export function IntroSequence() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const skipButton = (
+    <button
+      type="button"
+      onClick={() => {
+        markIntroSeen();
+        scrollToHomeStart();
+      }}
+      aria-label="Skip the intro and go to the shop"
+      className={`fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 items-center gap-2 rounded-full border border-gold/40 bg-black/50 px-5 py-2.5 text-[11px] uppercase tracking-[0.3em] text-cream backdrop-blur-xl transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-[#0a0a0c] ${
+        showSkip ? "flex" : "hidden"
+      }`}
+    >
+      Skip down
+      <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
+    </button>
+  );
+
   return (
     <div ref={ref} className="relative bg-[#050b08]">
       <GramsHero />
       <GramsSlider />
-
-      <button
-        type="button"
-        onClick={() => {
-          markIntroSeen();
-          scrollToHomeStart();
-        }}
-        aria-label="Skip the intro and go to the shop"
-        className={`fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 items-center gap-2 rounded-full border border-gold/40 bg-black/50 px-5 py-2.5 text-[11px] uppercase tracking-[0.3em] text-cream backdrop-blur-xl transition-all duration-500 hover:border-gold hover:bg-gold hover:text-[#0a0a0c] ${
-          showSkip ? "flex opacity-100" : "pointer-events-none hidden opacity-0"
-        }`}
-      >
-        Skip down
-        <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
-      </button>
+      {mounted ? createPortal(skipButton, document.body) : null}
     </div>
   );
 }
+
