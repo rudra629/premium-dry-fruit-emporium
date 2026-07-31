@@ -16,6 +16,7 @@ import prunesAsset from "@/assets/products/Dreid_Mango_F.asset.json";
 import raisinsAsset from "@/assets/products/Dried_Cranberry_F.asset.json";
 import { ParticleBurst } from "./ParticleBurst";
 import { IngredientHalo } from "./IngredientHalo";
+import { getLenis } from "@/lib/smooth-scroll";
 
 type Slide = {
   image: string;
@@ -183,12 +184,21 @@ export function GramsSlider() {
       const visible = goingDown
         ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
         : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
-      if (!visible) return false;
+      if (!visible) {
+        resumeScroll();
+        return false;
+      }
 
       // Release downwards only after the final product.
-      if (goingDown && index === last && rect.top <= 2) return false;
+      if (goingDown && index === last && rect.top <= 2) {
+        resumeScroll();
+        return false;
+      }
       // Release upwards only once we're back on the first product.
-      if (!goingDown && index === 0 && rect.top >= -2) return false;
+      if (!goingDown && index === 0 && rect.top >= -2) {
+        resumeScroll();
+        return false;
+      }
 
       pin();
       if (Math.abs(delta) < 6) return true;
@@ -222,9 +232,18 @@ export function GramsSlider() {
       const visible = dir > 0
         ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
         : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
-      if (!visible) return;
-      if (dir > 0 && index === last && rect.top <= 2) return;
-      if (dir < 0 && index === 0 && rect.top >= -2) return;
+      if (!visible) {
+        resumeScroll();
+        return;
+      }
+      if (dir > 0 && index === last && rect.top <= 2) {
+        resumeScroll();
+        return;
+      }
+      if (dir < 0 && index === 0 && rect.top >= -2) {
+        resumeScroll();
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       pin();
@@ -243,6 +262,7 @@ export function GramsSlider() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("touchstart", onTouchStart, true);
       window.removeEventListener("touchmove", onTouchMove, true);
+      resumeScroll();
     };
   }, [index, isMobile]);
 
