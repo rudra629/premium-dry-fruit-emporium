@@ -134,9 +134,18 @@ function Auth() {
               )}
               <IconField icon={Mail} placeholder="Email address" type="email" value={email} maxLength={120} onChange={(e) => setEmail(e.target.value)} />
               <IconField icon={Lock} placeholder="Password" type="password" value={password} maxLength={64} onChange={(e) => setPassword(e.target.value)} />
+              {mode === "signup" && <PasswordChecklist value={password} />}
+              {mode === "signin" && (
+                <div className="flex justify-end">
+                  <Link to="/forgot-password" className="text-xs text-cream/60 hover:text-gold transition">
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
               <button type="submit" className="w-full rounded-full bg-gold text-forest-deep py-3.5 text-sm font-semibold hover:bg-gold-soft transition">
                 {mode === "signin" ? "Sign in" : "Register"}
               </button>
+
             </form>
 
             <p className="mt-6 text-center text-xs text-cream/50">
