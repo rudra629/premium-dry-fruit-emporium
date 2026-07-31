@@ -481,8 +481,8 @@ function ImageLayer({
 }
 
 function TextLayer({ s, i, t }: { s: Slide; i: number; t: MotionValue<number> }) {
-  const opacity = useSlideOpacity(t, i);
-  const y = useTransform(t, [i - 0.6, i + 0.5, i + 1.6], [60, 0, -60]);
+  const opacity = useCrispOpacity(t, i);
+  const y = useTransform(t, [i - 0.3, i + 0.5, i + 1.3], [40, 0, -40]);
   return (
     <motion.div
       className="absolute inset-0 flex transform-gpu flex-col justify-center"
