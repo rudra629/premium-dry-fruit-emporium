@@ -78,9 +78,19 @@ function Home() {
   const bestsellers = shown.filter((p) => p.bestseller).slice(0, 4);
   const newArrivals = shown.filter((p) => p.newArrival);
 
+  // On repeat visits within the session, land straight on the home content —
+  // the intro stays above so scrolling up replays it.
+  useEffect(() => {
+    if (!hasSeenIntro()) return;
+    const id = requestAnimationFrame(() => scrollToHomeStart(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <div className="relative">
+      <IntroSequence />
+      <div id={HOME_START_ID} className="relative" />
+
       {/* Decorative fixed side rails */}
       <div aria-hidden className="hidden lg:flex fixed left-4 top-0 h-screen z-[1] pointer-events-none items-center">
         <div className="flex flex-col items-center gap-6">
