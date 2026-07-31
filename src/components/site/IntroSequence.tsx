@@ -25,10 +25,17 @@ export function hasSeenIntro() {
   }
 }
 
+/** Height of the sticky site chrome, so the hero never sits under the navbar. */
+function chromeOffset() {
+  if (typeof document === "undefined") return 0;
+  const header = document.querySelector("header.site-chrome") as HTMLElement | null;
+  return header ? Math.round(header.getBoundingClientRect().height) : 0;
+}
+
 function homeStartTop() {
   const el = document.getElementById(HOME_START_ID);
   if (!el) return 0;
-  return Math.round(el.getBoundingClientRect().top + window.scrollY);
+  return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - chromeOffset()));
 }
 
 /** Smoothly (or instantly) move the viewport to the start of the real home page. */
@@ -40,13 +47,14 @@ export function scrollToHomeStart(immediate = false) {
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const jump = immediate || reduced;
+  const top = homeStartTop();
   if (lenis) {
-    lenis.scrollTo(el, jump ? { immediate: true } : { duration: 1.4 });
+    lenis.scrollTo(top, jump ? { immediate: true, force: true } : { duration: 1.4, force: true });
   } else {
-    const top = el.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top, behavior: jump ? "auto" : "smooth" });
   }
 }
+
 
 
 export function IntroSequence() {
