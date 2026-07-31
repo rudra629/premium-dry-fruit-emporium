@@ -9,6 +9,8 @@ import story1 from "@/assets/story-1.jpg";
 import lifestyle1 from "@/assets/lifestyle-1.jpg";
 import texture1 from "@/assets/texture-1.jpg";
 import fruitCollage from "@/assets/hero-fruit-collage.png";
+import { IntroSequence, HOME_START_ID, hasSeenIntro, scrollToHomeStart } from "@/components/site/IntroSequence";
+
 
 const VALUE_PROP_ICON_MAP: Record<ValuePropIcon, typeof Leaf> = {
   leaf: Leaf,
