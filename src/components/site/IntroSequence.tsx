@@ -69,7 +69,23 @@ export function IntroSequence() {
   const ref = useRef<HTMLDivElement>(null);
   const [showSkip, setShowSkip] = useState(true);
   const [mounted, setMounted] = useState(false);
+  // The site chrome (announcement bar + header) sits in flow above the intro;
+  // while it's hidden its space would show as a flat band. Pulling the intro
+  // up by exactly that height removes the band without any layout jump later.
+  const [chromePull, setChromePull] = useState(0);
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    const measure = () => {
+      const bars = Array.from(document.querySelectorAll(".site-chrome")) as HTMLElement[];
+      const total = bars.reduce((sum, el) => sum + el.offsetHeight, 0);
+      setChromePull(total);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
 
   // Track whether the intro fills the viewport (hides the site chrome), and
   // remember it as "seen" once the user has scrolled past it.
