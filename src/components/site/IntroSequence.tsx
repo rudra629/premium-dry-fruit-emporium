@@ -122,7 +122,10 @@ export function IntroSequence() {
     arm();
     window.addEventListener("scroll", arm, { passive: true });
 
+    let lastSettle = 0;
+
     const blockUp = (delta: number) => {
+      if (isProgrammatic()) return false;
       const top = homeStartTop();
       const y = window.scrollY;
 
@@ -149,15 +152,17 @@ export function IntroSequence() {
         resume();
         return false;
       }
-      const lenis = getLenis();
-      if (lenis) {
-        lenis.stop();
-        stopped = true;
-        lenis.scrollTo(top, { immediate: true, force: true });
+      // Ease back to the hero instead of hard-jumping — the gate should feel
+      // like a soft magnet, not a wall.
+      if (now - lastSettle > 260 && Math.abs(y - top) > 2) {
+        lastSettle = now;
+        const lenis = getLenis();
+        if (lenis) lenis.scrollTo(top, { duration: 0.55, force: true });
+        else window.scrollTo({ top, behavior: "smooth" });
       }
-      window.scrollTo({ top, behavior: "auto" });
       return true;
     };
+
 
 
 
