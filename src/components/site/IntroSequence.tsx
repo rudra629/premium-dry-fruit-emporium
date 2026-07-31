@@ -228,7 +228,9 @@ export function IntroSequence() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
         style={{ background: "linear-gradient(180deg, transparent 0%, #0a0a0c 100%)" }}
       />
+      {mounted ? createPortal(backdrop, document.body) : null}
       {mounted ? createPortal(skipButton, document.body) : null}
+
     </div>
 
 
