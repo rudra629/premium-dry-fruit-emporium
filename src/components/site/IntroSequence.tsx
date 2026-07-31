@@ -32,13 +32,15 @@ export function scrollToHomeStart(immediate = false) {
   const reduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (lenis && !immediate && !reduced) {
-    lenis.scrollTo(el, { duration: 1.4 });
+  const jump = immediate || reduced;
+  if (lenis) {
+    lenis.scrollTo(el, jump ? { immediate: true } : { duration: 1.4 });
   } else {
     const top = el.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top, behavior: immediate || reduced ? "auto" : "smooth" });
+    window.scrollTo({ top, behavior: jump ? "auto" : "smooth" });
   }
 }
+
 
 export function IntroSequence() {
   const ref = useRef<HTMLDivElement>(null);
