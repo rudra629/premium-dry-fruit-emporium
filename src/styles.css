@@ -682,13 +682,14 @@ html.intro-active .site-chrome {
   pointer-events: none;
 }
 
-/* The hidden chrome still holds its space in flow, exposing the warm paper
-   backdrop as a brown band above the intro — darken the backdrop while the
-   intro owns the viewport so the handoff reads as one continuous surface. */
+/* The hidden chrome still holds its space in flow; the intro paints a fixed
+   backdrop behind everything, so the page background just needs to match its
+   darkest stop instead of showing the warm paper texture. */
 html.intro-active body {
   background-image: none;
-  background-color: #12241c;
+  background-color: #050b08;
 }
+
 html.intro-active body::before,
 html.intro-active body::after {
   display: none;
