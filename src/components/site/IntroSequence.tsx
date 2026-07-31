@@ -77,9 +77,14 @@ export function IntroSequence() {
 
   useEffect(() => {
     const measure = () => {
-      const bars = Array.from(document.querySelectorAll(".site-chrome")) as HTMLElement[];
-      const total = bars.reduce((sum, el) => sum + el.offsetHeight, 0);
+      const bars = Array.from(
+        document.querySelectorAll(".site-chrome"),
+      ) as HTMLElement[];
+      const total = bars
+        .filter((el) => getComputedStyle(el).position !== "fixed")
+        .reduce((sum, el) => sum + el.offsetHeight, 0);
       setChromePull(total);
+
     };
     measure();
     window.addEventListener("resize", measure);
