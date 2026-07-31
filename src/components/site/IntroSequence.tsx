@@ -38,6 +38,12 @@ function homeStartTop() {
   return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - chromeOffset()));
 }
 
+/** Set while a programmatic scroll is in flight, so gates stay out of the way. */
+let programmaticUntil = 0;
+function isProgrammatic() {
+  return performance.now() < programmaticUntil;
+}
+
 /** Smoothly (or instantly) move the viewport to the start of the real home page. */
 export function scrollToHomeStart(immediate = false) {
   const el = document.getElementById(HOME_START_ID);
@@ -48,12 +54,14 @@ export function scrollToHomeStart(immediate = false) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const jump = immediate || reduced;
   const top = homeStartTop();
+  programmaticUntil = performance.now() + (jump ? 300 : 1800);
   if (lenis) {
     lenis.scrollTo(top, jump ? { immediate: true, force: true } : { duration: 1.4, force: true });
   } else {
     window.scrollTo({ top, behavior: jump ? "auto" : "smooth" });
   }
 }
+
 
 
 
@@ -114,7 +122,10 @@ export function IntroSequence() {
     arm();
     window.addEventListener("scroll", arm, { passive: true });
 
+    let lastSettle = 0;
+
     const blockUp = (delta: number) => {
+      if (isProgrammatic()) return false;
       const top = homeStartTop();
       const y = window.scrollY;
 
@@ -141,15 +152,25 @@ export function IntroSequence() {
         resume();
         return false;
       }
+      // Hold the viewport at the hero and ease back — a soft magnet, not a
+      // hard jump. Lenis is paused so the gesture can't fight the tween.
       const lenis = getLenis();
       if (lenis) {
-        lenis.stop();
-        stopped = true;
-        lenis.scrollTo(top, { immediate: true, force: true });
+        if (!stopped) {
+          lenis.stop();
+          stopped = true;
+        }
+        if (now - lastSettle > 220 && Math.abs(y - top) > 2) {
+          lastSettle = now;
+          lenis.scrollTo(top, { duration: 0.45, force: true });
+        }
+      } else if (Math.abs(y - top) > 2) {
+        window.scrollTo({ top, behavior: "smooth" });
       }
-      window.scrollTo({ top, behavior: "auto" });
       return true;
     };
+
+
 
 
 
@@ -207,7 +228,11 @@ export function IntroSequence() {
 
   return (
     <div ref={ref} className="relative bg-[#0a0a0c]">
+      {/* The collapsed site-chrome strip at the very top exposes the page
+          backdrop; `html.intro-active` (see styles.css) darkens it so no warm
+          "brown band" shows above the intro. */}
       <GramsHero />
+
       <GramsSlider />
       {/* seam: fade the intro into the home hero's base colour */}
       <div
@@ -217,6 +242,7 @@ export function IntroSequence() {
       />
       {mounted ? createPortal(skipButton, document.body) : null}
     </div>
+
 
   );
 }

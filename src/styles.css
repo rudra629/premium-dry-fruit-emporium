@@ -681,3 +681,17 @@ html.intro-active .site-chrome {
   opacity: 0;
   pointer-events: none;
 }
+
+/* The hidden chrome still holds its space in flow, exposing the warm paper
+   backdrop as a brown band above the intro — darken the backdrop while the
+   intro owns the viewport so the handoff reads as one continuous surface. */
+html.intro-active body {
+  background-image: none;
+  background-color: #12241c;
+}
+html.intro-active body::before,
+html.intro-active body::after {
+  display: none;
+}
+
+

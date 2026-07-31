@@ -3,11 +3,13 @@ import {
   AnimatePresence,
   motion,
   useMotionValue,
+  useScroll,
   useSpring,
   useTransform,
   type MotionValue,
   type Variants,
 } from "framer-motion";
+
 
 import brazilAsset from "@/assets/products/Hazelnuts_F.asset.json";
 import chiaAsset from "@/assets/products/Pumpkin_Seeds_F.asset.json";
@@ -127,8 +129,7 @@ function useIsMobile() {
 export function GramsSlider() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const lockRef = useRef(false);
+  const containerRef = useRef<HTMLElement>(null);
   const isMobile = useIsMobile();
 
   const slide = SLIDES[index];
@@ -138,133 +139,48 @@ export function GramsSlider() {
   const smx = useSpring(mx, { stiffness: 60, damping: 20, mass: 0.6 });
   const smy = useSpring(my, { stiffness: 60, damping: 20, mass: 0.6 });
 
-  const go = (dir: number) => {
-    setDirection(dir);
-    setIndex((i) => (i + dir + SLIDES.length) % SLIDES.length);
-  };
+  // Scroll-driven sequence. The section is a tall track containing a sticky
+  // stage, so the native (Lenis-smoothed) scroll advances the products.
+  // Nothing is preventDefault-ed and the page is never force-jumped.
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-  // Scroll-jacking: the section stays locked until the last product is reached.
+  const lastIndex = useRef(0);
   useEffect(() => {
+    const n = SLIDES.length;
+    const apply = (v: number) => {
+      const next = Math.min(n - 1, Math.max(0, Math.floor(v * n)));
+      if (next === lastIndex.current) return;
+      setDirection(next > lastIndex.current ? 1 : -1);
+      lastIndex.current = next;
+      setIndex(next);
+    };
+    apply(scrollYProgress.get());
+    return scrollYProgress.on("change", apply);
+  }, [scrollYProgress]);
+
+  const goTo = (i: number) => {
     const el = containerRef.current;
     if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const travel = Math.max(1, el.offsetHeight - window.innerHeight);
+    const target = top + (travel * (i + 0.5)) / SLIDES.length;
+    const lenis = getLenis();
+    if (lenis) lenis.scrollTo(target, { duration: 1.1 });
+    else window.scrollTo({ top: target, behavior: "smooth" });
+  };
 
-    const last = SLIDES.length - 1;
-    let lenisStopped = false;
-
-    const resumeScroll = () => {
-      if (!lenisStopped) return;
-      lenisStopped = false;
-      getLenis()?.start();
-    };
-
-    const pin = () => {
-      const top = Math.round(el.getBoundingClientRect().top + window.scrollY);
-      const lenis = getLenis();
-      if (lenis && !lenisStopped) {
-        lenis.stop();
-        lenisStopped = true;
-      }
-      lenis?.scrollTo(top, { immediate: true, force: true });
-      if (Math.abs(window.scrollY - top) >= 1) window.scrollTo({ top, behavior: "auto" });
-    };
-
-
-    const advance = (dir: number) => {
-      if (lockRef.current) return;
-      lockRef.current = true;
-      go(dir);
-      window.setTimeout(() => (lockRef.current = false), 850);
-    };
-
-    // Returns true when the gesture was consumed (scroll must be blocked).
-    const consume = (delta: number) => {
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const goingDown = delta > 0;
-      const visible = goingDown
-        ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
-        : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
-      if (!visible) {
-        resumeScroll();
-        return false;
-      }
-
-      // Release downwards only after the final product.
-      if (goingDown && index === last && rect.top <= 2) {
-        resumeScroll();
-        return false;
-      }
-      // Release upwards only once we're back on the first product.
-      if (!goingDown && index === 0 && rect.top >= -2) {
-        resumeScroll();
-        return false;
-      }
-
-      pin();
-      if (Math.abs(delta) < 6) return true;
-      advance(goingDown ? 1 : -1);
-      return true;
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (consume(e.deltaY)) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
+  // Keyboard navigation scrolls the track (still fully native).
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowUp" || e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") goTo(Math.min(SLIDES.length - 1, index + 1));
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") goTo(Math.max(0, index - 1));
     };
-
-    let touchStartY = 0;
-    let touchLockedDir = 0;
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-      touchLockedDir = 0;
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      const dy = touchStartY - e.touches[0].clientY;
-      const dir = dy > 0 ? 1 : -1;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const visible = dir > 0
-        ? rect.top < vh * 0.85 && rect.bottom > vh * 0.15
-        : rect.top < vh * 0.85 && rect.top > -vh * 0.15;
-      if (!visible) {
-        resumeScroll();
-        return;
-      }
-      if (dir > 0 && index === last && rect.top <= 2) {
-        resumeScroll();
-        return;
-      }
-      if (dir < 0 && index === 0 && rect.top >= -2) {
-        resumeScroll();
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      pin();
-      if (Math.abs(dy) < 45) return;
-      if (touchLockedDir === dir) return;
-      touchLockedDir = dir;
-      advance(dir);
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
     window.addEventListener("keydown", onKey);
-    window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
-    return () => {
-      window.removeEventListener("wheel", onWheel, true);
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("touchstart", onTouchStart, true);
-      window.removeEventListener("touchmove", onTouchMove, true);
-      resumeScroll();
-    };
-  }, [index, isMobile]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index]);
 
   // Mouse parallax (rAF-throttled, desktop only)
   useEffect(() => {
@@ -303,9 +219,11 @@ export function GramsSlider() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden"
-      style={{ height: "100vh", minHeight: "100svh" }}
+      className="relative w-full"
+      style={{ height: `${SLIDES.length * 100}vh` }}
     >
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+
       {/* Morphing background */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -557,10 +475,7 @@ export function GramsSlider() {
           <button
             key={i}
             aria-label={`Go to slide ${i + 1}`}
-            onClick={() => {
-              setDirection(i > index ? 1 : -1);
-              setIndex(i);
-            }}
+            onClick={() => goTo(i)}
             className="group relative h-8 w-8"
           >
             <span
@@ -582,9 +497,11 @@ export function GramsSlider() {
       >
         Scroll to explore
       </div>
+      </div>
     </section>
   );
 }
+
 
 export default GramsSlider;
 
