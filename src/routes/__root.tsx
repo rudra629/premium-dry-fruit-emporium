@@ -150,6 +150,25 @@ function RootComponent() {
   );
 }
 
+/** Floating widgets (mode toggle + wellness chat) hide while the cinematic
+ *  intro owns the viewport, so nothing overlays the animation. */
+function FloatingChrome() {
+  const introActive = useIntroActive();
+  return (
+    <div
+      className={`transition-all duration-500 ease-out ${
+        introActive ? "pointer-events-none translate-y-6 opacity-0" : "opacity-100"
+      }`}
+      aria-hidden={introActive}
+    >
+      <ModeToggle />
+      <HealthChat />
+    </div>
+  );
+}
+
+
+
 function PageTransition({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useReveal(pathname);
