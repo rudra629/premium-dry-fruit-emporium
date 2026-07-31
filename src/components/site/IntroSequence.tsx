@@ -220,9 +220,10 @@ export function IntroSequence() {
 
   return (
     <div ref={ref} className="relative bg-[#0a0a0c]">
-      {/* While the intro owns the viewport, paint the whole背 background dark so
-          the collapsed site-chrome strip at the very top never shows the warm
+      {/* While the intro owns the viewport, paint the backdrop dark so the
+          collapsed site-chrome strip at the very top never shows the warm
           paper texture (the "brown band"). */}
+
       {showSkip && (
         <div
           aria-hidden
