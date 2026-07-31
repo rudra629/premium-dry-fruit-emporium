@@ -25,6 +25,8 @@ import { HealthChat } from "@/components/site/HealthChat";
 import { useReveal } from "@/lib/use-reveal";
 import { useSmoothScroll, getLenis } from "@/lib/smooth-scroll";
 import { hasSeenIntro, scrollToHomeStart } from "@/components/site/IntroSequence";
+import { useIntroActive } from "@/lib/intro-visibility";
+
 
 
 
