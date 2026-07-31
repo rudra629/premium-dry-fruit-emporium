@@ -1,71 +1,28 @@
+## 1. Forgot password page (`/forgot-password`)
 
-## 1. Product detail page — full-screen hero with auto-slideshow
+A three-step flow on one page, matching the existing `/auth` glass-card styling (gold accents, cream text, `IconField` inputs):
 
-**File:** `src/routes/product.$slug.tsx`
+1. **Email step** — user enters email, clicks "Send OTP". Validates email format, then generates a 6-digit demo OTP.
+2. **OTP step** — 6-digit input with resend option and a "change email" link. Since this is the existing demo/local auth (no email backend), the generated OTP is shown to the user in a toast/inline hint so the flow is testable. Wrong code shows an error; code expires after 10 minutes.
+3. **New password step** — "New password" and "Confirm new password" fields with a live requirements checklist. On success, the password is saved locally, the user is signed in, and they're redirected to `/profile`.
 
-Restructure the top of the page so the **first viewport = only image + title/description/origin**. Everything else (price, weights, qty, add-to-cart, badges, shipping strip, story, nutrition, related) moves below the fold.
+A "Forgot password?" link is added under the password field on the sign-in form in `src/routes/auth.tsx`.
 
-- Wrap current hero in a `min-h-[calc(100vh-<header>)]` section, 2-column grid on desktop (`lg:grid-cols-2`), stacked on mobile.
-- **Left**: large product image, fills the column height. Fades between `slides[i].image` (200–300ms cross-fade, same slot/size).
-- **Right**: vertically centered
-  - Category eyebrow
-  - `h1` = current slide's `title` (falls back to `product.name`)
-  - Slide `description` paragraph
-  - **Origin** stays fixed (never changes across slides)
-  - Slide dots / progress bar for the auto-swipe
-- Auto-advance every ~4s via `setInterval`; pause on hover; reset on manual dot click. Cleaned up on unmount + slug change.
-- Everything currently under the hero (price block, weight chips, qty + Add-to-bag button, wishlist/share, badges chips, shipping/freshness/recyclable strip, Story, Nutrition, "You might also love") stays intact but rendered **after** the hero section so the user must scroll for it. Add a small scroll-cue chevron at the bottom of the hero.
+## 2. Password requirements
 
-### Slide data source (admin-editable)
+Rules: minimum 6 characters, at least 1 number, at least 1 special character.
 
-Extend the `Product` type in `src/lib/products.ts`:
+- Shared validator helper in `src/lib/auth-store.tsx` (or a small `password.ts`) so one rule set is used everywhere.
+- Live checklist UI (tick/cross per rule) shown on the Sign-up form and on the reset-password step.
+- Submit blocked with an inline/toast error until all rules pass; confirm-password must match.
+- Applied to sign-up and password reset. Sign-in keeps just "enter your password" so existing demo accounts don't break.
 
-```ts
-slides?: { image: string; title: string; description: string }[];
-```
+## 3. Stop "chill" from jumping
 
-Fallback logic in the page: if `slides` is empty/undefined, synthesise a single slide from `{ image: product.image, title: product.name, description: product.tagline }` — so existing products keep working with zero migration.
+In `src/styles.css`, the `letter-wave` keyframes translate and rotate each letter (lines 253-259). The per-letter motion is removed so the letters sit still; the color/glow `hue-cycle` animation stays untouched, so "chill" keeps its glowing gradient look without any bouncing.
 
-### Admin editor
+## Technical notes
 
-In `src/routes/admin.tsx` `AddProductForm`:
-- New "Detail slideshow" section (below the main image field).
-- Repeating rows: image upload (FileReader → dataURL, same helper as main image) + title input + description textarea + remove button + "Add slide".
-- On submit, include `slides` in the constructed `Product`.
-
-`site-store` needs no schema change (products are persisted as-is in `grams:extra-products`).
-
-For the baked-in `products` array we won't seed slides — they'll just use the single-image fallback until an admin edits them. (Editing baseline products is out of scope; only newly added products get custom slides, matching how the admin panel already works.)
-
-## 2. Cart per-item cap of 30
-
-**File:** `src/lib/cart-store.tsx`
-- In `add`: cap `qty` at 30 when merging (`Math.min(30, existing.qty + i.qty)`); if already at 30, toast "Max 30 per product".
-- In `setQty`: clamp to `Math.min(30, Math.max(1, qty))`.
-
-**Files with qty inputs** — clamp UI + show inline hint:
-- `src/routes/product.$slug.tsx` — the +/- qty stepper (disable `+` at 30).
-- `src/routes/cart.tsx` — same clamp on its qty stepper.
-
-Uses `sonner` toast (already imported across the app) for the max-reached feedback.
-
-## 3. Hide ugly scrollbars in chatbot + admin
-
-**File:** `src/styles.css` — add a utility:
-
-```css
-@utility no-scrollbar {
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-```
-
-Apply `no-scrollbar` to:
-- `src/components/site/HealthChat.tsx` — the messages scroll container.
-- `src/routes/admin.tsx` — the horizontal tabs strip (line 39, `overflow-x-auto`) and any `overflow-x-auto` table wrappers.
-
-Scrolling still works; just the visible track/thumb are hidden.
-
-## Out of scope
-- No theme/color changes, no changes to header/footer/home hero.
-- Base catalog products won't get pre-authored slideshows this pass.
+- Auth remains the current local/demo store (`src/lib/auth-store.tsx`, localStorage) — no real email is sent; the OTP is client-generated and displayed. If you later want real email OTP delivery, that needs Lovable Cloud.
+- New file: `src/routes/forgot-password.tsx`. Edited: `src/routes/auth.tsx`, `src/lib/auth-store.tsx`, `src/styles.css`.
+- The new route gets its own `head()` with a unique title and description.
