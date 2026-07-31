@@ -3,11 +3,13 @@ import {
   AnimatePresence,
   motion,
   useMotionValue,
+  useScroll,
   useSpring,
   useTransform,
   type MotionValue,
   type Variants,
 } from "framer-motion";
+
 
 import brazilAsset from "@/assets/products/Hazelnuts_F.asset.json";
 import chiaAsset from "@/assets/products/Pumpkin_Seeds_F.asset.json";
