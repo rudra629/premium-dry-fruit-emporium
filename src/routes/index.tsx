@@ -83,7 +83,6 @@ function Home() {
   // On repeat visits within the session, land straight on the home content —
   // the intro stays above so scrolling up replays it.
   useEffect(() => {
-    console.log("HOME_MOUNT seen=", hasSeenIntro());
     if (!hasSeenIntro()) return;
     // Retry across a few frames: layout (and Lenis) settle after mount.
     const ids: number[] = [];
