@@ -220,21 +220,11 @@ export function IntroSequence() {
 
   return (
     <div ref={ref} className="relative bg-[#0a0a0c]">
-      {/* While the intro owns the viewport, paint the backdrop dark so the
-          collapsed site-chrome strip at the very top never shows the warm
-          paper texture (the "brown band"). */}
-
-      {showSkip && (
-        <div
-          aria-hidden
-          className="pointer-events-none fixed inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(120% 80% at 50% 18%, #1f3d2d 0%, #0f2119 48%, #050b08 100%)",
-          }}
-        />
-      )}
+      {/* The collapsed site-chrome strip at the very top exposes the page
+          backdrop; `html.intro-active` (see styles.css) darkens it so no warm
+          "brown band" shows above the intro. */}
       <GramsHero />
+
       <GramsSlider />
       {/* seam: fade the intro into the home hero's base colour */}
       <div
